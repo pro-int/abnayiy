@@ -1,0 +1,108 @@
+body {
+  background: #fff !important;
+  font-family: "cairo", sans-serif;
+  direction: rtl;
+  font-size: 10pt;
+}
+
+
+img {
+  border-style: none;
+  padding-bottom: 10px;
+}
+
+.u-body {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+
+p {
+  padding-bottom: 10px;
+
+}
+
+.u-align-center {
+  text-align: center;
+}
+
+.u-align-right {
+  text-align: right;
+}
+
+
+.u-table th,
+.u-table td {
+  padding: 10px;
+  font-weight: inherit;
+  position: inherit;
+}
+
+h5 {
+  font-weight: 400;
+  font-size: 1.25rem;
+  line-height: 1.2;
+
+}
+
+.mb
+{
+  margin: 11mm 11mm 11mm 11mm;
+
+}
+
+.mt
+{
+  margin: 11mm 11mm 11mm 11mm;
+
+}
+.u-section-2 .u-text-1 {
+  font-weight: 700;
+  text-decoration: underline !important;
+  margin: 20px;
+  border: 0.1mm dashed rgb(49, 49, 49);
+
+}
+
+
+
+table {
+  width: 100%;
+}
+
+.thr {
+  height: 100px;
+}
+
+.info-table .title {
+  border: 0.1mm groove rgb(49, 49, 49);
+	padding: 2mm 2mm 2mm 2mm;
+  width: 70%;
+
+}
+.info-table tbody {
+  vertical-align: baseline;
+}
+
+.info-table .head {
+background-color: #2cccc4;
+  width: 30%;
+  color: #fff;
+	padding: 2mm 2mm;
+
+}
+
+
+.total-tabel {
+ width: 100%;
+}
+
+.head-td {
+  background-color: rgb(187, 0, 0);
+  width: 30%;
+}
+
+
+.u-section-2 table {
+  border-collapse: collapse;
+}

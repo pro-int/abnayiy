@@ -1,0 +1,1 @@
+<img src="{{ isset($logoSrc) ? asset($logoSrc) : asset('assets/reportLogo.png') }}" alt="ابنائي">

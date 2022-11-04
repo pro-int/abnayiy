@@ -1,0 +1,377 @@
+{
+  "menu": [
+    {
+      "url": "home",
+      "name": "الرئيسية",
+      "icon": "home",
+      "slug": "home"
+    },
+    {
+      "name": "اعدادات الصلاحيات",
+      "icon": "lock",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "roles.index",
+          "name": "ادارة الصلاحيات",
+          "icon": "circle",
+          "slug": "roles.index"
+        },
+        {
+          "url": "ApplicationManagers.index",
+          "name": "مشرفين الطلبات",
+          "icon": "circle",
+          "slug": "ApplicationManagers.index"
+        },
+        {
+          "url": "AttendanceManagers.index",
+          "name": "مشرفين الغياب",
+          "icon": "circle",
+          "slug": "AttendanceManagers.index"
+        }
+      ]
+    },
+    {
+      "name": "المستخدمين",
+      "icon": "users",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "users.index",
+          "name": "جميع المستخدمين",
+          "icon": "circle",
+          "slug": "users.index"
+        },
+        {
+          "url": "admins.index",
+          "name": "المديرين",
+          "icon": "circle",
+          "slug": "admins.index"
+        },
+        {
+          "url": "teachers.index",
+          "name": "المعلمين",
+          "icon": "circle",
+          "slug": "teachers.index"
+        },
+        {
+          "url": "guardians.index",
+          "name": "اولياء الامور",
+          "icon": "circle",
+          "slug": "guardians.index"
+        },
+        {
+          "url": "users.create",
+          "name": "تسجيل حساب جديد",
+          "icon": "circle",
+          "slug": "users.create"
+        }
+      ]
+    },
+    {
+      "name": "طلبات الألتحاق",
+      "icon": "file",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "applications.index",
+          "name": "جميع الطلبات",
+          "icon": "circle",
+          "slug": "applications.index"
+        },
+        {
+          "url": "applications.index",
+          "name": "الطلبات الجديدة",
+          "icon": "circle",
+          "slug": "students.index",
+          "query": "status_id=1"
+        },
+        {
+          "url": "applications.index",
+          "name": "قائمة الانتظار",
+          "icon": "circle",
+          "slug": "applications.index",
+          "query": "status_id=4"
+        },
+        {
+          "url": "applications.create",
+          "name": "تسجيل طلب التحاق",
+          "icon": "circle",
+          "slug": "applications.create"
+        },
+        {
+          "url": "applications.index",
+          "name": "طلباتي",
+          "icon": "circle",
+          "slug": "applications.index",
+          "query": "myapplications=1"
+        }
+      ]
+    },
+    {
+      "name": "ادارة الطلاب",
+      "icon": "users",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "students.index",
+          "name": "جميع الطلاب",
+          "icon": "circle",
+          "slug": "students.index"
+        },
+        {
+          "url": "contracts.all",
+          "name": "جميع التعاقدات",
+          "icon": "circle",
+          "slug": "contracts.all"
+        },
+        {
+          "url": "students.show_exam_result",
+          "name": "نتائج الطلاب",
+          "icon": "circle",
+          "slug": "students.show_exam_result"
+        },
+        {
+          "url": "transfers.index",
+          "name": "طللبات تجديد التعاقد",
+          "icon": "circle",
+          "slug": "transfers.index"
+        },
+        {
+          "url": "permissions.index",
+          "name": "طلبات الأستئذان",
+          "icon": "circle",
+          "slug": "permissions.index"
+        },
+        {
+          "url": "StudentAttendances.index",
+          "name": "الغياب",
+          "icon": "circle",
+          "slug": "StudentAttendances.index"
+        },
+        {
+          "url": "noor.create",
+          "name": "مزامنة نظام نور",
+          "icon": "circle",
+          "slug": "noor.create"
+        }
+      ]
+    },
+    {
+      "name": "الاعدادات الاساسية",
+      "icon": "settings",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "categories.index",
+          "name": "فئات العملاء",
+          "icon": "circle",
+          "slug": "categories.index"
+        },
+        {
+          "url": "plans.index",
+          "name": "خطط السداد",
+          "icon": "circle",
+          "slug": "plans.index"
+        },
+        {
+          "url": "nationalities.index",
+          "name": "الجنسيات",
+          "icon": "circle",
+          "slug": "nationalities.index"
+        },
+        {
+          "url": "transportations.index",
+          "name": "خطط النقل",
+          "icon": "circle",
+          "slug": "transportations.index"
+        },
+        {
+          "url": "contract_terms.index",
+          "name": "شروط التعاقد",
+          "icon": "circle",
+          "slug": "contract_terms.index"
+        },
+        {
+          "url": "contract_design.edit",
+          "name": "تصميم العقد",
+          "icon": "circle",
+          "slug": "contract_design.edit"
+        },
+        {
+          "url": "banks.index",
+          "name": "البنوك",
+          "icon": "circle",
+          "slug": "banks.index"
+        },
+        {
+          "url": "payment_networks.index",
+          "name": "شبكات الدفع",
+          "icon": "circle",
+          "slug": "payment_networks.index"
+        },
+        {
+          "url": "noorAccounts.index",
+          "name": "حسابات نور",
+          "icon": "circle",
+          "slug": "noorAccounts.index"
+        }
+      ]
+    },
+    {
+      "name": "اعدادات الصفوف",
+      "icon": "activity",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "years.index",
+          "name": "السنوات الدراسية",
+          "icon": "circle",
+          "slug": "students.index"
+        },
+        {
+          "url": "corporates.index",
+          "name": "المجمعات الدراسية",
+          "icon": "circle",
+          "slug": "corporates.index"
+        },
+        {
+          "url": "schools.index",
+          "name": "المدارس",
+          "icon": "circle",
+          "slug": "schools.index"
+        },
+        {
+          "url": "genders.index",
+          "name": "الأقسام",
+          "icon": "circle",
+          "slug": "genders.index"
+        },
+        {
+          "url": "grades.index",
+          "name": "المسارات",
+          "icon": "circle",
+          "slug": "grades.index"
+        },
+        {
+          "url": "levels.index",
+          "name": "الصفوف",
+          "icon": "circle",
+          "slug": "levels.index"
+        }
+      ]
+    },
+    {
+      "name": "قسائم الخصم",
+      "icon": "divide-circle",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "coupons.create",
+          "name": "اضافة قسيمة",
+          "icon": "circle",
+          "slug": "coupons.index"
+        },
+        {
+          "url": "coupons.index",
+          "name": "ادارة القسائم",
+          "icon": "circle",
+          "slug": "coupons.index"
+        },
+        {
+          "url": "classifications.index",
+          "name": "تصنيفات القسائم",
+          "icon": "circle",
+          "slug": "classifications.index"
+        },
+        {
+          "url": "coupons.discount_report",
+          "name": "تقرير استخدام القسائم",
+          "icon": "circle",
+          "slug": "coupons.discount_report"
+        }
+      ]
+    },
+    {
+      "name": "الحسابات",
+      "icon": "dollar-sign",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "accounts.index",
+          "name": "حركة الصندوق",
+          "icon": "circle",
+          "slug": "accounts.index"
+        },
+        {
+          "url": "debts.index",
+          "name": "مديونيات اولياء الأمور",
+          "icon": "circle",
+          "slug": "debts.index"
+        }
+      ]
+    },
+    {
+      "name": "نظام الأشعارات",
+      "icon": "bell",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "notifications.index",
+          "name": "ادارة الأشعارات",
+          "icon": "circle",
+          "slug": "notifications.index"
+        },
+        {
+          "url": "contents.index",
+          "name": "محتوي الأشعارات",
+          "icon": "circle",
+          "slug": "contents.index"
+        },
+        {
+          "url": "channels.index",
+          "name": "قنوات الأرسال",
+          "icon": "circle",
+          "slug": "channels.index"
+        },
+        {
+          "url": "sections.index",
+          "name": "اقسام الأشعارات",
+          "icon": "circle",
+          "slug": "sections.index"
+        },
+        {
+          "url": "sentNotifications",
+          "name": "الأشعارات المرسلة",
+          "icon": "circle",
+          "slug": "sentNotifications"
+        }
+      ]
+    },
+    {
+      "name": "نظام المقابلات",
+      "icon": "clock",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "appointments.sections.index",
+          "name": "ادارة الاقسام",
+          "icon": "circle",
+          "slug": "appointments.sections.index"
+        },
+        {
+          "url": "appointments.offices.index",
+          "name": "ادارة المكاتب",
+          "icon": "circle",
+          "slug": "appointments.offices.index"
+        },
+        {
+          "url": "appointments.reserved.index",
+          "name": "المواعيد المحجوزة",
+          "icon": "circle",
+          "slug": "appointments.reserved.index"
+        }
+      ]
+    }
+  ]
+}

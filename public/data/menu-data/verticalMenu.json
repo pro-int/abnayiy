@@ -1,0 +1,75 @@
+{
+  "menu": [
+    {
+      "url": "home",
+      "name": "الرئيسية",
+      "icon": "home",
+      "slug": "home"
+    },
+    {
+      "name": "اعدادات الصلاحيات",
+      "icon": "lock",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "roles.index",
+          "name": "ادارة الصلاحيات",
+          "icon": "circle",
+          "slug": "roles.index"
+        }
+      ]
+    },
+    {
+      "name": "المستخدمين",
+      "icon": "users",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "admins.index",
+          "name": "المديرين",
+          "icon": "circle",
+          "slug": "admins.index"
+        },
+        {
+          "url": "teachers.index",
+          "name": "المعلمين",
+          "icon": "circle",
+          "slug": "teachers.index"
+        },
+        {
+          "url": "guardians.index",
+          "name": "اولياء الأمور",
+          "icon": "circle",
+          "slug": "guardians.index"
+        }
+      ]
+    },
+    {
+      "name": "خدمات الطالب",
+      "icon": "edit-3",
+      "slug": "",
+      "submenu": [
+        {
+          "url": "applications.index",
+          "name": "طلبات الألتحاق",
+          "icon": "circle",
+          "slug": "applications.index"
+        },
+        {
+          "url": "applications.index",
+          "name": "قائمة الانتظار",
+          "icon": "circle",
+          "slug": "applications.index",
+          "query" : "status_id=4"
+          
+        },
+        {
+          "url": "students.index",
+          "name": "الطلاب المسجلين",
+          "icon": "circle",
+          "slug": "students.index"
+        }
+      ]
+    }
+  ]
+}

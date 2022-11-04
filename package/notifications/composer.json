@@ -1,0 +1,26 @@
+{
+    "name": "gtech/abnayiynotification",
+    "description": "send internal and external notifications to users",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Amr Abd-Rabou",
+            "email": "amrsoft13@gmail.com"
+        },
+        {
+            "name": "Noran",
+            "email": "amrsoft13@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "files": [
+            "src/Helppers/NotificationHelper.php"
+        ],
+        "psr-4": {
+            "gtech\\abnayiynotification\\": "src/"
+        }
+    }
+}

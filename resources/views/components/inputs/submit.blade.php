@@ -1,0 +1,2 @@
+@props(['lock' => false, 'class' => 'btn-primary', 'showLoader' => 'withLoader'])
+<button {{ $attributes->merge(['class' => $showLoader .' btn me-1 '. $class . ($lock ? ' btn-page-block-custom ' : null)]) }} type="submit">{{ $slot }}</button>
