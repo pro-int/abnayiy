@@ -17,6 +17,7 @@ class CheckContractStatus extends Command
      */
     protected $signature = 'contracts:checkStatus';
 
+
     /**
      * The console command description.
      *
@@ -35,11 +36,11 @@ class CheckContractStatus extends Command
 
         foreach ($years as $year) {
             info($year);
-            # loop to close years 
+            # loop to close years
             $contracts = Contract::where('academic_year_id',$year->id)->where('status',1)->whereHas('student')->with('student')->get();
 
             if ($contracts) {
-                # load graduated level 
+                # load graduated level
                 $levels = Level::where('is_graduated',true)->whereNull('next_level_id')->pluck('id')->toArray();
                 foreach ($contracts as $contract) {
 
