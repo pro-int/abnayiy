@@ -27,6 +27,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Mpdf\Tag\Tr;
+use App\Models\Student;
+
 
 class AdminJsonController extends Controller
 {
@@ -140,6 +142,20 @@ class AdminJsonController extends Controller
                 ->get();
 
             return $this->ApiSuccessResponse(['users' => $users]);
+        }
+    }
+
+    protected function search_students(Request $request)
+    {
+        if ($request->filled('q')) {
+            $students =  Student::select('students.id', 'students.student_name', 'students.national_id', 'levels.level_name')
+                ->orWhere('student_name', 'LIKE', '%' . $request->q . '%')
+                ->orWhere('national_id', 'LIKE', '%' . $request->q . '%')
+                ->leftJoin('contracts', 'contracts.student_id', 'students.id')
+                ->leftjoin('levels', 'levels.id', 'contracts.level_id')
+                ->get();
+
+            return $this->ApiSuccessResponse(['students' => $students]);
         }
     }
 

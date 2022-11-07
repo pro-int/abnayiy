@@ -59,6 +59,8 @@ use App\Http\Controllers\admin\AdminNoorQueueController;
 use App\Http\Controllers\admin\AdminSchoolController;
 use App\Http\Controllers\admin\AdminTransferRequestController;
 use App\Http\Controllers\admin\AdminUserController;
+use App\Http\Controllers\admin\AdminWithdrawalApplicationController;
+use App\Http\Controllers\admin\AdminWithdrawalPeriodController;
 use App\Models\Application;
 use App\Models\guardian;
 use Maatwebsite\Excel\Facades\Excel;
@@ -122,6 +124,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('years', AdminAcademicYearController::class);
         Route::resource('years.semesters', AdminSemesterController::class);
         Route::resource('years.periods', AdminPeriodController::class);
+        Route::resource('years.withdrawalPeriods', AdminWithdrawalPeriodController::class);
         Route::resource('years.periods.discounts', AdminDiscountController::class);
         Route::get('years/{year}/classrooms/{classroom}/students', [AdminClassRoomController::class,'students'])->name('years.classrooms.students.view');
         Route::post('years/{year}/classrooms/{classroom}/store_students', [AdminClassRoomController::class,'StoreStudents'])->name('years.classrooms.students.store');
@@ -149,13 +152,16 @@ Route::group(['middleware' => ['auth']], function () {
         Route::post('contract_design', [AdminContractTemplateController::class,'update'])->name('contract_design.update');
     });
 
-    // applications routes 
+    // Withdrawals routes
+    Route::resource('withdrawals', AdminWithdrawalApplicationController::class);
+
+    // applications routes
     Route::match(['post', 'put'], 'applications/meetingInfo', [AdminApplicationController::class, 'meeting_info'])->name('applications.meeting');
     Route::match(['post', 'put'], 'applications/meetingresult', [AdminApplicationController::class, 'meeting_result'])->name('applications.meeting_result');
     Route::post('applications/updateapplicationstatus', [AdminApplicationController::class, 'updateapplicationstatus'])->name('applications.updateapplicationstatus');
     Route::match(['post', 'get'], 'applications/{id}/confirm_application', [AdminApplicationController::class, 'confirm_application'])->name('applications.confirm_application');
     Route::get('transactions/unconfirmedpayment', [AdminPaymentAttemptController::class, 'UnConfirmedPayment'])->name('attempts.unconfirmed');
-    
+
     Route::get('accounts/cash_flow', [AdminAccountsController::class,'index'])->name('accounts.index');
     Route::resource('accounts/debts', AdminGuardianDebtController::class)->except(['edit','update','destroy']);
     Route::resource('applications', AdminApplicationController::class);
@@ -195,7 +201,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/testpaymrnt', [TransactionController::class, 'test_discount']);
 
 
-    //Transaction 
+    //Transaction
     Route::match(['post', 'put'], 'payment_attempt/confirm-transaction', [AdminPaymentAttemptController::class, 'confirmTransaction'])->name('paymentattempt.confirm');
     Route::match(['post', 'put'], 'payment_attempt/refuse-transaction', [AdminPaymentAttemptController::class, 'refuseTransaction'])->name('paymentattempt.refuse');
 

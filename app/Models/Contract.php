@@ -14,6 +14,7 @@ class Contract extends Model
         0 => 'بانتظار سداد مبلغ التعاقد',
         1 => 'تم التعاقد',
         2 => 'تعاقد منتهي',
+        3 => 'الغاء التعاقد'
     ];
     const EXAM_RESULT = [
         'pass' => 'ناجح',
@@ -124,6 +125,7 @@ class Contract extends Model
                 $class = 'success';
                 break;
             case 2:
+            case 3:
                 $class = 'danger';
                 break;
             default:
@@ -239,7 +241,7 @@ class Contract extends Model
             $guardianPoints->save();
         }
     }
-    public function update_total_payments()
+    public function update_total_payments($withdrawal = null)
     {
         $transaction = $this->transactions();
 
@@ -257,7 +259,16 @@ class Contract extends Model
         $this->coupon_discounts = round($coupon_discounts, 2);
         $this->vat_amount = round($vat_amount, 2);
         $this->bus_fees = round($buss_fees, 2);
-        $this->total_fees = round(($tuition_fees - $period_discounts - $coupon_discounts) + $buss_fees + $vat_amount + $debt, 2);
+
+        $withdrawal_fees = 0;
+
+        if($withdrawal != null){
+            $this->status = 3;
+            $withdrawal_fees = $this->transactions()->where('transaction_type', 'withdrawal') ? $withdrawal : 0;
+        }
+
+        $this->total_fees = round(($tuition_fees - $period_discounts - $coupon_discounts) + $buss_fees + $vat_amount + $debt + $withdrawal_fees, 2);
+
         $this->total_paid = round($total_paid, 2);
         $this->debt = $debt;
 

@@ -61,6 +61,12 @@ $breadcrumbs = [[['link' => route('years.index'), 'name' => "السنوات ال
                         <x-inputs.btn.generic colorClass="success" icon="watch" :route="route('years.periods.index', $year->id)">ادارة فترات السداد</x-inputs.btn.generic>
                     </div>
                     @endcan
+                    @can('periods-create')
+                        <div>
+                            <h6 class="text-muted fw-bolder">فترات طلبات الانسحاب</h6>
+                            <x-inputs.btn.generic colorClass="danger" icon="watch" :route="route('years.withdrawalPeriods.index', $year->id)">ادارة فترات طلبات الانسحاب</x-inputs.btn.generic>
+                        </div>
+                    @endcan
                 </div>
             </div>
         </div>
