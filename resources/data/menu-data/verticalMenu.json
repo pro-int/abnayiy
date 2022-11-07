@@ -108,6 +108,25 @@
         }
       ]
     },
+      {
+          "name": "طلبات الأنسحاب",
+          "icon": "file",
+          "slug": "",
+          "submenu": [
+              {
+                  "url": "withdrawals.index",
+                  "name": "الطلبات الجديده",
+                  "icon": "circle",
+                  "slug": "withdrawals.index"
+              },
+              {
+                  "url": "withdrawals.create",
+                  "name": "تسجيل طلب انسحاب",
+                  "icon": "circle",
+                  "slug": "withdrawals.create"
+              }
+          ]
+      },
     {
       "name": "ادارة الطلاب",
       "icon": "users",
