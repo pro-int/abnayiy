@@ -1,4 +1,7 @@
 
 node_modules/*
 .env
+public/storage
+.idea
+storage/*
 vendor/*
