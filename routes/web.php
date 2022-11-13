@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\StaterkitController;
 use App\Http\Controllers\LanguageController;
 use App\Http\Controllers\TableController;
+use App\Http\Controllers\guardian\GuardianAuthController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +20,11 @@ use App\Http\Controllers\TableController;
 
 Route::get('/', function () {
     return redirect()->route('home');
+});
+
+Route::prefix('parent')->group(function () {
+    Route::get('login', [GuardianAuthController::class, 'showLoginPage'])->name("showLoginPage");
+    Route::get('register', [GuardianAuthController::class, 'showRegistrationPage'])->name("showRegistrationPage");
+    Route::post('userLogin', [GuardianAuthController::class, 'userLogin'])->name("userLogin");
+    Route::post('userRegistration', [GuardianAuthController::class, 'userRegistration'])->name("userRegistration");
 });

@@ -44,15 +44,15 @@
               تذكرني
             </x-inputs.checkbox>
           </div>
-          
+
           <x-inputs.submit class="btn btn-primary w-100">تسجيل الدخول</x-inputs.submit>
         </form>
 
         <p class="text-center mt-2">
-          <span>ليس لديك حساب ؟</span>
-          @if (Route::has('register'))
-          <a href="{{ route('register') }}">
-            <span>تسجيل مدير جديد</span>
+          <span style="font-weight: bold">هل تريد تسجيل ولي امر ؟</span>
+          @if (Route::has('showRegistrationPage'))
+          <a href="{{ route('showRegistrationPage') }}">
+            <span>تسجيل ولي امر</span>
           </a>
           @endif
         </p>
