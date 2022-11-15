@@ -26,7 +26,8 @@ $configData = Helper::applClasses();
   <div class="main-menu-content">
     <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
       {{-- Foreach menu item starts --}}
-      @if (isset($menuData[0]))
+
+      @if (!Auth::user()->hasRole(\Spatie\Permission\Models\Role::where("name","parent")->first())  && isset($menuData[0]))
         @foreach ($menuData[0]->menu as $menu)
           @if (isset($menu->navheader))
             <li class="navigation-header">

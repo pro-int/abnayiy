@@ -66,9 +66,9 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-    //relations 
+    //relations
 
-    public static function boot() 
+    public static function boot()
     {
 	    parent::boot();
 
@@ -118,5 +118,13 @@ class User extends Authenticatable
             'user_id' => $this->id,
             'channels' => [1]
         ]);
+    }
+
+    public function getPhone(){
+        return $this->phone;
+    }
+
+    public function getEmail(){
+        return $this->email;
     }
 }
