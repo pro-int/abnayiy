@@ -18,6 +18,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
+
 
 class GuardianAuthController extends Controller
 {
@@ -54,6 +56,8 @@ class GuardianAuthController extends Controller
             Auth::login($user);
 
             if ($user) {
+                $role = Role::select("id")->where("name","parent")->first();
+                $user->assignRole([$role->id]);
                 return redirect()->route('showLoginPage')
                     ->with(["userRegistrationSuccessMessage" => 'تم تسجيل الدخول بنجاح !!']);
             } else {

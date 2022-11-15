@@ -40,14 +40,14 @@ class AdminRoleController extends Controller
      */
     public function index(Request $request)
     {
-        $roles = Role::orderBy('id')->with('users')->get();
+        $roles = Role::where("is_fixed",0)->orderBy('id')->with('users')->get();
         $PermissionsCategory = PermissionsCategory::with('permissions')->get();
-        
+
         $users = User::select('users.*', 'countries.country_name', 'countries.country_code')
         ->leftjoin('countries', 'countries.id', 'users.country_id')
         ->with(['admin', 'roles'])->whereHas('admin')
         ->orderBy('id')->paginate(30);
-        
+
         return view('admin.rolesPermission.index', compact('roles', 'PermissionsCategory','users'));
     }
 
@@ -103,7 +103,7 @@ class AdminRoleController extends Controller
      */
     public function edit(Role $role)
     {
-      
+
         $rolePermissions = DB::table("role_has_permissions")->where("role_has_permissions.role_id", $role->id)
             ->pluck('role_has_permissions.permission_id', 'role_has_permissions.permission_id')
             ->all();
