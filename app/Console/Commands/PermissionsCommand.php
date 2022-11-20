@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Models\User;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
@@ -1215,7 +1216,7 @@ class PermissionsCommand extends Command
         $checkSuperAdminRole = DB::table("model_has_roles")->where("role_id",$superAdminRole->id)->count();
 
         if($checkSuperAdminRole == 0){
-            $newSuperAdminUSer = DB::table("users")->firstOrCreate([
+            $newSuperAdminUSer = User::firstOrCreate([
                 'first_name' => 'سوبر ادمن',
                 'last_name' => 'ادمن',
                 'phone' => '966123123123',
