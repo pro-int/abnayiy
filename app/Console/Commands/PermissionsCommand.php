@@ -1227,7 +1227,7 @@ class PermissionsCommand extends Command
             ]);
 
             DB::table("admins")->insert([
-                'admin_id' => $newSuperAdminUSer,
+                'admin_id' => $newSuperAdminUSer->id,
                 'job_title' => 'سوبر ادمن',
                 'active' => 1
             ]);
@@ -1235,7 +1235,7 @@ class PermissionsCommand extends Command
             DB::table("model_has_roles")->insert([
                 'role_id' => $superAdminRole->id,
                 'model_type' => 'App\Models\User',
-                'model_id' => $newSuperAdminUSer
+                'model_id' => $newSuperAdminUSer->id
             ]);
 
         }
