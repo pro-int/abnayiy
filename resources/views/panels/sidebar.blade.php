@@ -62,6 +62,40 @@ $configData = Helper::applClasses();
         @endforeach
       @endif
       {{-- Foreach menu item ends --}}
+        @if (Auth::user()->hasRole(\Spatie\Permission\Models\Role::where("name","parent")->first())  && isset($menuData[2]))
+            @foreach ($menuData[2]->menu as $menu)
+                @if (isset($menu->navheader))
+                    <li class="navigation-header">
+                        <span>{{ __('locale.' . $menu->navheader) }}</span>
+                        <em data-feather="more-horizontal"></em>
+                    </li>
+                @else
+                    {{-- Add Custom Class with nav-item --}}
+                    @php
+                        $custom_classes = '';
+                        if (isset($menu->classlist)) {
+                            $custom_classes = $menu->classlist;
+                        }
+                    @endphp
+                    <li
+                        class="nav-item {{ $custom_classes }}">
+                        <a href="{{ isset($menu->url) ? (Route::has($menu->url) ? route($menu->url) : url($menu->url)) : 'javascript:void(0)' }}" class="d-flex align-items-center"
+                           target="{{ isset($menu->newTab) ? '_blank' : '_self' }}">
+                            <em data-feather="{{ $menu->icon }}"></em>
+                            <span class="menu-title text-truncate">{{ $menu->name }}</span>
+                            @if (isset($menu->badge))
+                                    <?php $badgeClasses = 'badge rounded-pill badge-light-primary ms-auto me-1'; ?>
+                                <span
+                                    class="{{ isset($menu->badgeClass) ? $menu->badgeClass : $badgeClasses }}">{{ $menu->badge }}</span>
+                            @endif
+                        </a>
+                        @if (isset($menu->submenu))
+                            @include('panels.submenu', ['menu' => $menu->submenu])
+                        @endif
+                    </li>
+                @endif
+            @endforeach
+        @endif
     </ul>
   </div>
 </div>

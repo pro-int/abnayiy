@@ -1,0 +1,17 @@
+{
+    "menu": [
+        {
+            "name": "ابنائي",
+            "icon": "users",
+            "slug": "",
+            "submenu": [
+                {
+                    "url": "parent.showChildrens",
+                    "name": "جميع الابناء",
+                    "icon": "circle",
+                    "slug": "parent.showChildrens"
+                }
+            ]
+        }
+    ]
+}

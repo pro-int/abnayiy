@@ -199,7 +199,17 @@ class PermissionsCommand extends Command
                 "id" => 33,
                 "category_name" => "اعدادت ولي الامر",
                 "active" => 1
-            ]
+            ],
+            [
+                "id" => 34,
+                "category_name" => "اعدادت المدارس",
+                "active" => 1
+            ],
+            [
+                "id" => 35,
+                "category_name" => "ادارة طلبات الانسحاب",
+                "active" => 1
+            ],
         ];
         $permissions = [
             [
@@ -1097,13 +1107,70 @@ class PermissionsCommand extends Command
                 "name" => "users-delete",
                 "guard_name" => "web",
                 "permission_category_id" => 32
-            ]
+            ],
+            [
+                "id" => 137,
+                "display_name" => "مشاهدة",
+                "name" => "corporates-list",
+                "guard_name" => "web",
+                "permission_category_id" => 34
+            ],
+            [
+                "id" => 138,
+                "display_name" => "اضافة",
+                "name" => "corporates-create",
+                "guard_name" => "web",
+                "permission_category_id" => 34
+            ],
+            [
+                "id" => 139,
+                "display_name" => "تعديل",
+                "name" => "corporates-edit",
+                "guard_name" => "web",
+                "permission_category_id" => 34
+            ],
+            [
+                "id" => 140,
+                "display_name" => "حذف",
+                "name" => "corporates-delete",
+                "guard_name" => "web",
+                "permission_category_id" => 34
+            ],
+            [
+                "id" => 141,
+                "display_name" => "مشاهدة",
+                "name" => "withdrawal-applications-list",
+                "guard_name" => "web",
+                "permission_category_id" => 35
+            ],
+            [
+                "id" => 142,
+                "display_name" => "اضافة",
+                "name" => "withdrawal-applications-create",
+                "guard_name" => "web",
+                "permission_category_id" => 35
+            ],
+            [
+                "id" => 143,
+                "display_name" => "تعديل",
+                "name" => "withdrawal-applications-edit",
+                "guard_name" => "web",
+                "permission_category_id" => 35
+            ],
+            [
+                "id" => 144,
+                "display_name" => "حذف",
+                "name" => "withdrawal-applications-delete",
+                "guard_name" => "web",
+                "permission_category_id" => 35
+            ],
+
         ];
 
         $parentPermission = [
             [
-                "display_name" => "عرض طلبات الالتحاق",
-                "name" => "applications",
+                "display_name" => "عرض الابناء",
+                "name" => "guardianChildren-list",
                 "guard_name" => "web",
                 "permission_category_id" => 33
             ]
@@ -1111,8 +1178,8 @@ class PermissionsCommand extends Command
 
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');
 
-        DB::table('permissions')->truncate();
         DB::table('permissions_categories')->truncate();
+        DB::table('permissions')->truncate();
 
         DB::table('permissions_categories')->insert($permissionsCategory);
         DB::table('permissions')->insert($permissions);
