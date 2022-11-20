@@ -1215,12 +1215,13 @@ class PermissionsCommand extends Command
         $checkSuperAdminRole = DB::table("model_has_roles")->where("role_id",$superAdminRole->id)->count();
 
         if($checkSuperAdminRole == 0){
-            $newSuperAdminUSer = DB::table("users")->insertGetId([
+            $newSuperAdminUSer = DB::table("users")->firstOrCreate([
                 'first_name' => 'سوبر ادمن',
                 'last_name' => 'ادمن',
                 'phone' => '966123123123',
                 'email' => 'admin123@admin.com',
-                'country_id' => 1,
+                'country_id' => 1
+            ],[
                 'password' => Hash::make("Admin123")
             ]);
 
