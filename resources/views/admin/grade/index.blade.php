@@ -13,9 +13,9 @@ $breadcrumbs = [[['link' => route('grades.index'), 'name' => "المسارات �
         <div class="col-md">
             <x-inputs.select.generic :required="false" select2="" label="المدرسة" onLoad="{{ request('school_id') ? null : 'change'}}" name="school_id" data-placeholder="اختر المدرسة" data-msg="رجاء اختيار المدرسة" :options="['' => 'اختر المدرسة'] +schools()" />
         </div>
-        
+
         <div class="col-md">
-            <x-inputs.select.generic :required="false" select2="" label="النوع" name="gender_id" data-placeholder="اختر النوع" data-msg="رجاء اختيار النوع" :options="request('school_id') ? ['' => 'اختر النوع'] + App\Models\Gender::genders(true,request('school_id')) : []" />
+            <x-inputs.select.generic :required="false" select2="" label="القسم" name="gender_id" data-placeholder="اختر النوع" data-msg="رجاء اختيار القسم" :options="request('school_id') ? ['' => 'اختر القسم'] + App\Models\Gender::genders(true,request('school_id')) : []" />
         </div>
     </div>
 
@@ -35,7 +35,7 @@ $breadcrumbs = [[['link' => route('grades.index'), 'name' => "المسارات �
             <th scope="col">كود</th>
             <th scope="col">المسار</th>
             <th scope="col">الاسم في نور</th>
-            <th scope="col">النوع</th>
+            <th scope="col">القسم</th>
             <th scope="col">المدرسة</th>
             <th scope="col">قسم المقابلات</th>
             <th scope="col">حساب نور</th>
@@ -54,7 +54,7 @@ $breadcrumbs = [[['link' => route('grades.index'), 'name' => "المسارات �
             <td>{{ $grade->gender->school->school_name }}</td>
             <td>{{ $grade->section_name }}</td>
             <td>{{ $grade->account_name }}</td>
-            
+
             <td>{!! isActive($grade->active) !!}</td>
             <td>
                 @can('grades-list')

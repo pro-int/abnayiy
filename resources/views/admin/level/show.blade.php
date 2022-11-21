@@ -33,11 +33,11 @@ $breadcrumbs = [[['link' => route('levels.index'), 'name' => "الصفوف ال�
         </div>
 
         <div class="col-md">
-            <x-inputs.select.generic select2="" label="النوع" name="gender_id" data-placeholder="اختر النوع" data-msg="رجاء اختيار النوع" :options="old('school_id') ? App\Models\Gender::genders(true,old('school_id')) : App\Models\Gender::genders(true,$level->school_id)" />
+            <x-inputs.select.generic select2="" label="القسم" name="gender_id" data-placeholder="اختر القسم" data-msg="رجاء اختيار القسم" :options="old('school_id') ? App\Models\Gender::genders(true,old('school_id')) : App\Models\Gender::genders(true,$level->school_id)" />
         </div>
 
         <div class="col-md">
-            <x-inputs.select.generic select2="" label="المرحلة" name="grade_id" data-placeholder="اختر المرحلة" data-msg="رجاء اختيار المرحلة" :options="old('gender_id') ?App\Models\Grade::grades(true,old('gender_id')) : App\Models\Grade::grades(true,$level->gender_id)" />
+            <x-inputs.select.generic select2="" label="المسار" name="grade_id" data-placeholder="اختر المسار" data-msg="رجاء اختيار المسار" :options="old('gender_id') ?App\Models\Grade::grades(true,old('gender_id')) : App\Models\Grade::grades(true,$level->gender_id)" />
         </div>
     </div>
 

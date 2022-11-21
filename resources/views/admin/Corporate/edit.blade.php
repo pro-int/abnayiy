@@ -1,6 +1,6 @@
 @extends('layouts.contentLayoutMaster')
 @php
-$breadcrumbs = [[['link' => route('corporates.index'), 'name' => "البنوك"]],['title'=> 'تعديل معلومات المجمع']];
+$breadcrumbs = [[['link' => route('corporates.index'), 'name' => "المجمعات"]],['title'=> 'تعديل معلومات المجمع']];
 @endphp
 
 @section('title', 'تعديل معلومات المجمع')
@@ -28,7 +28,7 @@ $breadcrumbs = [[['link' => route('corporates.index'), 'name' => "البنوك"]
         <div class="col-md">
             <x-inputs.text.Input icon="home" label="اسم المجمع" name="corporate_name" placeholder="ادخل اسم المجمع" data-msg="'اسم المجمع بشكل صحيح" />
         </div>
-   
+
         <div class="col-md">
 
         <label class="form-label mr-1" for="active"> الحالة </label>

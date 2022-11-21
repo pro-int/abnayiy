@@ -133,7 +133,8 @@ class GuardianAuthController extends Controller
         }
 
         $user = $this->getAuthUser();
-
+        $role = Role::select("id")->where("name","parent")->first();
+        $user->assignRole([$role->id]);
         if ($user) {
             return response()->json([
                 'code' => 200,

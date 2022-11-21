@@ -42,5 +42,5 @@ class StoreCorporateRequest extends GeneralRequest
         $this->merge([
             'created_by' => auth()->id()]);
     }
-    
+
 }
