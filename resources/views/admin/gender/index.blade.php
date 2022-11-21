@@ -23,7 +23,7 @@ $breadcrumbs = [[['link' => route('genders.index'), 'name' => "الأقسام"]]
     <x-slot name="cardbody">قائمة الأقسام المسجلة بالمدرسة .. {{ isset($type) ?  'الأقسام  الخاصة بالنظام : ' . $type->school_name  : 'الأقسام (بنين - بنات)' }} </x-slot>
     <x-slot name="button">
         <a class="btn btn-primary mb-1" href="{{ route('genders.create') }}">
-            <em data-feather='plus-circle'></em> اضافة نوع جديد </a>
+            <em data-feather='plus-circle'></em> اضافة قسم جديد </a>
     </x-slot>
 
     <x-slot name="thead">
@@ -59,7 +59,7 @@ $breadcrumbs = [[['link' => route('genders.index'), 'name' => "الأقسام"]]
                 @endcan
 
                 @can('semesters-list')
-                <x-inputs.btn.generic :route="route('grades.index', ['gender_id' => $gender->id])">المراحل</x-inputs.btn.generic>
+                <x-inputs.btn.generic :route="route('grades.index', ['gender_id' => $gender->id])">المسارات</x-inputs.btn.generic>
                 @endcan
             </td>
         </tr>

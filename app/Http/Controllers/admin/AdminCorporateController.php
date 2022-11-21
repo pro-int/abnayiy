@@ -116,7 +116,7 @@ class AdminCorporateController extends Controller
 
     public function switch(Request $request)
     {
-        # togglw selected corporate
+        # toggle selected corporate
         if ($request->filled('corprate_id') && $corporate = Corporate::find($request->corprate_id)) {
             session()->put('seleted_corprate', $corporate);
         }

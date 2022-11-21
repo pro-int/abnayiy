@@ -21,11 +21,11 @@ $breadcrumbs = [[['link' => route('schools.index'), 'name' => "البنوك"]],[
 
 {!! Form::model($school,['route' => ['schools.update',$school],'method'=>'PUT' , 'onsubmit' => 'showLoader()'])  !!}
 
-<x-ui.divider>معلومات المدرسة</x-ui-divider>
+<x-ui.divider>معلومات المدرسة</x-ui.divider>
 
     <div class="row mb-1">
         <div class="col-md">
-            <x-inputs.select.generic label="المجمع الدراسي" name="corporate_id" data-placeholder="اختر المجمع الدراسي" :options="corporates()" />
+            <x-inputs.select.generic label="المجمع الدراسي" name="corporate_id" data-placeholder="اختر المجمع الدراسي" :options="corporates(true)" />
         </div>
 
         <div class="col-md">
@@ -36,7 +36,7 @@ $breadcrumbs = [[['link' => route('schools.index'), 'name' => "البنوك"]],[
     <div class="row mb-1">
         <div class="col-md">
             <label class="form-label mr-1" for="active"> الحالة </label>
-            <x-inputs.checkbox name="active">مفعل</x-inpurs.checkbox>
+            <x-inputs.checkbox name="active">مفعل</x-inputs.checkbox>
         </div>
     </div>
 

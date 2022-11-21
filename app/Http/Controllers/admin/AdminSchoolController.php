@@ -9,6 +9,7 @@ use App\Http\Requests\Corporate\School\StoreSchoolRequest;
 use App\Http\Requests\Corporate\School\UpdateSchoolRequest;
 use App\Services\CorporateService;
 use App\Services\SchoolService;
+use Illuminate\View\View;
 
 class AdminSchoolController extends Controller
 {
@@ -28,11 +29,12 @@ class AdminSchoolController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param IndexSchoolRequest $request
+     * @return View
      */
-    public function index(IndexSchoolRequest $request)
+    public function index(IndexSchoolRequest $request):View
     {
-        $schools = $this->schoolService->all($request->validated());
+        $schools = $this->schoolService->all($request->all());
 
         return view('admin.Corporate.School.index', compact('schools'));
     }
