@@ -4,7 +4,9 @@ namespace App\Http\Controllers\guardian;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Http\Requests\nationality\StorenationalityRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\StorePaymentAttempRequest;
 use App\Http\Traits\TransactionTrait;
 use App\Models\AcademicYear;
 use App\Http\Requests\AcademicYear\StoreAcademicYearRequest;
@@ -115,20 +117,46 @@ class GuardianChildrenController extends Controller
 
     public function showTransactionPaymentAttempt(Request $request){
 
-        $contract = $request->contract;
-        $student = $request->student;
 
-        $transaction =  $this->Get_transactions($request->transaction);
+        $req = json_decode($request->get('data'))[0];
 
-        if ($msg = $this->CheckNewPaymentStatus($transaction->academic_year_id, $contract)) {
-            return redirect()->back()->with('alert-danger', $msg);
+        $student = Student::select("guardian_id")->where("id", $req->student)->first();
+
+        $transaction = $this->Get_transactions($req->transaction);
+
+        if ($msg = $this->CheckNewPaymentStatus($transaction->academic_year_id, $req->contract)) {
+            return response()->json([
+                'code' => 400,
+                'message' => $msg,
+            ], 200);
         }
 
-        $coupon_code = $request->filled('coupon_code') ? $request->coupon_code : null;
+        $PaymentAttempt = $this->CreatePaymentAttempt($transaction, $request, [], $student->guardian_id,$req);
+        if ($PaymentAttempt) {
 
-        $transaction_info = $this->getTransactionAmounts($transaction, $coupon_code);
+            if ($request->filled('is_confirmed')) {
 
-        return view('parent.children.createPaymentAttempt', compact('transaction', 'student', 'contract', 'transaction_info'));
+                $amount = $request->requested_ammount ?? $transaction->residual_amount;
+                $request->request->add(['requested_ammount' => $amount]); //add request
+
+                if (!$this->confirmPaymentAttempt($PaymentAttempt, $transaction, $request)) {
+                    return response()->json([
+                        'code' => 400,
+                        'message' => 'خطأ اثناء محاولة تأكيد الدفعة',
+                    ], 200);
+                }
+            }
+
+            return response()->json([
+                'code' => 200,
+                'message' => 'تم اضافه الدفعه بنجاح',
+            ], 200);
+        } else {
+            return response()->json([
+                'code' => 400,
+                'message' => 'خطأ اثناء تسجيل الدفعة',
+            ], 200);
+        }
     }
 
     protected function CheckNewPaymentStatus(int $academic_year_id, int $contract_id)
@@ -159,6 +187,39 @@ class GuardianChildrenController extends Controller
             ->leftjoin('plans', 'plans.id', 'contracts.plan_id')
             ->leftjoin('students', 'students.id', 'contracts.student_id')
             ->find($id);
+    }
+
+    public function confirmPaymentAttempt($PaymentAttempt, $transaction, $request)
+    {
+        $result = DB::transaction(function () use ($PaymentAttempt, $transaction, $request) {
+
+            $received_ammount =  $request->filled('received_ammount') ? $request->received_ammount : $PaymentAttempt->requested_ammount;
+
+            if ($received_ammount <> $PaymentAttempt->requested_ammount) {
+                $transaction_data =  $this->getTransactionAmounts($transaction, $PaymentAttempt->coupon, $received_ammount);
+
+                $PaymentAttempt->coupon_discount = $transaction_data['coupon_discount'];
+                $PaymentAttempt->period_discount = $transaction_data['new_period_discount'];
+            }
+
+            $PaymentAttempt->approved = 1;
+            $PaymentAttempt->admin_id = Auth::id();
+            $PaymentAttempt->received_ammount = $received_ammount;
+
+            if ($PaymentAttempt->save()) {
+                if ($request->has('notifyuser') && $request->notifyuser) {
+                    $nNotification = new ApplySingleNotification($PaymentAttempt, 3, $transaction->guardian_id);
+                    $nNotification->fireNotification();
+                }
+
+                if (!empty($PaymentAttempt->coupon)) {
+                    $this->UpdatecouponUsage($PaymentAttempt->coupon);
+                }
+                return $transaction->update_transaction();
+            }
+        });
+
+        return $result;
     }
 
 }

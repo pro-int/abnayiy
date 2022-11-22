@@ -28,7 +28,7 @@ trait TransactionTrait
     /**
      * @param String $coupon_code
      * @param \App\Models\Transaction $transaction
-     * @return 
+     * @return
      */
 
     public function getTransactionAmounts(transaction $transaction, $coupon_code = null, $requested_ammount = null, $check_coupon = true)
@@ -164,11 +164,19 @@ trait TransactionTrait
         return $this->has_Coupone();
     }
 
-    protected function CreatePaymentAttempt($transaction, $request, $data = [], $guardian_id = null) : PaymentAttempt
+    protected function CreatePaymentAttempt($transaction, $request, $data = [], $guardian_id = null, $reqFromParent = null) : PaymentAttempt
     {
-        $requested_ammount = $request->filled('requested_ammount') && $request->requested_ammount < $request->max_amount ? $request->requested_ammount : null;
-        
-        $transaction_data =  $this->getTransactionAmounts($transaction, $request->coupon, $requested_ammount);
+        if($reqFromParent){
+            $requested_ammount =  $reqFromParent->requested_ammount ?? null;
+
+            $transaction_data =  $this->getTransactionAmounts($transaction, $reqFromParent->coupon??null, $requested_ammount);
+
+        }else{
+            $requested_ammount = $request->filled('requested_ammount') && $request->requested_ammount < $request->max_amount ? $request->requested_ammount : null;
+            $transaction_data =  $this->getTransactionAmounts($transaction, $request->coupon, $requested_ammount);
+
+        }
+
 
         if (!$requested_ammount) {
             $requested_ammount = $transaction_data['residual_amount'];
@@ -178,7 +186,9 @@ trait TransactionTrait
         $location = null == $guardian_id ? 'byUser-U' : 'byAdmin-U';
         $file_path = [];
 
-        if ($request->has('receipt')) {
+
+        if ($request->has('receipt') && $request->file('receipt') ) {
+
             $file = $request->file('receipt');
 
             // generate a new filename. getClientOriginalExtension() for the file extension
@@ -195,13 +205,13 @@ trait TransactionTrait
 
         return PaymentAttempt::create($file_path + [
             'transaction_id' => $transaction->id,
-            'payment_method_id' => $request->method_id,
+            'payment_method_id' => $reqFromParent ? $reqFromParent->method_id : $request->method_id,
             'requested_ammount' => $requested_ammount,
             'coupon' => $transaction_data['coupon_code'],
             'coupon_discount' => $transaction_data['coupon_discount'],
             'period_id' => $transaction_data['period_id'],
             'period_discount' => $transaction_data['new_period_discount'],
-            'bank_id' => $request->bank_id,
+            'bank_id' => $reqFromParent ? $reqFromParent->bank_id : $request->bank_id,
             'payment_network_id' => $request->payment_network_id
         ] + $data);
 
