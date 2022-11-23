@@ -221,7 +221,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('showChildrens', [GuardianChildrenController::class, "showChildrens"])->name("showChildrens");
         Route::get('childrenDetails', [GuardianChildrenController::class, "getChildrenDetails"])->name("childrenDetails");
         Route::get('contractTransaction', [GuardianChildrenController::class, "getContractTransaction"])->name("contractTransaction");
-        Route::get('transactionPaymentAttempt', [GuardianChildrenController::class, "showTransactionPaymentAttempt"])->name("transactionPaymentAttempt");
+        Route::post('transactionPaymentAttempt', [GuardianChildrenController::class, "showTransactionPaymentAttempt"])->name("transactionPaymentAttempt");
     });
 
 
@@ -229,5 +229,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('applications', GuardianApplicationController::class);
     });
 
+    Route::post('parent/student/{student_id}/transaction/{transaction_id}', [TransactionController::class, 'update_transactions']);
 
 });
+
