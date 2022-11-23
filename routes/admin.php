@@ -38,6 +38,7 @@ use App\Http\Controllers\admin\AdminStudentTransportationController;
 use App\Http\Controllers\admin\AdminTeacherController;
 use App\Http\Controllers\admin\AdminTransactionController;
 use App\Http\Controllers\admin\AdminTransportationController;
+use App\Http\Controllers\guardian\GuardianApplicationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\admin\AdminSubjectController;
@@ -221,6 +222,11 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('childrenDetails', [GuardianChildrenController::class, "getChildrenDetails"])->name("childrenDetails");
         Route::get('contractTransaction', [GuardianChildrenController::class, "getContractTransaction"])->name("contractTransaction");
         Route::get('transactionPaymentAttempt', [GuardianChildrenController::class, "showTransactionPaymentAttempt"])->name("transactionPaymentAttempt");
+    });
+
+
+    Route::prefix('parent')->name('parent.')->group(function () {
+        Route::resource('applications', GuardianApplicationController::class);
     });
 
 
