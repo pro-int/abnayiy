@@ -202,14 +202,13 @@ trait TransactionTrait
             $file_path = ['attach_pathh' => $path];
         }
 
-
         return PaymentAttempt::create($file_path + [
             'transaction_id' => $transaction->id,
             'payment_method_id' => $reqFromParent ? $reqFromParent->method_id : $request->method_id,
             'requested_ammount' => $requested_ammount,
             'coupon' => $transaction_data['coupon_code'],
             'coupon_discount' => $transaction_data['coupon_discount'],
-            'period_id' => $transaction_data['period_id'],
+            'period_id' => $transaction_data['period_id']?? 0,
             'period_discount' => $transaction_data['new_period_discount'],
             'bank_id' => $reqFromParent ? $reqFromParent->bank_id : $request->bank_id,
             'payment_network_id' => $request->payment_network_id

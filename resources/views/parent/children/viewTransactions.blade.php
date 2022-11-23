@@ -129,11 +129,14 @@
                 <div class="card card-profile">
                     <div class="card-body">
                         <x-ui.table>
+                            <x-slot name="thead">
+                                <tr>
+                                    <th>كود</th>
+                                    <th>{{ $transaction->id }}</th>
+                                </tr>
+                            </x-slot>
                             <x-slot name="tbody">
-                                    <tr>
-                                        <th>كود</th>
-                                        <th>{{ $transaction->id }}</th>
-                                    </tr>
+
                                     <tr>
                                         <th>الدفعة</th>
                                         <th>{{ $transaction->installment_name }}</th>
@@ -181,7 +184,7 @@
                         @if(!$transaction->payment_status)
                         <div class="d-flex justify-content-center align-items-center">
 {{--                            <a href=" {{ route('parent.transactionPaymentAttempt', ['student' => $contract->student_id, 'contract' => $contract, 'transaction' => $transaction]) }}">--}}
-                                <button type="button" class="openPayment btn btn-primary mb-1" value="{{ round($transaction->residual_amount, 2) }}">الدفع</button>
+                                <button type="button" class="openPayment btn btn-primary mb-1" value="{{ round($transaction->residual_amount, 2) . "," . $transaction->id }}">الدفع</button>
 {{--                            </a>--}}
                         </div>
                         @endif
@@ -243,10 +246,12 @@
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-        var payment_amount = '';
 
+        var payment_amount = '';
+        var trans_id = '';
         $(".openPayment").click(function () {
-            payment_amount = this.value;
+            payment_amount = this.value.split(",")[0];
+            trans_id = this.value.split(",")[1];
             $(".modalDialog1").css("display","block");
         });
         $(".close1").on('click',function(){
@@ -288,10 +293,6 @@
                 $('.errorMessageBody').text("يرجي ادحال البنك ورفع الملف");
             }else if(paymentGetaway == 1){
                 $(".errorMessage").css("display","none");
-                console.log(payment_amount);
-                console.log(paymentGetaway);
-                console.log($('#formFile').prop('files')[0]);
-                console.log(bankId);
                 var formData = new FormData();
                 formData.append('receipt', $('#formFile').prop('files')[0]);
                 var objArr = [];
@@ -303,7 +304,7 @@
                     "bank_id": bankId,
                     "student": {{$contract->student_id}},
                     "contract": {{$contract->id}},
-                    "transaction": {{$transaction->id}}
+                    "transaction": trans_id
                 });
                 formData.append('data', JSON.stringify(objArr));
 
@@ -324,11 +325,12 @@
                             $(".responseErrorMessage").addClass("alert-danger");
                         }
                         $(".modalDialog1").css("display","none");
+                        location.reload();
                     }
                 });
             }else if(paymentGetaway ==3){
                 $.ajax({
-                    url: "student/" + {{$contract->student_id}} + "/transaction/" + {{$transaction->id}},
+                    url: "student/" + {{$contract->student_id}} + "/transaction/" + trans_id,
                     method: 'POST',
                     data: {
                         "requested_ammount": payment_amount,
@@ -337,23 +339,20 @@
                         "bank_id": bankId,
                         "student": {{$contract->student_id}},
                         "contract": {{$contract->id}},
-                        "transaction": {{$transaction->id}}
+                        "transaction": trans_id
                     },
                     success: function (response){
-                        console.log(response.params);
-                        $.ajax({
-                            url: response.url,
-                            headers: {
-                                'Access-Control-Allow-Origin':  'http://127.0.0.1:8000',
-                                'Access-Control-Allow-Methods': 'POST',
-                                'Access-Control-Allow-Headers': 'Content-Type, Authorization'
-                            },
-                            method: 'POST',
-                            data: response.params,
-                            success: function (response){
-                                console.log(response);
-                            }
-                        });
+                        if(response.url){
+                            $.ajax({
+                                url: response.url,
+                                method: 'POST',
+                                data: response.params,
+                                success: function (response){
+                                    console.log(response);
+                                    location.reload();
+                                }
+                            });
+                        }
                     }
                 });
 

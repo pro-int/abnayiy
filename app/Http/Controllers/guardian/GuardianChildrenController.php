@@ -117,34 +117,32 @@ class GuardianChildrenController extends Controller
 
     public function showTransactionPaymentAttempt(Request $request){
 
+        $requestData = json_decode($request->get('data'))[0];
 
-        $req = json_decode($request->get('data'))[0];
+        $student = Student::select("guardian_id")->where("id", $requestData->student)->first();
 
-        $student = Student::select("guardian_id")->where("id", $req->student)->first();
+        $transaction = $this->Get_transactions($requestData->transaction);
 
-        $transaction = $this->Get_transactions($req->transaction);
-
-        if ($msg = $this->CheckNewPaymentStatus($transaction->academic_year_id, $req->contract)) {
+        if ($msg = $this->CheckNewPaymentStatus($transaction->academic_year_id, $requestData->contract)) {
             return response()->json([
                 'code' => 400,
                 'message' => $msg,
             ], 200);
         }
 
-        $PaymentAttempt = $this->CreatePaymentAttempt($transaction, $request, [], $student->guardian_id,$req);
+        $PaymentAttempt = $this->CreatePaymentAttempt($transaction, $request, [], $student->guardian_id,$requestData);
+
         if ($PaymentAttempt) {
 
-            if ($request->filled('is_confirmed')) {
+            $amount = $requestData->requested_ammount ?? $transaction->residual_amount;
 
-                $amount = $request->requested_ammount ?? $transaction->residual_amount;
-                $request->request->add(['requested_ammount' => $amount]); //add request
+            $requestData->requested_ammount = $amount; //add request
 
-                if (!$this->confirmPaymentAttempt($PaymentAttempt, $transaction, $request)) {
-                    return response()->json([
-                        'code' => 400,
-                        'message' => 'خطأ اثناء محاولة تأكيد الدفعة',
-                    ], 200);
-                }
+            if (!$this->confirmPaymentAttempt($PaymentAttempt, $transaction, $requestData)) {
+                return response()->json([
+                    'code' => 400,
+                    'message' => 'خطأ اثناء محاولة تأكيد الدفعة',
+                ], 200);
             }
 
             return response()->json([
@@ -193,7 +191,7 @@ class GuardianChildrenController extends Controller
     {
         $result = DB::transaction(function () use ($PaymentAttempt, $transaction, $request) {
 
-            $received_ammount =  $request->filled('received_ammount') ? $request->received_ammount : $PaymentAttempt->requested_ammount;
+            $received_ammount =  isset($request->received_ammount) ? $request->received_ammount : $PaymentAttempt->requested_ammount;
 
             if ($received_ammount <> $PaymentAttempt->requested_ammount) {
                 $transaction_data =  $this->getTransactionAmounts($transaction, $PaymentAttempt->coupon, $received_ammount);
@@ -207,10 +205,10 @@ class GuardianChildrenController extends Controller
             $PaymentAttempt->received_ammount = $received_ammount;
 
             if ($PaymentAttempt->save()) {
-                if ($request->has('notifyuser') && $request->notifyuser) {
-                    $nNotification = new ApplySingleNotification($PaymentAttempt, 3, $transaction->guardian_id);
-                    $nNotification->fireNotification();
-                }
+//                if ($request->has('notifyuser') && $request->notifyuser) {
+//                    $nNotification = new ApplySingleNotification($PaymentAttempt, 3, $transaction->guardian_id);
+//                    $nNotification->fireNotification();
+//                }
 
                 if (!empty($PaymentAttempt->coupon)) {
                     $this->UpdatecouponUsage($PaymentAttempt->coupon);
