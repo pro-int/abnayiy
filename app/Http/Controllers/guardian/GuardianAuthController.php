@@ -65,6 +65,7 @@ class GuardianAuthController extends Controller
                     ->with(["userRegistrationErrorMessage" => 'خطأ اثناء تسجيل الحساب']);
             }
         } catch (\Exception $th) {
+            dd($th);
             info($th);
             return redirect()->back()
                 ->with(["userRegistrationErrorMessage" => 'خطأ غير متوقع']);
