@@ -167,8 +167,7 @@ trait TransactionTrait
     protected function CreatePaymentAttempt($transaction, $request, $data = [], $guardian_id = null, $reqFromParent = null) : PaymentAttempt
     {
         if($reqFromParent){
-            $requested_ammount =  $reqFromParent->requested_ammount ?? null;
-
+            $requested_ammount =  $reqFromParent->coupon ? null : $reqFromParent->requested_ammount;
             $transaction_data =  $this->getTransactionAmounts($transaction, $reqFromParent->coupon??null, $requested_ammount);
 
         }else{
