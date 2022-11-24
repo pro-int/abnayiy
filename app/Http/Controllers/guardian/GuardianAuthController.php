@@ -65,7 +65,6 @@ class GuardianAuthController extends Controller
                     ->with(["userRegistrationErrorMessage" => 'خطأ اثناء تسجيل الحساب']);
             }
         } catch (\Exception $th) {
-            dd($th);
             info($th);
             return redirect()->back()
                 ->with(["userRegistrationErrorMessage" => 'خطأ غير متوقع']);
@@ -94,7 +93,7 @@ class GuardianAuthController extends Controller
 
             if (!$code) {
                 Mobile::where('phone', $request->phone)->where('activated', 0)->delete();
-                $new_code = rand(1000, 9999);
+                $new_code = 1234;
                 $code = new Mobile();
                 $code->code = $new_code;
                 $code->phone = $request->phone;

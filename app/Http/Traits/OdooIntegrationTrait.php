@@ -18,22 +18,22 @@ trait OdooIntegrationTrait
         $password = config("odoo_configuration")['password'];
         $url = config("odoo_configuration")['url'];
 
-        $common = RipcordRipcord::client("$url/xmlrpc/2/common");
-        // get user id
-        $uid = $common->authenticate($db, $username, $password, array());
-        // select model
-        $models = RipcordRipcord::client("$url/xmlrpc/2/object");
+//        $common = RipcordRipcord::client("$url/xmlrpc/2/common");
+//        // get user id
+//        $uid = $common->authenticate($db, $username, $password, array());
+//        // select model
+//        $models = RipcordRipcord::client("$url/xmlrpc/2/object");
 
-        $this->user_id = $uid;
-        $this->models = $models;
+//        $this->user_id = $uid;
+//        $this->models = $models;
         $this->odoo_db = $db;
         $this->odoo_password = $password;
     }
 
     public function sendDataToOdoo($modelKeys, $enable){
-        if($enable){
-            $this->connect();
-            $this->models->execute_kw($this->odoo_db, $this->user_id, $this->odoo_password, 'res.partner', 'create', array(array($modelKeys)));
-        }
+//        if($enable){
+//            $this->connect();
+//            $this->models->execute_kw($this->odoo_db, $this->user_id, $this->odoo_password, 'res.partner', 'create', array(array($modelKeys)));
+//        }
     }
 }
