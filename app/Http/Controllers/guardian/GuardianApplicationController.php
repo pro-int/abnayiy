@@ -177,7 +177,7 @@ class GuardianApplicationController extends Controller
     {
         // handel new application after validation is passed "ApplicationReuest"
         try {
-            $user = User::whereHas('guardian')->with('guardian')->findOrFail(auth()->id);
+            $user = User::whereHas('guardian')->with('guardian')->findOrFail(Auth::user()->id);
             if ($user) {
                 // get gender
                 $gender = Gender::findOrFail($request->gender_id);
@@ -198,11 +198,11 @@ class GuardianApplicationController extends Controller
                     $application->gender = $gender->gender_type;
                     $application->level_id = $request->level_id;
                     $application->academic_year_id = $request->academic_year_id;
-                    $application->guardian_id = $request->guardian_id;
                     $application->appointment_id = $new_meetig['appointment']->id;
                     $application->transportation_id = $request->transportation_required ? $request->transportation_id : null;
                     $application->transportation_payment = $request->transportation_required ? $request->transportation_payment : null;
                     $application->sales_id = Auth::id();
+                    $application->guardian_id=Auth::id();
 
                     if ($application->save()) {
 
