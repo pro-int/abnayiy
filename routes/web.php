@@ -27,4 +27,6 @@ Route::prefix('parent')->group(function () {
     Route::get('register', [GuardianAuthController::class, 'showRegistrationPage'])->name("showRegistrationPage");
     Route::post('userLogin', [GuardianAuthController::class, 'userLogin'])->name("userLogin");
     Route::post('userRegistration', [GuardianAuthController::class, 'userRegistration'])->name("userRegistration");
+    Route::get('forgot-password', [GuardianAuthController::class, 'showForgotPasswordPage'])->name("showForgotPasswordPage");
+    Route::post('forgotPassword', [GuardianAuthController::class, 'sendPasswordResetCode'])->name("forgotPassword");
 });
