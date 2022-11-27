@@ -241,8 +241,9 @@
                     data: {
                         "requested_ammount": payment_amount,
                         "method_id": paymentGetaway,
-                        "receipt": $('#formFile').prop('files')[0],
-                        "bank_id": bankId,
+                        "receipt": null,
+                        "bank_id": null,
+                        "coupon": coupon,
                         "student": {{$contract->student_id}},
                         "contract": {{$contract->id}},
                         "transaction": trans_id
