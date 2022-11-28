@@ -1,7 +1,7 @@
 @extends('layouts.contentLayoutMaster')
 
 @php
-    $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],['link' => route('students.show',$contract->student_id), 'name' => $contract->student_name],['link' => route('students.contracts.index',$contract->student_id), 'name' => 'التعاقدات'],['link' => route('students.contracts.index',[$contract->student_id,$contract->id]), 'name' => 'تعاقد '.$contract->year_name]],['title'=> 'دفعات التعاقد رقم #'. $contract->id]];
+    $breadcrumbs = [[['link' => route('parent.showChildrens'), 'name' => 'الابناء'],['link' => route('parent.contractTransaction',["student_id" => $contract->student_id, "contract_id" => $contract->id]), 'name' => $contract->student_name],['link' => route('parent.contractTransaction',["student_id" => $contract->student_id, "contract_id" => $contract->id]), 'name' => 'تعاقد '.$contract->year_name]],['title'=> 'دفعات التعاقد رقم #'. $contract->id]];
 @endphp
 
 @section('title', 'دفعات التعاقد رقم #'. $contract->id)
@@ -141,7 +141,7 @@
     <script>
         $.ajaxSetup({
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
             }
         });
 
@@ -232,6 +232,7 @@
                             $(".responseErrorMessage").addClass("alert-danger");
                         }
                         $(".modalDialog1").css("display","none");
+                        location.reload();
                     }
                 });
             }else if(paymentGetaway ==3){
@@ -249,14 +250,18 @@
                         "transaction": trans_id
                     },
                     success: function (response){
+                        console.log(response);
                         if(response.url){
                             $.ajax({
-                                url: response.url,
+                                url: '{{ route('parent.sendPayfortRequest') }}',
                                 method: 'POST',
-                                data: response.params,
+                                dataType: "html",
+                                data: {
+                                    "path": response.url,
+                                    "params": response.params
+                                },
                                 success: function (response){
                                     console.log(response);
-                                    location.reload();
                                 }
                             });
                         }
