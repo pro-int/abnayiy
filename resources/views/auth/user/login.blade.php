@@ -42,9 +42,14 @@
             <x-inputs.text.Input style="display: inline-block; width: 90%;" label="الجوال/ البريد الأليكتروني" name="phone" placeholder="رقم الجوال او البريد الألكيتروني" required />
             966+
           </div>
+            <div style="direction: ltr; float: left;">
+                <a href="{{ route("showForgotPasswordPage") }}">
+                    <small>نسيت كلمة المرور ؟</small>
+                </a>
+            </div>
 
           <div class="mb-1">
-            <x-inputs.password required enableForgotPassword=true name="password" label="كلمة المرور" />
+            <x-inputs.password required name="password" label="كلمة المرور" />
 
           </div>
           <div class="mb-1">

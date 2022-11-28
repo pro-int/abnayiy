@@ -38,6 +38,7 @@ use App\Http\Controllers\admin\AdminStudentTransportationController;
 use App\Http\Controllers\admin\AdminTeacherController;
 use App\Http\Controllers\admin\AdminTransactionController;
 use App\Http\Controllers\admin\AdminTransportationController;
+use App\Http\Controllers\guardian\GuardianApplicationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\admin\AdminSubjectController;
@@ -62,6 +63,7 @@ use App\Http\Controllers\admin\AdminUserController;
 use App\Http\Controllers\admin\AdminWithdrawalApplicationController;
 use App\Http\Controllers\admin\AdminWithdrawalPeriodController;
 use App\Http\Controllers\guardian\GuardianChildrenController;
+use App\Http\Controllers\guardian\GuardianWithdrawalApplicationController;
 use App\Models\Application;
 use App\Models\guardian;
 use Maatwebsite\Excel\Facades\Excel;
@@ -225,5 +227,6 @@ Route::group(['middleware' => ['auth']], function () {
     });
 
     Route::post('parent/student/{student_id}/transaction/{transaction_id}', [TransactionController::class, 'update_transactions']);
+
 });
 

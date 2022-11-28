@@ -12,6 +12,49 @@
                     "slug": "parent.showChildrens"
                 }
             ]
+        },{
+            "name": "طلبات الألتحاق",
+            "icon": "file",
+            "slug": "",
+            "submenu": [
+                {
+                    "url": "parent.applications.index",
+                    "name": "جميع الطلبات",
+                    "icon": "circle",
+                    "slug": "parent.applications.index"
+                },
+                {
+                    "url": "parent.applications.index",
+                    "name": "الطلبات الجديدة",
+                    "icon": "circle",
+                    "slug": "parent.students.index",
+                    "query": "status_id=1"
+                },
+                {
+                    "url": "parent.applications.create",
+                    "name": "تسجيل طلب التحاق",
+                    "icon": "circle",
+                    "slug": "parent.applications.create"
+                }
+            ]
+        },{
+            "name": "طلبات الأنسحاب",
+            "icon": "file",
+            "slug": "",
+            "submenu": [
+                {
+                    "url": "parent.withdrawals.index",
+                    "name": "الطلبات الجديده",
+                    "icon": "circle",
+                    "slug": "parent.withdrawals.index"
+                },
+                {
+                    "url": "parent.withdrawals.create",
+                    "name": "تسجيل طلب انسحاب",
+                    "icon": "circle",
+                    "slug": "parent.withdrawals.create"
+                }
+            ]
         }
     ]
 }

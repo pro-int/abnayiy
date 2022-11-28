@@ -1174,7 +1174,55 @@ class PermissionsCommand extends Command
                 "name" => "guardianChildren-list",
                 "guard_name" => "web",
                 "permission_category_id" => 33
-            ]
+            ],
+            [
+                "display_name" => "مشاهدة",
+                "name" => "guardian-applications-list",
+                "guard_name" => "web",
+                "permission_category_id" => 33
+            ],
+            [
+                "display_name" => "اضافة",
+                "name" => "guardian-applications-create",
+                "guard_name" => "web",
+                "permission_category_id" => 33
+            ],
+            [
+                "display_name" => "تعديل",
+                "name" => "guardian-applications-edit",
+                "guard_name" => "web",
+                "permission_category_id" => 33
+            ],
+            [
+                "display_name" => "حذف",
+                "name" => "guardian-applications-delete",
+                "guard_name" => "web",
+                "permission_category_id" => 33
+            ],
+            [
+                "display_name" => "مشاهدة",
+                "name" => "guardian-withdrawal-applications-list",
+                "guard_name" => "web",
+                "permission_category_id" => 33
+            ],
+            [
+                "display_name" => "اضافة",
+                "name" => "guardian-withdrawal-applications-create",
+                "guard_name" => "web",
+                "permission_category_id" => 33
+            ],
+            [
+                "display_name" => "تعديل",
+                "name" => "guardian-withdrawal-applications-edit",
+                "guard_name" => "web",
+                "permission_category_id" => 33
+            ],
+            [
+                "display_name" => "حذف",
+                "name" => "guardian-withdrawal-applications-delete",
+                "guard_name" => "web",
+                "permission_category_id" => 33
+            ],
         ];
 
         DB::statement('SET FOREIGN_KEY_CHECKS=0;');

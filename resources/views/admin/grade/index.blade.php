@@ -51,7 +51,7 @@ $breadcrumbs = [[['link' => route('grades.index'), 'name' => "المسارات �
             <td>{{ $grade->grade_name }}</td>
             <td>{{ $grade->grade_name_noor }}</td>
             <td>{{ $grade->gender->gender_name }}</td>
-            <td>{{ $grade->gender->school->school_name }}</td>
+            <td>{{ $grade?->gender?->school?->school_name }}</td>
             <td>{{ $grade->section_name }}</td>
             <td>{{ $grade->account_name }}</td>
 

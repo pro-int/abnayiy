@@ -5,6 +5,7 @@ namespace App\Http\Controllers\guardian;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
+use App\Http\Requests\ResetPasswordRestLinkRequest;
 use App\Models\AcademicYear;
 use App\Http\Requests\AcademicYear\StoreAcademicYearRequest;
 use App\Http\Requests\AcademicYear\UpdateAcademicYearRequest;
@@ -65,7 +66,6 @@ class GuardianAuthController extends Controller
                     ->with(["userRegistrationErrorMessage" => 'خطأ اثناء تسجيل الحساب']);
             }
         } catch (\Exception $th) {
-            dd($th);
             info($th);
             return redirect()->back()
                 ->with(["userRegistrationErrorMessage" => 'خطأ غير متوقع']);
@@ -94,7 +94,7 @@ class GuardianAuthController extends Controller
 
             if (!$code) {
                 Mobile::where('phone', $request->phone)->where('activated', 0)->delete();
-                $new_code = rand(1000, 9999);
+                $new_code = 1234;
                 $code = new Mobile();
                 $code->code = $new_code;
                 $code->phone = $request->phone;
@@ -153,6 +153,103 @@ class GuardianAuthController extends Controller
     public function getAuthUser()
     {
         return user::with(['guardian', 'guardian.students', 'guardian.applications', 'guardian.category'])->find(Auth::id());
+    }
+
+    public function showForgotPasswordPage(){
+        return view('auth.user.forgot-password');
+    }
+
+    public function sendPasswordResetCode(ResetPasswordRestLinkRequest $request)
+    {
+
+        try {
+            if ($request->filled('code')) {
+                $code = null;
+
+                $request->phone = '966' . $request->phone;
+
+                //dd(preg_match('/^[0-9]{12}+$/', $request->phone), preg_match("@^\d{4}$@", $request->code));
+                if(preg_match("@^\d{4}$@", $request->code) && preg_match('/^[0-9]{12}+$/', $request->phone)){
+                    $code = Mobile::where('phone', $request->phone)->where('activated', 0)->whereDate('created_at', '>=', Carbon::now()->subMinutes(30))->where('code', $request->code)->first();
+                }
+
+                if (!$code){
+                    return response()->json([
+                        'error' => 'كود التحقق غير صحيح',
+                        'code' => 402,
+                        'message' => 'يرجى التأكد من الكود او رقم الجوال',
+                    ], 200);
+                }
+
+                $user = User::where('phone', $request->phone)->first();
+
+                if ($user && $request->password) {
+                    $user->password = Hash::make($request->password);
+
+                    if ($user->save()){
+                        $message = 'تم تغيير كلمة المررو بنجاح .. يمكنك الان تسجيل الدخول بأستخادم كلمة المرور الجديدة.';
+                        return response()->json([
+                            'code' => 200,
+                            'message' => $message,
+                        ], 200);
+                    }
+                }
+
+                $message = 'لم يتم العثور علي المستخدم او قم بادخال كلمه المرور';
+                $error = 'تاكد من رقم الجوال وكلمه المرور مكونه من 8 احرف علي الاقل';
+
+                return response()->json([
+                    'error' => $error,
+                    'code' => 403,
+                    'message' => $message,
+                ], 200);
+            } else {
+
+                $request->phone = '966' . $request->phone;
+
+                $phone = $request->phone;
+
+                $user = null;
+
+                if(preg_match('/^[0-9]{12}+$/', $phone)){
+                    $user = User::where('phone', $phone)->first();
+                }
+
+                if (!$user) {
+                    return response()->json([
+                        'error' => 'رجاء التأكد من رقم الجوال',
+                        'code' => 401,
+                        'message' => 'للاسف المعلومات التي ادخلتها لا تطابق البيانات المسجلة لدينا',
+                    ], 200);
+                }
+
+                $code = Mobile::where('phone', $phone)->where('activated', 0)->whereDate('created_at', '>=', Carbon::now()->subMinutes(2)->toDateTimeString())->first();
+
+                if (!$code) {
+                    Mobile::where('phone', $phone)->where('activated', 0)->delete();
+                    $new_code = rand(1000, 9999);
+                    $code = new Mobile();
+                    $code->code = $new_code;
+                    $code->phone = $phone;
+                    $code->save();
+                }
+
+                $message = 'تم ارسال كود التحقق الي رقم الجوال';
+                $message_code = 'كود التحقق الخاص بك هو : ' . $code->code;
+
+                Mobile::Send_verify_code($code->phone, $message_code);
+                return response()->json([
+                    'code' => 200,
+                    'message' => $message,
+                ], 200);
+            }
+        } catch (\Throwable $th) {
+            info($th);
+            return response()->json([
+                'error' => 'خطا غير متوقع .. رجاء المحاولة في وقت لاحق.',
+                'code' => 401,
+            ], 200);
+        }
     }
 
 }

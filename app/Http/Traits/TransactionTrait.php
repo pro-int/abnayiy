@@ -16,7 +16,7 @@ trait TransactionTrait
 {
     use CouponeTrait;
 
-    public $transaction_data = [];
+    public array $transaction_data = [];
     public $coupon_code;
     public $transaction;
     public $check_coupon;
@@ -166,6 +166,7 @@ trait TransactionTrait
 
     protected function CreatePaymentAttempt($transaction, $request, $data = [], $guardian_id = null, $reqFromParent = null) : PaymentAttempt
     {
+
         if($reqFromParent){
             $requested_ammount =  $reqFromParent->coupon ? null : $reqFromParent->requested_ammount;
             $transaction_data =  $this->getTransactionAmounts($transaction, $reqFromParent->coupon??null, $requested_ammount);
@@ -175,6 +176,7 @@ trait TransactionTrait
             $transaction_data =  $this->getTransactionAmounts($transaction, $request->coupon, $requested_ammount);
 
         }
+
 
 
         if (!$requested_ammount) {
