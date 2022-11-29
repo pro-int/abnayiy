@@ -28,7 +28,8 @@ class StoreWithdrawalApplicationRequest extends GeneralRequest
             'student_id' => 'required|numeric|unique:withdrawal_applications',
             'reason' => 'required|string',
             'comment' => 'required|string|min:1|max:150',
-            'school_name' => 'nullable|min:1|max:50'
+            'school_name' => 'nullable|min:1|max:50',
+            'date' => 'nullable|string'
         ];
     }
 
@@ -40,6 +41,8 @@ class StoreWithdrawalApplicationRequest extends GeneralRequest
             'reason' => 'سبب الانسحاب',
 
             'comment' => 'تعليقك',
+
+            'date' => 'تاريخ الانسحاب',
 
             'school_name' => 'اسم المدرسه'
 

@@ -54,6 +54,9 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
             <x-inputs.select.generic label="سبب الانسحاب" name="reason" data-placeholder="ابحث عن سبب الانسحاب" data-msg="رجاءاختيار سبب الانسحاب"  :options="App\Models\WithdrawalApplication::getWithdrawalReasons()"/>
         </div>
         <div class="col-md">
+            <x-inputs.text.Input class="flatpickr-basic" icon="calendar" :required="false" label="تاريخ الانسحاب :اذا لم تقم باختيار تاريخ فسوف يتم تسجيل الطلب بتاريخ اليوم" data-msg="اذا لم تقم باختيار تاريخ فسوف يتم تسجيل الطلب بتاريخ اليوم"  name="date" placeholder="yyyy-mm-dd" />
+        </div>
+        <div class="col-md">
             <x-inputs.text.Input label="اسم المدرسه المحول لها" :required="false" name="school_name"  data-msg="' بشكل صحيح" />
         </div>
         <div class="col-md">

@@ -14,6 +14,7 @@ class WithdrawalApplication extends Model
         'student_id',
         'academic_year_id',
         'reason',
+        'date',
         'comment',
         'amount_fees',
         'application_status',

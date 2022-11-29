@@ -19,48 +19,48 @@ $breadcrumbs = [[['link' => route('applications.index'), 'name' => "الطلبا
 
 @section('content')
 
-<x-forms.search route="parent.applications.index">
-    <div class="row mb-1">
-        <div class="col-md">
-            <x-inputs.text.Input :required="false" icon="search" label="اليحث" name="search" placeholder="يمكنك البحث عن اسم او رقم جوال او هوية ويمكن البحث بالكود عن طريق اضافة = قبل لكمة البحث" />
-        </div>
-        <div class="col-md">
-            <x-inputs.select.generic :required="false" label="السنة الدراسية" name="academic_year_id" data-placeholder="السنة الدراسية" :options="['' => 'جميع السنوات'] + App\Models\AcademicYear::years()" />
-        </div>
-        <div class="col-md">
-            <x-inputs.select.generic label="حالة الطلب" name="status_id" data-placeholder="اختر حالة الطلب" :options="['all' => 'جميع الطلبات'] + App\Models\ApplicationStatus::Statuses()" />
-        </div>
-    </div>
-    <div class="row mb-1">
+{{--<x-forms.search route="parent.applications.index">--}}
+{{--    <div class="row mb-1">--}}
+{{--        <div class="col-md">--}}
+{{--            <x-inputs.text.Input :required="false" icon="search" label="اليحث" name="search" placeholder="يمكنك البحث عن اسم او رقم جوال او هوية ويمكن البحث بالكود عن طريق اضافة = قبل لكمة البحث" />--}}
+{{--        </div>--}}
+{{--        <div class="col-md">--}}
+{{--            <x-inputs.select.generic :required="false" label="السنة الدراسية" name="academic_year_id" data-placeholder="السنة الدراسية" :options="['' => 'جميع السنوات'] + App\Models\AcademicYear::years()" />--}}
+{{--        </div>--}}
+{{--        <div class="col-md">--}}
+{{--            <x-inputs.select.generic label="حالة الطلب" name="status_id" data-placeholder="اختر حالة الطلب" :options="['all' => 'جميع الطلبات'] + App\Models\ApplicationStatus::Statuses()" />--}}
+{{--        </div>--}}
+{{--    </div>--}}
+{{--    <div class="row mb-1">--}}
 
-        <div class="col-md">
-            <x-inputs.text.Input class="flatpickr-basic" icon="calendar" :required="false" label="تاريخ من :" name="date_from" placeholder="yyyy-mm-dd" />
-        </div>
-        <div class="col-md">
-            <x-inputs.text.Input class="flatpickr-basic" icon="calendar" :required="false" label="تاريخ الي :" name="date_to" placeholder="yyyy-mm-dd" />
-        </div>
-    </div>
+{{--        <div class="col-md">--}}
+{{--            <x-inputs.text.Input class="flatpickr-basic" icon="calendar" :required="false" label="تاريخ من :" name="date_from" placeholder="yyyy-mm-dd" />--}}
+{{--        </div>--}}
+{{--        <div class="col-md">--}}
+{{--            <x-inputs.text.Input class="flatpickr-basic" icon="calendar" :required="false" label="تاريخ الي :" name="date_to" placeholder="yyyy-mm-dd" />--}}
+{{--        </div>--}}
+{{--    </div>--}}
 
-    <div class="row mb-1">
-        <div class="col-md">
-            <label class="form-label">خدمة النقل </label>
-            <x-inputs.checkbox :required="false" name="transportation">يرغب في خدمة النقل</x-inputs.checkbox>
-        </div>
-    </div>
+{{--    <div class="row mb-1">--}}
+{{--        <div class="col-md">--}}
+{{--            <label class="form-label">خدمة النقل </label>--}}
+{{--            <x-inputs.checkbox :required="false" name="transportation">يرغب في خدمة النقل</x-inputs.checkbox>--}}
+{{--        </div>--}}
+{{--    </div>--}}
 
-    <x-slot name="export">
-        <div class="btn-group">
-            <button class="btn btn-outline-secondary waves-effect" name="action" type="submit" value="export_xlsx"><em data-feather='save'></em> اكسل</button>
-            <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split waves-effect" data-bs-toggle="dropdown" aria-expanded="false">
-                <span class="visually-hidden"></span>
-            </button>
-            <div class="dropdown-menu dropdown-menu-end">
-                <button class="dropdown-item" name="action" type="submit" value="export_pdf"><em data-feather='save'></em> PDF</button>
-            </div>
-        </div>
-    </x-slot>
+{{--    <x-slot name="export">--}}
+{{--        <div class="btn-group">--}}
+{{--            <button class="btn btn-outline-secondary waves-effect" name="action" type="submit" value="export_xlsx"><em data-feather='save'></em> اكسل</button>--}}
+{{--            <button type="button" class="btn btn-outline-secondary dropdown-toggle dropdown-toggle-split waves-effect" data-bs-toggle="dropdown" aria-expanded="false">--}}
+{{--                <span class="visually-hidden"></span>--}}
+{{--            </button>--}}
+{{--            <div class="dropdown-menu dropdown-menu-end">--}}
+{{--                <button class="dropdown-item" name="action" type="submit" value="export_pdf"><em data-feather='save'></em> PDF</button>--}}
+{{--            </div>--}}
+{{--        </div>--}}
+{{--    </x-slot>--}}
 
-</x-forms.search>
+{{--</x-forms.search>--}}
 
 <!-- Striped rows start -->
 <x-ui.table>
