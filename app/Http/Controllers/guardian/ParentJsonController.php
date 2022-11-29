@@ -147,7 +147,7 @@ class ParentJsonController extends Controller
             $search=$request->q;
             $students =  Student::select('students.id', 'students.student_name', 'students.national_id', 'levels.level_name')
                 ->where('guardian_id',Auth::user()->id)
-                ->orWhere(function ($query) use ($search){
+                ->where(function ($query) use ($search){
                     $query->where('student_name', 'LIKE', '%' . $search . '%')
                         ->orWhere('national_id', 'LIKE', '%' . $search . '%');
                 })

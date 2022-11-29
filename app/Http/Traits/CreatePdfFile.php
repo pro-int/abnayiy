@@ -15,7 +15,7 @@ trait CreatePdfFile
 
     function __construct()
     {
-        $this->mpdf = new Mpdf();
+        $this->mpdf = new Mpdf(['tempDir'=>storage_path('tempdir')]);
     }
 
     public function getPdf($content, $orientation = 'L')
@@ -27,6 +27,7 @@ trait CreatePdfFile
         $fontData = $defaultFontConfig['fontdata'];
 
         $this->mpdf = new Mpdf([
+            'tempDir'=>storage_path('tempdir'),
             'margin_left' => 10,
             'margin_right' => 10,
             'margin_top' => 10,

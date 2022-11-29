@@ -18,24 +18,24 @@
             "slug": "",
             "submenu": [
                 {
-                    "url": "parent.applications.index",
-                    "name": "جميع الطلبات",
+                    "url": "parent.applications.create",
+                    "name": "تسجيل طلب التحاق",
                     "icon": "circle",
-                    "slug": "parent.applications.index"
-                },
-                {
+                    "slug": "parent.applications.create"
+                },{
                     "url": "parent.applications.index",
-                    "name": "الطلبات الجديدة",
+                    "name": "طلبات تحت المراجعة",
                     "icon": "circle",
                     "slug": "parent.students.index",
                     "query": "status_id=1"
                 },
                 {
-                    "url": "parent.applications.create",
-                    "name": "تسجيل طلب التحاق",
+                    "url": "parent.applications.index",
+                    "name": "أرشيف الالتحاق",
                     "icon": "circle",
-                    "slug": "parent.applications.create"
+                    "slug": "parent.applications.index"
                 }
+
             ]
         },{
             "name": "طلبات الأنسحاب",
@@ -43,17 +43,18 @@
             "slug": "",
             "submenu": [
                 {
-                    "url": "parent.withdrawals.index",
-                    "name": "الطلبات الجديده",
-                    "icon": "circle",
-                    "slug": "parent.withdrawals.index"
-                },
-                {
                     "url": "parent.withdrawals.create",
                     "name": "تسجيل طلب انسحاب",
                     "icon": "circle",
                     "slug": "parent.withdrawals.create"
+                },
+                {
+                    "url": "parent.withdrawals.index",
+                    "name": "أرشيف الانسحاب",
+                    "icon": "circle",
+                    "slug": "parent.withdrawals.index"
                 }
+
             ]
         }
     ]

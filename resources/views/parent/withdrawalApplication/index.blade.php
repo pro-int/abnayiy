@@ -29,6 +29,7 @@ $breadcrumbs = [[['link' => route('parent.withdrawals.index'), 'name' => "الط
             <th scope="col">كود</th>
             <th scope="col">اسم الطالب</th>
             <th scope="col">رقم الهوية</th>
+            <th scope="col">تاريخ الانسحاب</th>
             <th scope="col">الصف</th>
             <th scope="col">العام</th>
             <th scope="col">حالة الطلب</th>
@@ -48,6 +49,7 @@ $breadcrumbs = [[['link' => route('parent.withdrawals.index'), 'name' => "الط
 
             <td>{{ $application->student_name }}</td>
             <td>{{ $application->national_id }}</td>
+            <td>{{ $application->date }}</td>
             <td>{{ $application->level_name }}</td>
             <td>{{ $application->year_name }}</td>
             <td><span class="badge {{ $application->application_status ? 'bg-info' : 'bg-success' }}">{{ $application->application_status ? 'مقبول' : 'جديد' }}</span></td>
