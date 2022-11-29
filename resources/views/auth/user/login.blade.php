@@ -216,7 +216,7 @@
                     $('.OTPStatus').removeClass("alert-success");
                     $('.OTPStatus').addClass("alert-danger");
                 }else if(response.code == 200){
-                    window.location.href = '/';
+                    window.location.href = '{{route("parent.showParentDashboard")}}';
                 }else if (response.code == 403){
                     $(".errorMessage").css("display","block");
                     $('.errorMessageBody').text(response.message);

@@ -6,6 +6,8 @@ use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\guardian\GuardianChildrenController;
 use App\Http\Controllers\guardian\GuardianWithdrawalApplicationController;
 use App\Http\Controllers\guardian\ParentJsonController;
+use App\Http\Controllers\guardian\GuardianAuthController;
+
 /*
 |--------------------------------------------------------------------------
 | Parent Web Routes
@@ -21,6 +23,7 @@ use App\Http\Controllers\guardian\ParentJsonController;
 Route::group(['middleware' => ['auth']], function () {
 
     Route::prefix('parent')->name('parent.')->group(function () {
+        Route::get('parent_dashboard', [GuardianAuthController::class, "showParentDashboard"])->name("showParentDashboard");
         Route::get('showChildrens', [GuardianChildrenController::class, "showChildrens"])->name("showChildrens");
         Route::get('childrenDetails', [GuardianChildrenController::class, "getChildrenDetails"])->name("childrenDetails");
         Route::get('contractTransaction', [GuardianChildrenController::class, "getContractTransaction"])->name("contractTransaction");

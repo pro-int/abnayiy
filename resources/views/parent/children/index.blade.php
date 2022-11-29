@@ -21,13 +21,13 @@ $breadcrumbs = [[['link' => route('parent.showChildrens'), 'name' => "الأبن
 
     <div class="row match-height">
         @foreach ($guardianChildrens as $children)
-            <div class="col-lg-6 col-md-6 col-12">
+            <div class="col-lg-3 col-md-3 col-12">
                 <div class="card card-profile">
                     <div class="card-body">
-                        <h1 class="text-success">{{ $children->student_name }} </h1>
-                        <h2>{{$children->school_name}} - {{$children->id}}</h2>
-                        <h3>({{ $children->level_name }}) {{ $children->gender_name }}</h3>
-                        <h4>الفصل: {{$children->class_name}}</h4>
+                        <h3 class="text-success">{{ $children->student_name }} </h3>
+                        <h4>{{$children->school_name}} - {{$children->id}}</h4>
+                        <h5>({{ $children->level_name }}) {{ $children->gender_name }}</h5>
+                        <h5>الفصل: {{$children->class_name}}</h5>
                         <hr class="mb-2" />
                         <div class="d-flex justify-content-center align-items-center">
                             <a href="{{ route('parent.childrenDetails', ["id" => $children->id]) }}">

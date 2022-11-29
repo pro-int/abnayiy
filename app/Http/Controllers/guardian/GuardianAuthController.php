@@ -25,6 +25,10 @@ use Spatie\Permission\Models\Role;
 class GuardianAuthController extends Controller
 {
 
+    public function showParentDashboard(){
+        return view('parent.dashboard');
+    }
+
     public function showRegistrationPage(){
         return view('auth.user.register');
     }

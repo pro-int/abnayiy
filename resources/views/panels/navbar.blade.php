@@ -1,3 +1,6 @@
+@php
+    $checkAdminOrUser = \App\Models\admin::where("admin_id",\Illuminate\Support\Facades\Auth::id())->count();
+@endphp
 @if ($configData['mainLayoutType'] === 'horizontal' && isset($configData['mainLayoutType']))
 <nav class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center {{ $configData['navbarColor'] }}" data-nav="brand-center">
   <div class="navbar-header d-xl-block d-none">
@@ -58,25 +61,28 @@
           </li> -->
         </ul>
 
-        <label class="mx-1">المجمع الدراسي :</label>
-        <ul class="nav navbar-nav ms-auto">
+          @if($checkAdminOrUser)
+              <label class="mx-1">المجمع الدراسي :</label>
+              <ul class="nav navbar-nav ms-auto">
 
-          <li class="nav-item d-none d-lg-block">
-            <div class="nav-link">
-              {!! Form::open(['route' => 'corporates.switch','method'=>'POST' , 'onsubmit' => 'showLoader()','name' => 'corporate_switch_form']) !!}
+                  <li class="nav-item d-none d-lg-block">
+                      <div class="nav-link">
+                          {!! Form::open(['route' => 'corporates.switch','method'=>'POST' , 'onsubmit' => 'showLoader()','name' => 'corporate_switch_form']) !!}
 
-              <select class="form-select" name="corprate_id" onchange="changeCorporate()">
-                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-flag">
-                  @foreach(corporates() as $corporate)
-                  <option @if(session()->has('seleted_corprate') && session('seleted_corprate')->id == $corporate->id) selected @endif value="{{ $corporate->id }}">{{$corporate->corporate_name}}</option>
-                  @endforeach
-                </div>
-              </select>
-              {!! Form::close() !!}
+                          <select class="form-select" name="corprate_id" onchange="changeCorporate()">
+                              <div class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown-flag">
+                                  @foreach(corporates() as $corporate)
+                                      <option @if(session()->has('seleted_corprate') && session('seleted_corprate')->id == $corporate->id) selected @endif value="{{ $corporate->id }}">{{$corporate->corporate_name}}</option>
+                                  @endforeach
+                              </div>
+                          </select>
+                          {!! Form::close() !!}
 
-            </div>
-          </li>
-        </ul>
+                      </div>
+                  </li>
+              </ul>
+          @endif
+
       </div>
 
 
