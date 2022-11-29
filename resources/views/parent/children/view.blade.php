@@ -15,7 +15,7 @@
             <div class="col-lg-6 col-md-6 col-12">
                 <div class="card card-profile">
                     <div class="card-body">
-                        <h1 name="title" class="text-primary">{{ \Carbon\Carbon::parse($contract->created_at)->year >= \Carbon\Carbon::now()->year? "العقد الساري" : "العقد المنتهي"  }}</h1>
+                        <h1 name="title" class="text-primary">{{ ($contract->status == 2 || $contract->status == 3)? "العقد المنتهي" : "العقد الساري" }}</h1>
                         <x-ui.table>
                             <x-slot name="tbody">
                                 <tr>

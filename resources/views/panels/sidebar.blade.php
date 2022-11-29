@@ -1,5 +1,8 @@
 @php
 $configData = Helper::applClasses();
+
+$checkAdminOrUser = \App\Models\admin::where("admin_id",\Illuminate\Support\Facades\Auth::id())->count();
+
 @endphp
 <div
   class="main-menu menu-fixed {{ $configData['theme'] === 'dark' || $configData['theme'] === 'semi-dark' ? 'menu-dark' : 'menu-light' }} menu-accordion menu-shadow"
@@ -7,7 +10,7 @@ $configData = Helper::applClasses();
   <div class="navbar-header">
     <ul class="nav navbar-nav flex-row">
       <li class="nav-item me-auto">
-        <a class="navbar-brand" href="{{ url('/') }}">
+        <a class="navbar-brand" href="{{ $checkAdminOrUser? url('/') : url('parent/parent_dashboard')}}">
           <span class="brand-logo">
             <x-ui.logo />
           </span>
