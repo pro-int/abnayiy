@@ -220,4 +220,47 @@ class GuardianChildrenController extends Controller
         return $result;
     }
 
+    public function sendPayfortRequest(Request $request){
+
+        $ch = curl_init();
+
+        $data = [
+            "access_code" => "2bS0vDRusW3Ebrdoymm1",
+            "amount" => 98000,
+            "currency" => "SAR",
+            "merchant_identifier" => "uBiiVtOi",
+            "merchant_reference" => 100802564,
+            "customer_email" => "1037741483@temp.com",
+            "command" => "PURCHASE",
+            "language" => "ar",
+            "return_url" => "https:admin.nobala.edu.sa/api/user/student/transaction/5019/response",
+            "signature" => "d939ddba56c9fee95cb9b28bab7f6262b9f0e73b672f409035a05eb53072c6df"
+        ];
+
+        //set the url, number of POST vars, POST data
+        $useragent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:20.0) Gecko/20100101 Firefox/20.0";
+        curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+            'Content-Type: application/json;charset=UTF-8',
+        ));
+
+        curl_setopt($ch, CURLOPT_URL, 'https://checkout.payfort.com/FortAPI/paymentPage');
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_FAILONERROR, 1);
+        curl_setopt($ch, CURLOPT_ENCODING, "compress, gzip");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // allow redirects
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0); // The number of seconds to wait while trying to connect
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+        $response = curl_exec($ch);
+
+        //$response_data = array();
+        //parse_str($response, $response_data);
+        curl_close($ch);
+        //dd($response);
+        return $response;
+
+    }
+
 }

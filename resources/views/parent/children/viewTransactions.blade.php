@@ -1,119 +1,13 @@
 @extends('layouts.contentLayoutMaster')
 
 @php
-    $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],['link' => route('students.show',$contract->student_id), 'name' => $contract->student_name],['link' => route('students.contracts.index',$contract->student_id), 'name' => 'التعاقدات'],['link' => route('students.contracts.index',[$contract->student_id,$contract->id]), 'name' => 'تعاقد '.$contract->year_name]],['title'=> 'دفعات التعاقد رقم #'. $contract->id]];
+    $breadcrumbs = [[['link' => route('parent.showChildrens'), 'name' => 'الابناء'],['link' => route('parent.contractTransaction',["student_id" => $contract->student_id, "contract_id" => $contract->id]), 'name' => $contract->student_name],['link' => route('parent.contractTransaction',["student_id" => $contract->student_id, "contract_id" => $contract->id]), 'name' => 'تعاقد '.$contract->year_name]],['title'=> 'دفعات التعاقد رقم #'. $contract->id]];
 @endphp
 
 @section('title', 'دفعات التعاقد رقم #'. $contract->id)
 
 @section('page-style')
     <meta name="csrf-token" content="{{ csrf_token() }}">
-
-<style>
-    .modalDialog1 {
-        position: fixed;
-        font-family: Arial, Helvetica, sans-serif;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        z-index: 99999;
-        opacity:1;
-        -webkit-transition: opacity 400ms ease-in;
-        -moz-transition: opacity 400ms ease-in;
-        transition: opacity 400ms ease-in;
-        pointer-events: auto;
-        display:none;
-        /*	background:rgba(0,0,0,0.8);*/
-    }
-    .modal-backdrop1 {
-        background: rgba(0,0,0,0.8);
-        position: absolute;
-        top: 0;
-        height: 100%;
-        width: 100%;
-    }
-    .modalDialog1:target {
-        opacity:1;
-        pointer-events: auto;
-    }
-    .modalDialog1 .overlay {
-        width: 450px;
-        position: relative;
-        margin: 5% auto;
-        padding: 40px 50px;
-        border-radius:0;
-        background:white;
-        z-index: 9999;
-    }
-    .close1 {
-        background:black;
-        color: #FFFFFF;
-        line-height: 25px;
-        position: absolute;
-        right: -12px;
-        text-align: center;
-        top: -10px;
-        text-decoration: none;
-        font-weight: bold;
-        opacity: 1;
-        width: 40px;
-        height: 30px;
-        border-radius: 50%;
-        padding: 6px 0px;
-    }
-    .modal-backdrop1.in{
-        opacity:0;
-    }
-    .close1:focus, .close1:hover {
-        background:black;
-        color:white;
-        opacity:1;
-        text-decoration:none;
-    }
-    .modal-body1 .coupon-btn1, .modal-body1 .thanks-btn1 {
-        background: #dc241e;
-        width: 36%;
-        float: left;
-        display: inline-block;
-        margin: 30px 20px 20px;
-        color: #fff;
-        cursor: pointer;
-        font-family: "Oswald", sans-serif;
-    }
-    .modal-head1 {
-        text-align:center;
-    }
-    .modal-body1 .coupon-btn1 {
-        background:gray;
-    }
-    body.modal-open {
-        overflow:auto;
-        padding-right:0 !important;
-    }
-    .heading {
-        display:table;
-        width:100%;
-    }
-    .middle-section1{
-        margin-bottom: 10px;
-    }
-    #otpVerification{
-        direction: ltr;
-    }
-    #otpVerification input{
-        display:inline-block;
-        width:50px;
-        height:50px;
-        text-align:center;
-    }
-    .customBtn{
-        border-radius:0px;
-        padding:10px;
-        margin-top: 10px;
-    }
-</style>
-
 @endsection
 
 @section('content')
@@ -214,13 +108,17 @@
                                         <div class="mb-3" class="">
                                             <x-inputs.select.generic select2="" name="bank_id" label="البنك" :options="['-1' => 'اختر البنك'] + GetBanks()" />
                                         </div>
-                                        <div class="uploadFile">
+                                        <div class="mb-3 uploadFile">
                                             <label for="formFile" class="form-label">صوره الايصال</label>
                                             <input required class="form-control" style="width: 74%;" type="file" accept="image/png, image/jpeg ,application/pdf" id="formFile">
                                         </div>
                                         <div class="errorMessage alert alert-danger mb-1 rounded-0" role="alert" style="display: none">
                                             <div class="errorMessageBody alert-body"></div>
                                         </div>
+                                    </div>
+                                    <div class="mb-3" style="direction: rtl">
+                                        <label class="form-label">كود الخصم</label>
+                                        <input class="form-control" style="width: 74%;" id="coupon" type="text" placeholder="ادخل كود الخصم">
                                     </div>
                                 </form>
                             </div>
@@ -243,7 +141,7 @@
     <script>
         $.ajaxSetup({
             headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
             }
         });
 
@@ -288,6 +186,14 @@
         });
 
         $(".customBtn").on('click', function() {
+
+            var regExp = new RegExp("^[A-Za-z0-9_-]{1,20}$");
+            var couponStatus =  regExp.test($("#coupon").val());
+            var coupon = null;
+            if(couponStatus){
+                coupon = $("#coupon").val();
+            }
+
             if(paymentGetaway == 1 && (!bankId || $('#formFile').prop('files').length == 0)){
                 $(".errorMessage").css("display","block");
                 $('.errorMessageBody').text("يرجي ادحال البنك ورفع الملف");
@@ -302,6 +208,7 @@
                     "method_id": paymentGetaway,
                     "receipt": $('#formFile').prop('files')[0],
                     "bank_id": bankId,
+                    "coupon": coupon,
                     "student": {{$contract->student_id}},
                     "contract": {{$contract->id}},
                     "transaction": trans_id
@@ -335,21 +242,26 @@
                     data: {
                         "requested_ammount": payment_amount,
                         "method_id": paymentGetaway,
-                        "receipt": $('#formFile').prop('files')[0],
-                        "bank_id": bankId,
+                        "receipt": null,
+                        "bank_id": null,
+                        "coupon": coupon,
                         "student": {{$contract->student_id}},
                         "contract": {{$contract->id}},
                         "transaction": trans_id
                     },
                     success: function (response){
+                        console.log(response);
                         if(response.url){
                             $.ajax({
-                                url: response.url,
+                                url: '{{ route('parent.sendPayfortRequest') }}',
                                 method: 'POST',
-                                data: response.params,
+                                dataType: "html",
+                                data: {
+                                    "path": response.url,
+                                    "params": response.params
+                                },
                                 success: function (response){
                                     console.log(response);
-                                    location.reload();
                                 }
                             });
                         }
