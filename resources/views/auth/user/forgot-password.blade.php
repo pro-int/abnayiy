@@ -183,7 +183,7 @@
 
         $(".customBtn").on('click',function(){
             console.log($("#password").val().trim().length);
-            if($("#password").val().length == 8){
+            if($("#password").val().length >= 8){
                 $.ajax({
                     url: "{{route("forgotPassword")}}",
                     method: 'post',
@@ -201,6 +201,7 @@
                             $(".modalDialog1").css("display","none");
                             $(".successMessage").css("display","block");
                             $('.successMessageBody').text(response.message);
+                            $(".errorMessage").css("display","none");
                         }else if (response.code == 403){
                             $(".errorMessage").css("display","block");
                             $('.errorMessageBody').text(response.message);
@@ -213,7 +214,7 @@
             }else{
                 $('.passwordValidation').html("كلمة المرور يجب ان تكون 8 احرف علي الاقل");
                 $('.passwordValidation').removeClass("alert-success");
-                $('.passwordValidation').addClass("alert-success");
+                $('.passwordValidation').addClass("alert-danger");
             }
         });
 

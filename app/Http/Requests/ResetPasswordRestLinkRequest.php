@@ -25,7 +25,7 @@ class ResetPasswordRestLinkRequest extends FormRequest
     {
         return [
             'phone'         => 'required',
-            'password'      => 'nullable|min:6',
+            'password'      => 'nullable|min:8',
             'code'          => 'nullable',
         ];
     }

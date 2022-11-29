@@ -183,7 +183,8 @@ class GuardianAuthController extends Controller
 
                 $user = User::where('phone', $request->phone)->first();
 
-                if ($user && $request->password) {
+                if ($user && $request->password && strlen($request->password) >= 8) {
+
                     $user->password = Hash::make($request->password);
 
                     if ($user->save()){
