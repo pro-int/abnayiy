@@ -119,6 +119,9 @@
                                     <div class="mb-3" style="direction: rtl">
                                         <label class="form-label">كود الخصم</label>
                                         <input class="form-control" style="width: 74%;" id="coupon" type="text" placeholder="ادخل كود الخصم">
+                                        <div class="couponErrorMessage alert alert-danger mb-1 rounded-0" role="alert" style="display: none; margin-top: 10px;">
+                                            <div class="couponErrorMessageBody alert-body"></div>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -228,11 +231,17 @@
                         $('.responseErrorMessageBody').text(response.message);
                         if(response.code == 200){
                             $(".responseErrorMessage").addClass("alert-success");
+                            $(".modalDialog1").css("display","none");
+                            location.reload();
+                        }else if (response.code == 401){
+                            $(".couponErrorMessage").css("display","block");
+                            $('.couponErrorMessageBody').text("قسيمة غير صالحة");
                         }else{
                             $(".responseErrorMessage").addClass("alert-danger");
+                            $(".modalDialog1").css("display","none");
+                            location.reload();
                         }
-                        $(".modalDialog1").css("display","none");
-                        location.reload();
+
                     }
                 });
             }else if(paymentGetaway ==3){
@@ -250,20 +259,24 @@
                         "transaction": trans_id
                     },
                     success: function (response){
-                        console.log(response);
                         if(response.url){
-                            $.ajax({
-                                url: '{{ route('parent.sendPayfortRequest') }}',
-                                method: 'POST',
-                                dataType: "html",
-                                data: {
-                                    "path": response.url,
-                                    "params": response.params
-                                },
-                                success: function (response){
-                                    console.log(response);
-                                }
-                            });
+                            if(coupon != null && response.params.amount / 100 == payment_amount){
+                                $(".couponErrorMessage").css("display","block");
+                                $('.couponErrorMessageBody').text("قسيمة غير صالحة");
+                            }else{
+                                $.ajax({
+                                    url: '{{ route('parent.sendPayfortRequest') }}',
+                                    method: 'POST',
+                                    dataType: "html",
+                                    data: {
+                                        "path": response.url,
+                                        "params": response.params
+                                    },
+                                    success: function (response){
+                                        document.write(response);
+                                    }
+                                });
+                            }
                         }
                     }
                 });

@@ -15,6 +15,7 @@ use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use App\Http\Traits\TransactionTrait;
 
@@ -201,7 +202,9 @@ class TransactionController extends Controller
             $responseToFront['error_msg'] = $response['error_msg'] ?? 'لم نتمكن من تأكيد استلام الدفعة';
         }
 
-        return redirect()->away('https://student.abnayiy.com/student?' . http_build_query($responseToFront), 302, $responseToFront);
+        return redirect()->route("parent.showChildrens",$responseToFront);
+
+        //return redirect()->away('https://student.abnayiy.com/student?' . http_build_query($responseToFront), 302, $responseToFront);
     }
 
 
