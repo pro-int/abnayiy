@@ -36,14 +36,14 @@
             </div>
               <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
                   <div class="d-flex flex-row">
-                      <a href="{{route('parent.applications.index')}}">
+                      <a href="{{route('parent.applications.create')}}">
                           <button type="button" class="btn btn-primary mb-1">تقديم طلب التحاق</button>
                       </a>
                   </div>
               </div>
               <div class="col-xl-3 col-sm-6 col-12 mb-2 mb-xl-0">
                   <div class="d-flex flex-row">
-                      <a href="{{route('parent.withdrawals.index')}}">
+                      <a href="{{route('parent.withdrawals.create')}}">
                           <button type="button" class="btn btn-primary mb-1">تقديم طلب انسحاب</button>
                       </a>
                   </div>
