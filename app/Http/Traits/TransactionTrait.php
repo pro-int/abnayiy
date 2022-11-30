@@ -164,7 +164,7 @@ trait TransactionTrait
         return $this->has_Coupone();
     }
 
-    protected function CreatePaymentAttempt($transaction, $request, $data = [], $guardian_id = null, $reqFromParent = null) : PaymentAttempt
+    protected function CreatePaymentAttempt($transaction, $request, $data = [], $guardian_id = null, $reqFromParent = null)
     {
 
         if($reqFromParent){
@@ -177,7 +177,11 @@ trait TransactionTrait
 
         }
 
-
+        if(isset($reqFromParent->coupon) && $reqFromParent->coupon != null &&(int)$transaction_data['amount_after_discount'] == (int)$reqFromParent->requested_ammount){
+            return [
+                "status" => 401
+            ];
+        }
 
         if (!$requested_ammount) {
             $requested_ammount = $transaction_data['residual_amount'];

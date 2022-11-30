@@ -20,6 +20,11 @@ $breadcrumbs = [[['link' => route('parent.showChildrens'), 'name' => "الأبن
 @section('content')
 
     <div class="row match-height">
+        @if(request()->has('status'))
+            <div class="alert {{request()->get('status') == 14 ? 'alert-success' : 'alert-danger'}} mb-1 rounded-0" role="alert">
+                <div class="alert-body">{{request()->get('status') == 14 ? request()->get('response_message') : request()->get('error_msg')}}</div>
+            </div>
+        @endif
         @foreach ($guardianChildrens as $children)
             <div class="col-lg-3 col-md-3 col-12">
                 <div class="card card-profile">
