@@ -196,12 +196,21 @@
             <div class="dropdown-divider"></div>
             @endif
             @if (Auth::check())
-            <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-              <em class="me-50" data-feather="power"></em> تسجيل الخروج
-            </a>
-            <form method="POST" id="logout-form" action="{{ route('logout') }}">
-              @csrf
-            </form>
+                @if ($checkAdminOrUser)
+                      <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                          <em class="me-50" data-feather="power"></em> تسجيل الخروج
+                      </a>
+                      <form method="POST" id="logout-form" action="{{ route('logout') }}">
+                          @csrf
+                      </form>
+                @else
+                      <a class="dropdown-item" href="{{ route('parentLogout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                          <em class="me-50" data-feather="power"></em> تسجيل الخروج
+                      </a>
+                      <form method="POST" id="logout-form" action="{{ route('parentLogout') }}">
+                          @csrf
+                      </form>
+                @endif
             @else
             <a class="dropdown-item" href="{{ Route::has('login') ? route('login') : 'javascript:void(0)' }}">
               <em class="me-50" data-feather="log-in"></em> تسجيل الدخول

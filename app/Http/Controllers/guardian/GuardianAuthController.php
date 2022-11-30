@@ -17,8 +17,10 @@ use Carbon\Carbon;
 use Gtech\AbnayiyNotification\ApplySingleNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
 use Spatie\Permission\Models\Role;
 
 
@@ -255,6 +257,14 @@ class GuardianAuthController extends Controller
                 'code' => 401,
             ], 200);
         }
+    }
+
+
+    public function logout(){
+        Session::flush([]);
+        Auth::logout();
+        cookie::forget('abc');
+        return redirect()->route('showLoginPage');
     }
 
 }
