@@ -202,6 +202,9 @@
                             $(".successMessage").css("display","block");
                             $('.successMessageBody').text(response.message);
                             $(".errorMessage").css("display","none");
+                            window.setTimeout(function(){
+                                window.location.href = "/parent/login";
+                            }, 3000);
                         }else if (response.code == 403){
                             $(".errorMessage").css("display","block");
                             $('.errorMessageBody').text(response.message);
