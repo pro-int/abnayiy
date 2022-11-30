@@ -70,7 +70,7 @@ class GuardianWithdrawalApplicationController extends Controller
      */
     public function store(StoreWithdrawalApplicationRequest $request)
     {
-        $time =  $request->filled('date') ? $request->date : Carbon::now()->toDateString();
+        $time = Carbon::now()->toDateString();
         $amount_fees = 0;
         $year = $this->GetAdmissionAcademicYear();
 
