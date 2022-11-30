@@ -45,7 +45,7 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
 
     <div class="row mb-1">
         <div class="col-md">
-            <x-inputs.select.generic label="سبب الانسحاب" name="reason" data-placeholder="ابحث عن سبب الانسحاب" data-msg="رجاءاختيار سبب الانسحاب"  :options="['r1' => 'السبب الاول', 'r2' => 'السبب الثاني']"/>
+            <x-inputs.select.generic label="سبب الانسحاب" name="reason" data-placeholder="ابحث عن سبب الانسحاب" data-msg="رجاءاختيار سبب الانسحاب"  :options="App\Models\WithdrawalApplication::getWithdrawalReasons()"/>
         </div>
         <div class="col-md">
             <x-inputs.text.Input label="اسم المدرسه المحول لها" name="school_name"  data-msg="' بشكل صحيح" />
