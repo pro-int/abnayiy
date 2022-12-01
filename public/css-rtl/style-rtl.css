@@ -42,7 +42,7 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 
 .modalDialog1 {
     position: fixed;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Cairo;
     top: 0;
     right: 0;
     bottom: 0;
@@ -57,7 +57,7 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
     /*	background:rgba(0,0,0,0.8);*/
 }
 .modal-backdrop1 {
-    background: rgba(0,0,0,0.8);
+    background: rgb(0 0 0 / 10%);
     position: absolute;
     top: 0;
     height: 100%;
