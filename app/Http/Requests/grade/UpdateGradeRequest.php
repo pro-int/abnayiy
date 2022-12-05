@@ -26,12 +26,12 @@ class UpdateGradeRequest extends GeneralRequest
     public function rules()
     {
         return [
-            'school_id' => 'required|exists:types,id',
+            'school_id' => 'required',
             'gender_id' => 'required|exists:genders,id',
             'grade_name' => 'required|string|' . Rule::unique('grades')->where('gender_id', $this->gender_id)->ignore($this->grade),
             'grade_name_noor' => 'required|string'
         ];
-        
+
         // 'grade_name' => 'required|string|unique:grade_name,'. $this->grade_name .',id,grades,gender_id,'. $this->gender_id,
         // ]; //unique:office_schedules,day_of_week,' . $this->day->id . ',id,office_id,' . $this->office,
         // Rule::unique('semesters')->where('year_id', $request->year->id)->ignore($request->semester->id)
@@ -41,9 +41,8 @@ class UpdateGradeRequest extends GeneralRequest
     public function messages()
     {
         return  [
-            
+
             'school_id.required' => 'رجاء المسار التعليمي',
-            'school_id.exists' => 'رجاء اختيار النظام التعليمي من القائمة',
 
             'gender_id.required' => 'رجاء اختيار االنوع',
             'gender_id.exists' => 'رجاء اختيار النوع من القائمة',

@@ -28,7 +28,7 @@ class StoreGradeRequest extends GeneralRequest
         info($request);
 
         return [
-            'school_id' => 'required|exists:types,id',
+            'school_id' => 'required',
             'gender_id' => 'required|exists:genders,id',
             'grade_name' => 'required|string|' . Rule::unique('grades')->where('gender_id', $request->gender_id),
         ];
@@ -37,9 +37,8 @@ class StoreGradeRequest extends GeneralRequest
     public function messages()
     {
         return  [
-            
+
             'school_id.required' => 'رجاء المسار التعليمي',
-            'school_id.exists' => 'رجاء اختيار النظام التعليمي من القائمة',
 
             'gender_id.required' => 'رجاء اختيار االنوع',
             'gender_id.exists' => 'رجاء اختيار النوع من القائمة',
