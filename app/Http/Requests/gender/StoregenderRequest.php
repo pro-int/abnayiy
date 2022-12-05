@@ -29,7 +29,7 @@ class StoregenderRequest extends GeneralRequest
         return [
             'school_id' => 'required|exists:schools,id',
             'gender_name' => 'required|' . Rule::unique('genders')->where('school_id', $request->school_id),
-            'gender_type' => 'required|boolean',
+            'gender_type' => 'required|integer',
         ];
     }
 

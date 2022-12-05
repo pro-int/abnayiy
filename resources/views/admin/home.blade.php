@@ -137,7 +137,7 @@
                 <th scope="row">
                     -
                 </th>
-                <td> الانواع (بنين - بنات) </td>
+                <td> الانواع (بنين - بنات - مشترك) </td>
                 <td>تعديل - حذف - اضافة - مشاهدة</td>
                 <td><a class="btn btn-sm btn-info" href="{{ route('genders.index') }}">الرابط</a></td>
             </tr>
