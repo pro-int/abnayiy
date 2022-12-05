@@ -20,7 +20,7 @@ $breadcrumbs = [[['link' => route('genders.index'), 'name' => "الأقسام"]]
 <!-- Striped rows start -->
 <x-ui.table :autoWith="false">
     <x-slot name="title">الأقسام </x-slot>
-    <x-slot name="cardbody">قائمة الأقسام المسجلة بالمدرسة .. {{ isset($type) ?  'الأقسام  الخاصة بالنظام : ' . $type->school_name  : 'الأقسام (بنين - بنات)' }} </x-slot>
+    <x-slot name="cardbody">قائمة الأقسام المسجلة بالمدرسة .. {{ isset($type) ?  'الأقسام  الخاصة بالنظام : ' . $type->school_name  : 'الأقسام ( بنين - بنات - مشترك)' }} </x-slot>
     <x-slot name="button">
         <a class="btn btn-primary mb-1" href="{{ route('genders.create') }}">
             <em data-feather='plus-circle'></em> اضافة قسم جديد </a>

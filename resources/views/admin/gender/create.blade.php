@@ -22,12 +22,12 @@ $breadcrumbs = [[['link' => route('genders.index'), 'name' => 'الأنواع'],
     <div class="col-md">
       <x-inputs.text.Input label="اسم القسم" icon="file-text" name="gender_name" placeholder="ادخل اسم القسم" data-msg="ااسم القسم بشكل صحيح" />
     </div>
-    
+
   </div>
   <div class="row mb-1 center">
-    
+
         <div class="col-md  mb-1">
-          <x-inputs.select.generic label="نوع" name="gender_type" data-placeholder="اختر نوع" data-msg="رجاء اختيار نوع" :options="['1' => 'بنين' , '0' => 'بنات']" />
+          <x-inputs.select.generic label="نوع" name="gender_type" data-placeholder="اختر نوع" data-msg="رجاء اختيار نوع" :options="['1' => 'بنين' , '0' => 'بنات' ,'2' => 'مشترك']" />
         </div>
 
     <div class="col-md  mb-1">

@@ -29,7 +29,7 @@ $breadcrumbs = [[['link' => route('corporates.index'), 'name' => "المجمعا
     </x-slot>
 
     <x-slot name="tbody">
-        
+
         @foreach ($corporates as $corporate)
         <tr>
             <th scope="row">
@@ -41,7 +41,7 @@ $breadcrumbs = [[['link' => route('corporates.index'), 'name' => "المجمعا
             <td>{{ $corporate->UpdatedAdmimName }}</td>
             <td>{!! isActive($corporate->active) !!}</td>
             <td>
-                
+
                 @can('accuonts-list')
                 <x-inputs.btn.view :route="route('corporates.show',$corporate->id)" />
                 @endcan
@@ -49,14 +49,14 @@ $breadcrumbs = [[['link' => route('corporates.index'), 'name' => "المجمعا
                 @can('accuonts-edit')
                 <x-inputs.btn.edit :route="route('corporates.edit',$corporate->id)" />
                 @endcan
-                
+
                 @can('accuonts-delete')
                 <x-inputs.btn.delete :route="route('corporates.destroy', $corporate->id)" />
                 @endcan
-                
+
                 @can('accuonts-list')
                     <x-inputs.btn.generic :route="route('schools.index',['corporate' => $corporate->id])">
-                        المادرس
+                        المدارس
                     </x-inputs.btn.generic>
                     @endcan
             </td>
