@@ -1,5 +1,5 @@
 <?php
- 
+
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
@@ -50,9 +50,9 @@ class AdminBankController extends Controller
      */
     public function store(StoreBankRequest $request)
     {
-       
-        $bank = Bank::create($request->only('bank_name','account_name','account_number','account_iban','active') + ['add_by' => Auth::id()]);
-        
+
+        $bank = Bank::create($request->only('bank_name','account_name','account_number', 'journal_id', 'odoo_account_number', 'account_iban','active') + ['add_by' => Auth::id()]);
+
         if ($bank) {
             return redirect()->route('banks.index')
                 ->with('alert-success', 'تم اضافة البنك بنجاح');
@@ -91,8 +91,8 @@ class AdminBankController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(UpdateBankRequest $request, bank $bank)
-    {   
-        $bank = $bank->update($request->only(['bank_name','account_name','account_number','account_iban','active']) +  ['add_by' => Auth::id()]);
+    {
+        $bank = $bank->update($request->only(['bank_name','account_name','account_number', 'journal_id', 'odoo_account_number','account_iban','active']) +  ['add_by' => Auth::id()]);
         if (!$bank) {
             return redirect()->back()
                 ->with('alert-danger', 'خطأ اثناء تعديل معلومات البنك ');
