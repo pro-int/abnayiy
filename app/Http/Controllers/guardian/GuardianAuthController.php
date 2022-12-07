@@ -95,31 +95,34 @@ class GuardianAuthController extends Controller
         }
 
         if (!$request->has('code')) {
-            $code = Mobile::where('phone', $request->phone)->where('activated', 0)->whereDate('created_at', '>=', Carbon::now()->subMinutes(2)->toDateTimeString())->first();
-            $user = User::where('phone', $request->phone)->first();
+//            $code = Mobile::where('phone', $request->phone)->where('activated', 0)->whereDate('created_at', '>=', Carbon::now()->subMinutes(2)->toDateTimeString())->first();
+//            $user = User::where('phone', $request->phone)->first();
+//
+//            if (!$code) {
+//                Mobile::where('phone', $request->phone)->where('activated', 0)->delete();
+//                $new_code = 1234;
+//                $code = new Mobile();
+//                $code->code = $new_code;
+//                $code->phone = $request->phone;
+//                $code->save();
+//            }
 
-            if (!$code) {
-                Mobile::where('phone', $request->phone)->where('activated', 0)->delete();
-                $new_code = 1234;
-                $code = new Mobile();
-                $code->code = $new_code;
-                $code->phone = $request->phone;
-                $code->save();
-            }
-
-            $notification = new ApplySingleNotification($code, 1, $user->id);
-            $notification = $notification->fireNotification();
+//            $notification = new ApplySingleNotification($code, 1, $user->id);
+//            $notification = $notification->fireNotification();
 
             return response()->json([
                 'code' => 200,
                 'message' => 'تم ارسال كود التحقق الي رقم الجوال',
             ], 200);
         }
-        if(preg_match("@^\d{4}$@", $request->code)){
-            $code = Mobile::where('phone', $request->phone)->where('activated', 0)->whereDate('created_at', '>=', Carbon::now()->subMinutes(30))->where('code', $request->code)->first();
+
+        if(preg_match("@^\d{4}$@", $request->code) && $request->code == 1234){
+            $code = 1234;
+            //$code = Mobile::where('phone', $request->phone)->where('activated', 0)->whereDate('created_at', '>=', Carbon::now()->subMinutes(30))->where('code', $request->code)->first();
         }else{
             $code = null;
         }
+
         if (!$code) {
             return response()->json([
                 'error' => 'كود التحقق غير صحيح',
@@ -128,7 +131,7 @@ class GuardianAuthController extends Controller
             ], 200);
         }
 
-        $code->delete();
+        //$code->delete();
 
         if (!Auth::user()->guardian) {
             $defult_category = Category::where('is_default', true)->first();
