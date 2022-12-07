@@ -9,7 +9,7 @@ $breadcrumbs = [[['link' => route('banks.index'), 'name' => "البنوك"]],['t
 @section('content')
 
 <!-- Striped rows start -->
-<x-ui.table>
+<x-ui.table :autoWith="false">
     <x-slot name="title">البنوك </x-slot>
     <x-slot name="cardbody">قائمة البنوك .. يمكن لأولياء الأمور اختيار احد البنوك المفعلة اثناء دفع الرسوم الدراسية ..</x-slot>
     <x-slot name="button">
@@ -24,6 +24,8 @@ $breadcrumbs = [[['link' => route('banks.index'), 'name' => "البنوك"]],['t
             <th scope="col">اسم الحساب</th>
             <th scope="col">رقم الحساب</th>
             <th scope="col">رقم IBAN</th>
+            <th scope="col">Odoo ِAccount Code</th>
+            <th scope="col">Odoo Journal ID</th>
             <th scope="col">الحالة</th>
             <th scope="col">إنشاءه بواسطة</th>
             <th scope="col" style="min-width: 180px;">الاجراءات </th>
@@ -31,7 +33,7 @@ $breadcrumbs = [[['link' => route('banks.index'), 'name' => "البنوك"]],['t
     </x-slot>
 
     <x-slot name="tbody">
-        
+
         @foreach ($banks as $bank)
         <tr>
             <th scope="row">
@@ -42,6 +44,8 @@ $breadcrumbs = [[['link' => route('banks.index'), 'name' => "البنوك"]],['t
             <td>{{ $bank->account_name }}</td>
             <td>{{ $bank->account_number }}</td>
             <td>{{ $bank->account_iban }}</td>
+            <td>{{ $bank->journal_id }}</td>
+            <td>{{ $bank->odoo_account_number }}</td>
             <td>{{ $bank->active == 1 ? 'فعال' : 'غير مفعل' }}</td>
             <td>{{ $bank->admin_name }}</td>
             <td>
