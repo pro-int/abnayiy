@@ -26,7 +26,7 @@ class StoreApplicationRequest extends GeneralRequest
     public function rules()
     {
         return [
-            'guardian_id'       => 'required|numeric',
+//            'guardian_id'       => 'required|numeric',
             'student_name'      => ['bail', 'required', 'string', new MaxWordsRule()],
             'birth_place'       => 'required|string|min:3|max:20',
             'national_id'       => 'required|numeric|' . Rule::unique('applications')->where('academic_year_id', $this->academic_year_id),

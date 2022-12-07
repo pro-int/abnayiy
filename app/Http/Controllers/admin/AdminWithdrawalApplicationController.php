@@ -68,12 +68,12 @@ class AdminWithdrawalApplicationController extends Controller
      */
     public function store(StoreWithdrawalApplicationRequest $request)
     {
-        $time = Carbon::now();
+        $time =  $request->filled('date') ? $request->date : Carbon::now()->toDateString();
         $amount_fees = 0;
         $year = $this->GetAdmissionAcademicYear();
 
         $period = WithdrawalPeriod::select("withdrawal_periods.*")
-        ->where("withdrawal_periods.apply_start", "<=", $time->toDateString())->where("withdrawal_periods.apply_end", ">=", $time->toDateString())->where("withdrawal_periods.active", 1)->first();
+        ->where("withdrawal_periods.apply_start", "<=", $time)->where("withdrawal_periods.apply_end", ">=", $time)->where("withdrawal_periods.active", 1)->first();
 
         if($period){
             $contract = Contract::select("contracts.*")
@@ -95,6 +95,7 @@ class AdminWithdrawalApplicationController extends Controller
             "reason" => $request->get("reason"),
             "comment" => $request->get("comment"),
             "amount_fees" => $amount_fees,
+            "date" => $time,
             "school_name" => $request->get("school_name")
         ]);
 

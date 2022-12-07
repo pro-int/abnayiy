@@ -20,7 +20,8 @@ class Gender extends Model
 
     protected $types = [
         0 => 'بنات',
-        1 => 'بنين'
+        1 => 'بنين',
+        2 => 'مشترك'
     ];
 
     public function school()

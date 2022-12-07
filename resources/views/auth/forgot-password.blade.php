@@ -37,8 +37,10 @@
           </form>
 
           <p class="text-center mt-2">
-            @if (Route::has('login'))
-              <a href="{{ route('login') }}"> تسجيل الدخول <em data-feather="chevron-right"></em> </a>
+            @if (Route::has('showLoginPage') && str_contains(url()->previous(), 'parent/'))
+              <a href="{{ route('showLoginPage') }}"> تسجيل الدخول <em data-feather="chevron-right"></em> </a>
+              @elseif(Route::has('login') && str_contains(url()->previous(), 'login'))
+                <a href="{{ route('login') }}"> تسجيل الدخول <em data-feather="chevron-right"></em> </a>
             @endif
           </p>
         </div>

@@ -27,14 +27,14 @@ $breadcrumbs = [[['link' => route('grades.index'), 'name' => "المسار "],['
             <x-inputs.select.generic  label="قسم المقابلات" name="appointment_section_id" data-placeholder="اختر قسم المقابلات" data-msg="رجاء اختيار قسم المقابلات" :options="App\Models\AppointmentSection::sections()" />
         </div>
     </div>
-    
+
     <div class="row mb-1 center">
         <div class="col-md">
             <x-inputs.select.generic select2="" label="المدرسة" name="school_id" data-placeholder="اختر المدرسة" data-msg="رجاء اختيار المدرسة" :options="['' => 'اختر المدرسة'] +schools()" />
         </div>
-        
+
         <div class="col-md">
-            <x-inputs.select.generic select2="" label="النوع" name="gender_id" data-placeholder="اختر النوع" data-msg="رجاء اختيار النوع" :options="request()->school_id ? App\Models\Gender::genders(true,request()->school_id) : App\Models\Gender::genders(true,$grade->school_id)" />
+            <x-inputs.select.generic select2="" label="القسم" name="gender_id" data-placeholder="اختر القسم" data-msg="رجاء اختيار القسم" :options="request()->school_id ? App\Models\Gender::genders(true,request()->school_id) : App\Models\Gender::genders(true,$grade->school_id)" />
         </div>
     </div>
 

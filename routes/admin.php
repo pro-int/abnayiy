@@ -38,6 +38,7 @@ use App\Http\Controllers\admin\AdminStudentTransportationController;
 use App\Http\Controllers\admin\AdminTeacherController;
 use App\Http\Controllers\admin\AdminTransactionController;
 use App\Http\Controllers\admin\AdminTransportationController;
+use App\Http\Controllers\guardian\GuardianApplicationController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\admin\AdminSubjectController;
@@ -61,6 +62,8 @@ use App\Http\Controllers\admin\AdminTransferRequestController;
 use App\Http\Controllers\admin\AdminUserController;
 use App\Http\Controllers\admin\AdminWithdrawalApplicationController;
 use App\Http\Controllers\admin\AdminWithdrawalPeriodController;
+use App\Http\Controllers\guardian\GuardianChildrenController;
+use App\Http\Controllers\guardian\GuardianWithdrawalApplicationController;
 use App\Models\Application;
 use App\Models\guardian;
 use Maatwebsite\Excel\Facades\Excel;
@@ -215,4 +218,15 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('reserved', AdminReservedAppointmentsController::class);
     });
 
+    Route::prefix('parent')->name('parent.')->group(function () {
+        Route::get('showChildrens', [GuardianChildrenController::class, "showChildrens"])->name("showChildrens");
+        Route::get('childrenDetails', [GuardianChildrenController::class, "getChildrenDetails"])->name("childrenDetails");
+        Route::get('contractTransaction', [GuardianChildrenController::class, "getContractTransaction"])->name("contractTransaction");
+        Route::post('transactionPaymentAttempt', [GuardianChildrenController::class, "transactionPaymentAttempt"])->name("transactionPaymentAttempt");
+        Route::post('sendPayfortRequest', [GuardianChildrenController::class, "sendPayfortRequest"])->name("sendPayfortRequest");
+    });
+
+    Route::post('parent/student/{student_id}/transaction/{transaction_id}', [TransactionController::class, 'update_transactions']);
+
 });
+

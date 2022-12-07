@@ -36,7 +36,7 @@ class StoreSchoolRequest extends GeneralRequest
             'corporate_id' => 'المجمع'
         ];
     }
-    
+
     protected function prepareForValidation()
     {
         parent::prepareForValidation();

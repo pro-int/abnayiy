@@ -15,11 +15,11 @@ $breadcrumbs = [[['link' => route('levels.index'), 'name' => "الصفوف ال�
         </div>
 
         <div class="col-md">
-            <x-inputs.select.generic :required="false" select2="" label="النوع" name="gender_id" data-placeholder="اختر النوع" data-msg="رجاء اختيار النوع" :options="request('school_id') ? ['' => 'اختر النوع'] + App\Models\Gender::genders(true,request('school_id')) : []" />
+            <x-inputs.select.generic :required="false" select2="" label="القسم" name="gender_id" data-placeholder="اختر القسم" data-msg="رجاء اختيار القسم" :options="request('school_id') ? ['' => 'اختر القسم'] + App\Models\Gender::genders(true,request('school_id')) : []" />
         </div>
 
         <div class="col-md">
-            <x-inputs.select.generic :required="false" select2="" label="المرحلة" name="grade_id" data-placeholder="اختر المرحلة" data-msg="رجاء اختيار المرحلة" :options="request('gender_id') ? ['' => 'اختر النوع'] + App\Models\Grade::grades(true,request('gender_id')) : []" />
+            <x-inputs.select.generic :required="false" select2="" label="المسار" name="grade_id" data-placeholder="اختر المسار" data-msg="رجاء اختيار المسار" :options="request('gender_id') ? ['' => 'اختر القسم'] + App\Models\Grade::grades(true,request('gender_id')) : []" />
         </div>
     </div>
 
@@ -28,7 +28,7 @@ $breadcrumbs = [[['link' => route('levels.index'), 'name' => "الصفوف ال�
 <!-- Striped rows start -->
 <x-ui.table>
     <x-slot name="title">الصفوف الدراسية </x-slot>
-    <x-slot name="cardbody">قائمة الصفوف الدراسية المسجلة بالمدرسة .. {{ isset($gender_id) ?  'االصفوف الدراسية الخاصة بالمرحلة  : ' . $type->gender_name  : 'الصفوف الدراسية' }} </x-slot>
+    <x-slot name="cardbody">قائمة الصفوف الدراسية المسجلة بالمدرسة .. {{ isset($gender_id) ?  'االصفوف الدراسية الخاصة بالمسار  : ' . $type->gender_name  : 'الصفوف الدراسية' }} </x-slot>
     <x-slot name="button">
         <a class="btn btn-primary mb-1" href="{{ route('levels.create') }}">
             <em data-feather='plus-circle'></em> اضافة صف جديد </a>
@@ -39,8 +39,8 @@ $breadcrumbs = [[['link' => route('levels.index'), 'name' => "الصفوف ال�
             <th scope="col">كود</th>
             <th scope="col">الصف</th>
             <th scope="col">الاسم في نور</th>
-            <th scope="col">المرحلة</th>
-            <th scope="col">النوع</th>
+            <th scope="col">المسار</th>
+            <th scope="col">القسم</th>
             <th scope="col">المدرسة</th>
             <th scope="col">الرسوم الدراسية</th>
             <th scope="col">الصف التالي</th>
@@ -64,7 +64,7 @@ $breadcrumbs = [[['link' => route('levels.index'), 'name' => "الصفوف ال�
                 <a class="btn btn-flat-danger btn-sm" href="{{ route('levels.nextLevel', $level->id) }}">متخرج</a>
                 @else
                     @if($level->next_level_id)
-                    <a class="btn btn-flat-primary btn-sm" href="{{ route('levels.nextLevel', $level->id) }}">{{ $level->next_level_name }}</a> 
+                    <a class="btn btn-flat-primary btn-sm" href="{{ route('levels.nextLevel', $level->id) }}">{{ $level->next_level_name }}</a>
                     @else
                     <x-inputs.btn.generic colorClass="warning" icon="plus" :route="route('levels.nextLevel', $level->id)"/>
                     @endif

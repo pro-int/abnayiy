@@ -4,7 +4,7 @@
 $breadcrumbs = [[['link' => route('grades.index'), 'name' => "المسارات الدراسية "],['link' => route('grades.edit',$grade), 'name' => "تعديل المسار : $grade->grade_name" ]],['title'=> 'المسار المسجلة']];
 @endphp
 
-@section('title', 'تعديل النوع التعليمي ')
+@section('title', 'تعديل القسم التعليمي ')
 
 @section('content')
 
@@ -39,14 +39,14 @@ $breadcrumbs = [[['link' => route('grades.index'), 'name' => "المسارات �
             </div>
 
             <div class="col-md">
-                <x-inputs.select.generic select2="" label="النوع" name="gender_id" data-placeholder="اختر النوع" data-msg="رجاء اختيار النوع" :options="old('school_id') ? App\Models\Gender::genders(true,old('school_id')) : App\Models\Gender::genders(true,$grade->school_id)" />
+                <x-inputs.select.generic select2="" label="القسم" name="gender_id" data-placeholder="اختر القسم" data-msg="رجاء اختيار القسم" :options="old('school_id') ? App\Models\Gender::genders(true,old('school_id')) : App\Models\Gender::genders(true,$grade->school_id)" />
             </div>
         </div>
 
         <div class="row mb-1 center">
             <div class="col-md  mb-1">
                 <label class="form-label mb-1" for="active"> الحالة </label>
-                <x-inputs.checkbox name="active">مفعل</x-inpurs.checkbox>
+                <x-inputs.checkbox name="active">مفعل</x-inputs.checkbox>
             </div>
         </div>
 

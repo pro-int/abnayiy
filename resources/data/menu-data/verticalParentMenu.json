@@ -1,0 +1,61 @@
+{
+    "menu": [
+        {
+            "name": "ابنائي",
+            "icon": "users",
+            "slug": "",
+            "submenu": [
+                {
+                    "url": "parent.showChildrens",
+                    "name": "جميع الابناء",
+                    "icon": "circle",
+                    "slug": "parent.showChildrens"
+                }
+            ]
+        },{
+            "name": "طلبات الألتحاق",
+            "icon": "file",
+            "slug": "",
+            "submenu": [
+                {
+                    "url": "parent.applications.create",
+                    "name": "تسجيل طلب التحاق",
+                    "icon": "circle",
+                    "slug": "parent.applications.create"
+                },{
+                    "url": "parent.applications.index",
+                    "name": "طلبات تحت المراجعة",
+                    "icon": "circle",
+                    "slug": "parent.students.index",
+                    "query": "status_id=1"
+                },
+                {
+                    "url": "parent.applications.index",
+                    "name": "أرشيف الالتحاق",
+                    "icon": "circle",
+                    "slug": "parent.applications.index"
+                }
+
+            ]
+        },{
+            "name": "طلبات الأنسحاب",
+            "icon": "file",
+            "slug": "",
+            "submenu": [
+                {
+                    "url": "parent.withdrawals.create",
+                    "name": "تسجيل طلب انسحاب",
+                    "icon": "circle",
+                    "slug": "parent.withdrawals.create"
+                },
+                {
+                    "url": "parent.withdrawals.index",
+                    "name": "أرشيف الانسحاب",
+                    "icon": "circle",
+                    "slug": "parent.withdrawals.index"
+                }
+
+            ]
+        }
+    ]
+}

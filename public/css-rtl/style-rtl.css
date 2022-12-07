@@ -39,3 +39,106 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
   white-space: nowrap;
   width: 1%;
 }
+
+.modalDialog1 {
+    position: fixed;
+    font-family: Cairo;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 99999;
+    opacity:1;
+    -webkit-transition: opacity 400ms ease-in;
+    -moz-transition: opacity 400ms ease-in;
+    transition: opacity 400ms ease-in;
+    pointer-events: auto;
+    display:none;
+    /*	background:rgba(0,0,0,0.8);*/
+}
+.modal-backdrop1 {
+    background: rgb(0 0 0 / 10%);
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 100%;
+}
+.modalDialog1:target {
+    opacity:1;
+    pointer-events: auto;
+}
+.modalDialog1 .overlay {
+    width: 450px;
+    position: relative;
+    margin: 5% auto;
+    padding: 40px 50px;
+    border-radius:0;
+    background:white;
+    z-index: 9999;
+}
+.close1 {
+    background:black;
+    color: #FFFFFF;
+    line-height: 25px;
+    position: absolute;
+    right: -12px;
+    text-align: center;
+    top: -10px;
+    text-decoration: none;
+    font-weight: bold;
+    opacity: 1;
+    width: 40px;
+    height: 30px;
+    border-radius: 50%;
+    padding: 6px 0px;
+}
+.modal-backdrop1.in{
+    opacity:0;
+}
+.close1:focus, .close1:hover {
+    background:black;
+    color:white;
+    opacity:1;
+    text-decoration:none;
+}
+.modal-body1 .coupon-btn1, .modal-body1 .thanks-btn1 {
+    background: #dc241e;
+    width: 36%;
+    float: left;
+    display: inline-block;
+    margin: 30px 20px 20px;
+    color: #fff;
+    cursor: pointer;
+    font-family: "Oswald", sans-serif;
+}
+.modal-head1 {
+    text-align:center;
+}
+.modal-body1 .coupon-btn1 {
+    background:gray;
+}
+body.modal-open {
+    overflow:auto;
+    padding-right:0 !important;
+}
+.heading {
+    display:table;
+    width:100%;
+}
+.middle-section1{
+    margin-bottom: 10px;
+}
+#otpVerification{
+    direction: ltr;
+}
+#otpVerification input{
+    display:inline-block;
+    width:50px;
+    height:50px;
+    text-align:center;
+}
+.customBtn{
+    border-radius:0px;
+    padding:10px;
+    margin-top: 10px;
+}
