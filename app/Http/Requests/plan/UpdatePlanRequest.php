@@ -29,6 +29,7 @@ class UpdatePlanRequest extends GeneralRequest
             'plan_name' => 'required|string|'. Rule::unique('plans')->ignore($request->plan->id),
             'transaction_methods' => 'required|array',
             'contract_methods'=> 'required|array',
+            'odoo_id' => 'Nullable|string',
             'payment_due_determination' => 'requiredif:plan_based_on,semester,selected_date',
             'beginning_installment_calculation' => 'requiredif:plan_based_on,=,selected_date',
             'down_payment' => 'requiredif:plan_based_on,=,selected_date',
@@ -43,7 +44,7 @@ class UpdatePlanRequest extends GeneralRequest
             'contract_methods' => 'طرق الدفع  اثناء التعاقد'
         ];
     }
-    
+
     public function messages()
     {
         return [

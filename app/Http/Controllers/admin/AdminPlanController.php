@@ -64,6 +64,7 @@ class AdminPlanController extends Controller
             'beginning_installment_calculation',
             'down_payment',
             'active',
+            'odoo_id',
             'transaction_methods',
             'contract_methods'
         ]));
@@ -122,6 +123,7 @@ class AdminPlanController extends Controller
             'beginning_installment_calculation',
             'down_payment',
             'active',
+            'odoo_id',
             'transaction_methods',
             'contract_methods'
         ]));

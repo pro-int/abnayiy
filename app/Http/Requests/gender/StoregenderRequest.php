@@ -30,6 +30,7 @@ class StoregenderRequest extends GeneralRequest
             'school_id' => 'required|exists:schools,id',
             'gender_name' => 'required|' . Rule::unique('genders')->where('school_id', $request->school_id),
             'gender_type' => 'required|integer',
+            'odoo_product_id' => 'Nullable|string',
         ];
     }
 

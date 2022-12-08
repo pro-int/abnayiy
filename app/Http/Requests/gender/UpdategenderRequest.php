@@ -29,8 +29,8 @@ class UpdategenderRequest extends GeneralRequest
         return [
             'school_id' => 'required|exists:schools,id',
             'gender_name' => 'required|' . Rule::unique('genders')->where('school_id', $request->school_id)->ignore($request->gender),
-
-            'gender_type' => 'required|string|'
+            'odoo_product_id' => 'Nullable|string',
+            'gender_type' => 'required|string|',
         ];
     }
 
@@ -47,7 +47,7 @@ class UpdategenderRequest extends GeneralRequest
             'gender_type.unique' => 'النوع مسجل مسبقا ضمن نفس النظام التعليمي',
         ];
     }
-    
+
     public function attributes()
     {
         return  [

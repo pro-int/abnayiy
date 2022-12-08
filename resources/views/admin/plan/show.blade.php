@@ -26,6 +26,10 @@ $breadcrumbs = [[['link' => route('plans.index'), 'name' => "خطط السداد
         <div class="col-md">
             <x-inputs.text.Input type="number" icon="percent" label="قيمة دفعة التعاقد" name="down_payment" placeholder="رجاء ادخال قيمة دفعة التعاقد" />
         </div>
+
+        <div class="col-md">
+            <x-inputs.text.Input type="text" label="Odoo ID" icon="anchor" name="odoo_id" placeholder="ادخل Odoo ID" data-msg="ادخل Odoo ID بشكل صحيح" />
+        </div>
     </div>
 
     <div class="row mb-1">
@@ -94,7 +98,7 @@ $breadcrumbs = [[['link' => route('plans.index'), 'name' => "خطط السداد
 
     @endsection
 
-    
+
     @section('page-script')
     <!-- Page js files -->
     <script>

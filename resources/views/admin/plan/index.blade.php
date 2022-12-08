@@ -23,6 +23,7 @@ $breadcrumbs = [[['link' => route('plans.index'), 'name' => "خطط السداد
             <th scope="col">اسم الخطة</th>
             <th scope="col">تتطلب سند امر</th>
             <th scope="col">خصم الفترة</th>
+            <th scope="col">Odoo ID</th>
             <th scope="col">الحالة</th>
             <th scope="col">الاجراءات المتاحة</th>
         </tr>
@@ -36,6 +37,7 @@ $breadcrumbs = [[['link' => route('plans.index'), 'name' => "خطط السداد
             <td>{{ $plan->plan_name }}</td>
             <td>{{ $plan->req_confirmation == 1 ? 'نعم' : 'لا' }}</td>
             <td>{{ $plan->fixed_discount == 1 ? 'اثناء التعاقد' : 'تطبق اثناء الدفع' }}</td>
+            <td>{{ $plan->odoo_id}}</td>
             <td>{{ $plan->active == 1 ? 'مفعل' : 'غير مفعل' }}</td>
 
             <td>
