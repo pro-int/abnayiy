@@ -37,6 +37,7 @@ class GenderService
             'school_id',
             'gender_name',
             'gender_type',
+            'odoo_product_id',
             'active',
         ));
     }
@@ -52,6 +53,7 @@ class GenderService
             'school_id',
             'gender_name',
             'gender_type',
+            'odoo_product_id',
             'active',
         ));
     }

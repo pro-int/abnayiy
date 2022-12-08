@@ -56,6 +56,7 @@ class AdminTransportationController extends Controller
             'annual_fees',
             'semester_fees',
             'monthly_fees',
+            'odoo_product_id',
             'active'
         ]),['add_by' => Auth::id(),'active' => (bool) $request->active]));
 
@@ -104,6 +105,7 @@ class AdminTransportationController extends Controller
             'annual_fees',
             'semester_fees',
             'monthly_fees',
+            'odoo_product_id',
             'active'
         ]),['add_by' => Auth::id(),'active' => $request->active]));
 

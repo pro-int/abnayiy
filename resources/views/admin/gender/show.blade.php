@@ -27,6 +27,9 @@ $breadcrumbs = [[['link' => route('genders.index'), 'name' => "الأقسام "]
       <x-inputs.select.generic label="نوع" name="gender_type" data-placeholder="اختر نوع" data-msg="رجاء اختيار نوع" :options="['1' => 'بنين' , '0' => 'بنات' ,'2' => 'مشترك']" />
     </div>
 
+      <div class="col-md">
+          <x-inputs.text.Input type="text" label="Odoo Product ID" icon="anchor" name="odoo_product_id" placeholder="ادخل Odoo Product ID" data-msg="ادخل Odoo Product ID بشكل صحيح" />
+      </div>
   </div>
   <div class="row mb-1 center">
 

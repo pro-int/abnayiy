@@ -13,6 +13,7 @@ class Gender extends Model
         'gender_name',
         'school_id',
         'gender_type',
+        'odoo_product_id',
         'created_by',
         'updated_by',
         'active'

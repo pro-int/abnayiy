@@ -14,12 +14,13 @@ class Transportation extends Model
         'annual_fees',
         'semester_fees',
         'monthly_fees',
+        'odoo_product_id',
         'active',
         'add_by',
     ];
 
     public static function transportations($returnArray = true, $id = 0)
-    {  
+    {
         if ($id > 0) {
             return Transportation::findOrFail($id);
         }
@@ -38,6 +39,6 @@ class Transportation extends Model
             3 => 'شهري',
         ];
 
-        return null !== $value ? $payment_plans[$value] : $payment_plans; 
+        return null !== $value ? $payment_plans[$value] : $payment_plans;
     }
 }
