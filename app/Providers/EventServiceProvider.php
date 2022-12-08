@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Events\WalletTransactionCreatedListener;
 use App\Models\guardian;
+use App\Models\PaymentAttempt;
 use App\Models\Student;
 use App\Models\User;
 use App\Observers\GuardianObserver;
+use App\Observers\PaymentAttemptObserver;
 use App\Observers\StudentObserver;
 use App\Observers\UserObserver;
 use Illuminate\Auth\Events\Registered;
@@ -41,6 +43,7 @@ class EventServiceProvider extends ServiceProvider
         //
         Student::observe(StudentObserver::class);
         guardian::observe(GuardianObserver::class);
+        PaymentAttempt::observe(PaymentAttemptObserver::class);
     }
 
     /**

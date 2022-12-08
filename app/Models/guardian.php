@@ -144,9 +144,9 @@ class guardian extends Model implements Wallet, WalletFloat
         $this->odooIntegrationKeys["name"] =  $guardian->user()->first()->getFullName();
         $this->odooIntegrationKeys["guardian_id"] = $guardian->guardian_id;
         $this->odooIntegrationKeys["guardian_national_id"] = $guardian->national_id;
-        $this->odooIntegrationKeys["phone"] = $guardian->user()->first()->getPhone();
-        $this->odooIntegrationKeys["email"] = $guardian->user()->first()->getEmail();
-        $this->odooIntegrationKeys["is_company"] = True;
+        $this->odooIntegrationKeys["student_id"] = null;
+        $this->odooIntegrationKeys["student_national_id"] = null;
+        $this->odooIntegrationKeys["is_company"] = "True";
     }
 
     public function getOdooKeys(){

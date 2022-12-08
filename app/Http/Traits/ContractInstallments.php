@@ -4,15 +4,19 @@ namespace App\Http\Traits;
 
 use App\Helpers\FeesCalculatorClass;
 use App\Helpers\TuitionFeesClass;
+use App\Models\Application;
 use App\Models\Discount;
 use App\Models\guardian;
 use App\Models\Plan;
+use App\Models\Student;
 use App\Models\Transaction;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
 trait ContractInstallments
 {
+    use OdooIntegrationTrait;
+
     private $plan;
     private $category;
     private $contract;
@@ -21,11 +25,12 @@ trait ContractInstallments
     private $ammount = [];
     private $transportation = [];
 
+    private $odooIntegrationKeys = [];
 
     /**
      * calculate transaction ammounts.
-     * @param \App\Models\Contract $contract 
-     * @param int $guardian_id  
+     * @param \App\Models\Contract $contract
+     * @param int $guardian_id
      * @return boolean
      */
 
@@ -33,7 +38,7 @@ trait ContractInstallments
     {
         $this->contract = $contract;
         $this->period  = currentPeriod($this->year);
-    
+
         $this->plan = Plan::findOrFail($contract->plan_id);
 
         // $this->guardian = guardian::firstOrFail($student->guardian_id)->category;
@@ -47,7 +52,7 @@ trait ContractInstallments
         $installments =  $fees->getContractPayments()->getPayments();
 
         if ($this->plan && $this->category) {
-            
+
             foreach ($installments as $installment) {
                 if (! $this->plan->fixed_discount) {
                     $installment['period_discount'] = 0;
@@ -59,9 +64,48 @@ trait ContractInstallments
 
             $contract->update_total_payments();
 
+            $this->setOdooKeys($contract);
+
+            $this->createInvoiceInOdoo($this->odooIntegrationKeys);
+
             return true;
         } else {
             return false;
+        }
+    }
+
+    public function setOdooKeys($contract){
+
+        $this->odooIntegrationKeys["student_id"] = $contract->student_id;
+        $this->odooIntegrationKeys["date"] = Carbon::parse($contract->created_at)->toDateString();
+        $this->odooIntegrationKeys["global_order_discount"] =  $contract->period_discounts + $contract->coupon_discounts;
+
+        $application = Application::select("transportations.id as transportation_id", "transportations.odoo_product_id as transportation_odoo_id", 'genders.id as gender_id', 'genders.odoo_product_id as gender_odoo_id', 'plans.odoo_key')
+            ->leftjoin('levels', 'levels.id', 'applications.level_id')
+            ->leftjoin('grades', 'grades.id', 'levels.grade_id')
+            ->leftjoin('genders', 'genders.id', 'grades.gender_id')
+            ->leftjoin("plans", "plans.id", "applications.plan_id")
+            ->leftjoin("transportations", "transportations.id", "applications.transportation_id")
+            ->where("applications.id", $contract->application_id)->first();
+
+        if($application && $application->transportation_id){
+            $this->odooIntegrationKeys["product_id"] = (int)$application->transportation_odoo_id;
+            $this->odooIntegrationKeys["name"] = 'رسوم نقل';
+        }else if ($application && $application->transportation_id == null){
+            $this->odooIntegrationKeys["product_id"] = (int)$application->gender_odoo_id;
+            $this->odooIntegrationKeys["name"] = 'رسوم دراسية';
+        }
+
+        $this->odooIntegrationKeys["account_code"] = $application->odoo_key;
+        $this->odooIntegrationKeys["price_unit"] = $contract->total_fees;
+        $this->odooIntegrationKeys["quantity"] = 1;
+
+        $student = Student::select("nationality_id")->where("id",$contract->student_id)->first();
+
+        if($student->nationality_id != 1 || $contract->bus_fees > 0){
+            $this->odooIntegrationKeys["tax_ids"] = [1];
+        }else{
+            $this->odooIntegrationKeys["tax_ids"] = [4];
         }
     }
 
@@ -104,7 +148,7 @@ trait ContractInstallments
 
     /**
      * Execute the console command.
-     * @param int $num_of_installments 
+     * @param int $num_of_installments
      * @param int $i installment index
      * @return string
      */
@@ -126,7 +170,7 @@ trait ContractInstallments
 
         /**
      * @param array $transactionArray --transaction data to store
-     * @return \App\Models\Transaction $transaction -- created transaction 
+     * @return \App\Models\Transaction $transaction -- created transaction
      */
     protected function StoreNewTransaction(array $transactionArray)
     {

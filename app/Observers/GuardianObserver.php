@@ -16,8 +16,7 @@ class GuardianObserver
      */
     public function created(guardian $guardian)
     {
-        //
-        $this->sendDataToOdoo($guardian->getOdooKeys(), $guardian->getEnableOdooIntegration());
+        $this->createParentInOdoo($guardian->getOdooKeys());
     }
 
     /**
