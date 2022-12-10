@@ -14,6 +14,9 @@ class Gender extends Model
         'school_id',
         'gender_type',
         'odoo_product_id',
+        'grade_name_noor',
+        'appointment_section_id',
+        'noor_account_id',
         'created_by',
         'updated_by',
         'active'

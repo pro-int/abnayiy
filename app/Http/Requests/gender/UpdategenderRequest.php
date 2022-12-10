@@ -31,6 +31,7 @@ class UpdategenderRequest extends GeneralRequest
             'gender_name' => 'required|' . Rule::unique('genders')->where('school_id', $request->school_id)->ignore($request->gender),
             'odoo_product_id' => 'Nullable|string',
             'gender_type' => 'required|string|',
+            'grade_name_noor' => 'required|string'
         ];
     }
 
@@ -45,6 +46,9 @@ class UpdategenderRequest extends GeneralRequest
             'gender_type.required' => 'النوع مسجل مسبقا ينفس المسار',
             'gender_type.string' => 'اسم النوع يجب ان يكون حروف فقط',
             'gender_type.unique' => 'النوع مسجل مسبقا ضمن نفس النظام التعليمي',
+
+            'grade_name_noor.required' => 'اسم المرحلة التعليمية بنظام نور مطلوب',
+            'grade_name_noor.string' => 'اسم المرحلة التعليمية بنظام نور يجب ان يكون حروف فقط',
         ];
     }
 

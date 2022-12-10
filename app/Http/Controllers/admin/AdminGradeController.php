@@ -58,7 +58,7 @@ class AdminGradeController extends Controller
      */
     public function store(StoreGradeRequest $request)
     {
-        $grade = Grade::create($request->only(['grade_name', 'grade_name_noor','noor_account_id' , 'gender_id' , 'active', 'appointment_section_id']));
+        $grade = Grade::create($request->only(['grade_name' , 'gender_id' , 'active']));
 
         if ($grade) {
             return redirect()->route('grades.index')
@@ -96,7 +96,7 @@ class AdminGradeController extends Controller
         ->leftjoin('genders', 'genders.id', 'grades.gender_id')
         ->leftjoin('schools', 'schools.id', 'genders.school_id')
         ->findOrFail($grade);
-        
+
         return view('admin.grade.edit', compact('grade'));
     }
 
@@ -110,7 +110,7 @@ class AdminGradeController extends Controller
     public function update(UpdateGradeRequest $request, Grade $grade)
     {
 
-        $grade->update($request->only(['grade_name', 'grade_name_noor', 'gender_id' ,'noor_account_id' , 'active', 'appointment_section_id']));
+        $grade->update($request->only(['grade_name', 'gender_id' , 'active']));
         if (!$grade) {
             return redirect()->back()
                 ->with('alert-danger', 'خطأ اثناء تعديل معلومات المسار بنجاح')->withInput();
