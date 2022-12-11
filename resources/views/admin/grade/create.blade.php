@@ -19,14 +19,6 @@ $breadcrumbs = [[['link' => route('grades.index'), 'name' => "المسارات �
         <div class="col-md">
             <x-inputs.text.Input label="اسم المسار التعليمي" icon="file-text" name="grade_name" placeholder="ادخل اسم المسار التعليمي" data-msg="ااسم المسار التعليمي بشكل صحيح" />
         </div>
-
-        <div class="col-md">
-            <x-inputs.text.Input label="اسم المسار التعليمي في نظام نور" icon="file-text" name="grade_name_noor" placeholder="ادخل اسم المسار التعليمي في نظام نور" data-msg="ااسم المسار التعليمي في نظام نور بشكل صحيح" />
-        </div>
-
-        <div class="col-md">
-            <x-inputs.select.generic label="قسم المقابلات" name="appointment_section_id" data-placeholder="اختر قسم المقابلات" data-msg="رجاء اختيار قسم المقابلات" :options="App\Models\AppointmentSection::sections()" />
-        </div>
     </div>
 
     <div class="row mb-1 center">

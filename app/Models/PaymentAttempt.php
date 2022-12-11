@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Cache;
@@ -30,6 +31,7 @@ class PaymentAttempt extends Model
         'admin_id',
     ];
 
+    private $odooIntegrationKeys = [];
 
     public static function boot()
     {
@@ -72,5 +74,34 @@ class PaymentAttempt extends Model
         return Cache::remember('PindngPayments', 30, function () {
             return PaymentAttempt::where('approved', 0)->whereIn('payment_method_id', PaymentMethod::where('require_approval', 1)->pluck('id')->toArray())->count();
         });
+    }
+
+    public function getOdooKeys()
+    {
+        if($this->approved == 1){
+            $transaction = transaction::select('transactions.id', 'transactions.contract_id','contracts.student_id',)
+                ->leftjoin('contracts', 'contracts.id', 'transactions.contract_id')
+                ->where('transactions.id', $this->transaction_id)
+                ->first();
+
+            if($this->bank_id){
+                $bankObject = Bank::select("journal_id")->where("id",$this->bank_id)->first();
+                $bankJournalID = $bankObject->journal_id;
+            }else if($this->payment_network_id){
+                $bankJournalID = 9;
+            }else{
+                // static el riad bank
+                $bankObject = Bank::select("journal_id")->where("id",8)->first();
+                $bankJournalID = $bankObject->journal_id;
+            }
+
+            $this->odooIntegrationKeys["student_id"] = $transaction->student_id;
+            $this->odooIntegrationKeys["amount"] =  $this->received_ammount;
+            $this->odooIntegrationKeys["date"] = Carbon::parse($this->updated_at)->toDateString();
+            $this->odooIntegrationKeys["journal_id"] = (int)$bankJournalID;
+
+            return $this->odooIntegrationKeys;
+        }
+
     }
 }

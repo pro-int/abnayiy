@@ -14,8 +14,10 @@ class Bank extends Model
         'account_name',
         'account_number',
         'account_iban',
+        'journal_id',
+        'odoo_account_number',
         'active',
         'add_by'
     ];
-     
+
 }

@@ -22,6 +22,8 @@ class Plan extends Model
         'beginning_installment_calculation',
         'down_payment',
         'active',
+        'odoo_id',
+        'odoo_key',
         'transaction_methods',
         'contract_methods'
     ];

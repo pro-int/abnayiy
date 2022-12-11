@@ -32,6 +32,10 @@ $breadcrumbs = [[['link' => route('genders.index'), 'name' => "الأقسام"]]
             <th scope="col">اسم القسم</th>
             <th scope="col">النوع</th>
             <th scope="col">المدرسة</th>
+            <th scope="col">الاسم في نور</th>
+            <th scope="col">قسم المقابلات</th>
+            <th scope="col">حساب نور</th>
+            <th scope="col">Odoo Product ID</th>
             <th scope="col">الحالة</th>
             <th scope="col">الاجراءات المتاحة</th>
         </tr>
@@ -44,6 +48,10 @@ $breadcrumbs = [[['link' => route('genders.index'), 'name' => "الأقسام"]]
             <td>{{ $gender->gender_name }}</td>
             <td>{{ $gender->getGenderTypeName() }}</td>
             <td>{{ $gender->school_name }}</td>
+                <td>{{ $gender->grade_name_noor }}</td>
+                <td>{{ $gender->section_name }}</td>
+                <td>{{ $gender->account_name }}</td>
+                <td>{{ $gender->odoo_product_id }}</td>
             <td>{{ $gender->active == 1 ? 'فعال' : 'غير مفعل' }}</td>
             <td>
                 @can('genders-list')

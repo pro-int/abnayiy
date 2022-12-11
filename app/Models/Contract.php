@@ -3,8 +3,10 @@
 namespace App\Models;
 
 use App\Events\UpdateDiscount;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Contract extends Model
 {
@@ -49,6 +51,8 @@ class Contract extends Model
     protected $casts = [
         'applied_semesters' => 'array'
     ];
+
+
 
     public static function boot()
     {
@@ -274,4 +278,15 @@ class Contract extends Model
 
         return $this->save();
     }
+
+    public function setOdooKeys(guardian $guardian)
+    {
+        $this->odooIntegrationKeys["name"] =  $guardian->user()->first()->getFullName();
+        $this->odooIntegrationKeys["guardian_id"] = $guardian->guardian_id;
+        $this->odooIntegrationKeys["guardian_national_id"] = $guardian->national_id;
+        $this->odooIntegrationKeys["student_id"] = null;
+        $this->odooIntegrationKeys["student_national_id"] = null;
+        $this->odooIntegrationKeys["is_company"] = "True";
+    }
+
 }

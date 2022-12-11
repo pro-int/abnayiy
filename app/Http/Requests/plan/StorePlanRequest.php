@@ -28,6 +28,8 @@ class StorePlanRequest extends GeneralRequest
             'transaction_methods' => 'required|array',
             'contract_methods'=> 'required|array',
             'plan_based_on' => 'required',
+            'odoo_id' => 'Nullable|string',
+            'odoo_key' => 'Nullable|string',
             'payment_due_determination' => 'requiredif:plan_based_on,semester,selected_date',
             'beginning_installment_calculation' => 'requiredif:plan_based_on,=,selected_date',
             'down_payment' => 'requiredif:plan_based_on,=,selected_date',
@@ -40,7 +42,7 @@ class StorePlanRequest extends GeneralRequest
             'plan_name' => 'اسم خطة الدفع',
             'transaction_methods' => 'طرق الدفع بعد التعاقد',
             'contract_methods' => 'طرق الدفع  اثناء التعاقد',
-           
+
         ];
     }
 
