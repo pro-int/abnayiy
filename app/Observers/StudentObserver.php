@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Http\Traits\OdooIntegrationTrait;
+use App\Models\guardian;
 use App\Models\Student;
 
 class StudentObserver
@@ -16,8 +17,7 @@ class StudentObserver
      */
     public function created(Student $student)
     {
-        //
-        $this->sendDataToOdoo($student->getOdooKeys(), $student->getEnableOdooIntegration());
+        $this->createStudentInOdoo($student->getOdooKeys());
     }
 
     /**

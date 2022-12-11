@@ -54,11 +54,20 @@ class Student extends Model
 
     public function getOdooKeys()
     {
+        $guardian = guardian::select('national_id')->where('guardian_id', $this->guardian_id)->first();
+
+        $applicationInfo = Application::select("plans.odoo_id")
+            ->leftjoin("plans", "plans.id", "applications.plan_id")
+            ->where("student_name", $this->student_name)->first();
+        
+        $code = $applicationInfo? $applicationInfo->odoo_id : null;
+
         $this->odooIntegrationKeys["student_id"] = $this->id;
         $this->odooIntegrationKeys["name"] =  $this->student_name;
         $this->odooIntegrationKeys["student_national_id"] = $this->national_id;
         $this->odooIntegrationKeys["guardian_id"] = $this->guardian_id;
-        // $this->odooIntegrationKeys["parent_id"] = $this->guardian_id;
+        $this->odooIntegrationKeys["guardian_national_id"] = $guardian->national_id?? $this->national_id;
+        $this->odooIntegrationKeys["property_account_receivable_id"] = $code;
 
         return $this->odooIntegrationKeys;
     }
