@@ -14,9 +14,6 @@ class Grade extends Model
     protected $fillable = [
         'gender_id',
         'grade_name',
-        'grade_name_noor',
-        'appointment_section_id',
-        'noor_account_id',
         'active'
     ];
 
@@ -53,11 +50,7 @@ class Grade extends Model
                 'grades.*',
                 DB::raw('CONCAT(createAdmin.first_name, " " , createAdmin.last_name) as createdAdminName'),
                 DB::raw('CONCAT(updateAdmin.first_name, " " , updateAdmin.last_name) as UpdatedAdmimName'),
-                'appointment_sections.section_name',
-                'noor_accounts.account_name'
             )
-            ->leftjoin('appointment_sections', 'appointment_sections.id', 'grades.appointment_section_id')
-            ->leftjoin('noor_accounts', 'noor_accounts.id', 'grades.noor_account_id')
             ->filter($filters, 'gender_id', 'gender')
             ->filter($filters, 'school_id', 'gender.school')
             ->with('gender', 'gender.school')->get();

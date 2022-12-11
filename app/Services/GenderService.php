@@ -24,8 +24,10 @@ class GenderService
                 'genders.*',
                 DB::raw('CONCAT(createAdmin.first_name, " " , createAdmin.last_name) as createdAdminName'),
                 DB::raw('CONCAT(updateAdmin.first_name, " " , updateAdmin.last_name) as UpdatedAdmimName'),
-                'schools.school_name'
+                'schools.school_name','appointment_sections.section_name', 'noor_accounts.account_name'
             )
+            ->leftjoin('appointment_sections', 'appointment_sections.id', 'genders.appointment_section_id')
+            ->leftjoin('noor_accounts', 'noor_accounts.id', 'genders.noor_account_id')
             ->filtered($request)
             ->get();
     }
@@ -37,6 +39,9 @@ class GenderService
             'school_id',
             'gender_name',
             'gender_type',
+            'grade_name_noor',
+            'appointment_section_id',
+            'noor_account_id',
             'odoo_product_id',
             'active',
         ));
@@ -53,6 +58,9 @@ class GenderService
             'school_id',
             'gender_name',
             'gender_type',
+            'grade_name_noor',
+            'appointment_section_id',
+            'noor_account_id',
             'odoo_product_id',
             'active',
         ));

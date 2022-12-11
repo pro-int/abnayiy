@@ -22,7 +22,7 @@ $breadcrumbs = [[['link' => route('grades.index'), 'name' => "المسارات �
 </x-forms.search>
 
 <!-- Striped rows start -->
-<x-ui.table>
+<x-ui.table :autoWith="false">
     <x-slot name="title">المسارات الدراسية </x-slot>
     <x-slot name="cardbody">قائمة المسارات الدراسية المسجلة بالمدرسة .. {{ isset($type) ?  'االمسارات الدراسية  الخاصة بالنظام : ' . $type->school_name  : 'المسارات الدراسية (بنين - بنات - مشترك)' }} </x-slot>
     <x-slot name="button">
@@ -34,11 +34,8 @@ $breadcrumbs = [[['link' => route('grades.index'), 'name' => "المسارات �
         <tr>
             <th scope="col">كود</th>
             <th scope="col">المسار</th>
-            <th scope="col">الاسم في نور</th>
             <th scope="col">القسم</th>
             <th scope="col">المدرسة</th>
-            <th scope="col">قسم المقابلات</th>
-            <th scope="col">حساب نور</th>
             <th scope="col">الحالة</th>
             <th scope="col" style="min-width:280px;">الاجراءات المتاحة</th>
         </tr>
@@ -49,11 +46,8 @@ $breadcrumbs = [[['link' => route('grades.index'), 'name' => "المسارات �
             @foreach ($grades as $grade)
             <th scope="row">{{ $grade->id }}</th>
             <td>{{ $grade->grade_name }}</td>
-            <td>{{ $grade->grade_name_noor }}</td>
             <td>{{ $grade->gender->gender_name }}</td>
             <td>{{ $grade?->gender?->school?->school_name }}</td>
-            <td>{{ $grade->section_name }}</td>
-            <td>{{ $grade->account_name }}</td>
 
             <td>{!! isActive($grade->active) !!}</td>
             <td>

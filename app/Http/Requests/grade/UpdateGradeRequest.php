@@ -29,7 +29,6 @@ class UpdateGradeRequest extends GeneralRequest
             'school_id' => 'required',
             'gender_id' => 'required|exists:genders,id',
             'grade_name' => 'required|string|' . Rule::unique('grades')->where('gender_id', $this->gender_id)->ignore($this->grade),
-            'grade_name_noor' => 'required|string'
         ];
 
         // 'grade_name' => 'required|string|unique:grade_name,'. $this->grade_name .',id,grades,gender_id,'. $this->gender_id,
@@ -51,8 +50,6 @@ class UpdateGradeRequest extends GeneralRequest
             'grade_name.string' => 'اسم المرحلة التعليمية يجب ان يكون حروف فقط',
             'grade_name.unique' => 'اسم المرحلة التعليمية مسجل مسبقا',
 
-            'grade_name_noor.required' => 'اسم المرحلة التعليمية بنظام نور مطلوب',
-            'grade_name_noor.string' => 'اسم المرحلة التعليمية بنظام نور يجب ان يكون حروف فقط',
         ];
     }
 }
