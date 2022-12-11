@@ -51,11 +51,11 @@ $breadcrumbs = [[['link' => route('contracts.all'), 'name' => "التعاقدا�
         </div>
 
         <div class="col-md">
-            <x-inputs.select.generic :required="false" select2="" label="النوع" name="gender_id" data-placeholder="اختر النوع" data-msg="رجاء اختيار النوع" :options="request('school_id') ? ['' => 'اختر النوع'] + App\Models\Gender::genders(true,request('school_id')) : []" />
+            <x-inputs.select.generic :required="false" select2="" label="القسم" name="gender_id" data-placeholder="اختر القسم" data-msg="رجاء اختيار القسم" :options="request('school_id') ? ['' => 'اختر القسم'] + App\Models\Gender::genders(true,request('school_id')) : []" />
         </div>
 
         <div class="col-md">
-            <x-inputs.select.generic :required="false" select2="" label="المرحلة" name="grade_id" data-placeholder="اختر المرحلة" data-msg="رجاء اختيار المرحلة" :options="request('gender_id') ? ['' => 'اختر المرحلة'] + App\Models\Grade::grades(true,request('gender_id')) : []" />
+            <x-inputs.select.generic :required="false" select2="" label="المسار" name="grade_id" data-placeholder="اختر المسار" data-msg="رجاء اختيار المسار" :options="request('gender_id') ? ['' => 'اختر المسار'] + App\Models\Grade::grades(true,request('gender_id')) : []" />
         </div>
 
         <div class="col-md">
