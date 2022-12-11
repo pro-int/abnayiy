@@ -80,7 +80,7 @@ trait ContractInstallments
         $this->odooIntegrationKeys["date"] = Carbon::parse($contract->created_at)->toDateString();
         $this->odooIntegrationKeys["global_order_discount"] =  $contract->period_discounts + $contract->coupon_discounts;
 
-        $application = Application::select("genders.odoo_account_code as gender_odoo_account_code", "transportations.odoo_account_code as transportation_odoo_account_code", "transportations.id as transportation_id", "transportations.odoo_product_id as transportation_odoo_id", 'genders.id as gender_id', 'genders.odoo_product_id as gender_odoo_id', 'plans.odoo_key')
+        $application = Application::select("genders.odoo_account_code as gender_odoo_account_code", "transportations.odoo_account_code as transportation_odoo_account_code", "transportations.id as transportation_id", "transportations.odoo_product_id as transportation_odoo_id", 'genders.id as gender_id', 'genders.odoo_product_id as gender_odoo_id')
             ->leftjoin('levels', 'levels.id', 'applications.level_id')
             ->leftjoin('grades', 'grades.id', 'levels.grade_id')
             ->leftjoin('genders', 'genders.id', 'grades.gender_id')
@@ -98,7 +98,6 @@ trait ContractInstallments
             $this->odooIntegrationKeys["account_code"] = $application->gender_odoo_account_code;
         }
 
-        $this->odooIntegrationKeys["account_code"] = $application->odoo_key;
         $this->odooIntegrationKeys["price_unit"] = $contract->total_fees;
         $this->odooIntegrationKeys["quantity"] = 1;
 
