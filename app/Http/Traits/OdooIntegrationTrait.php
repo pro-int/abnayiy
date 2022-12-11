@@ -181,7 +181,7 @@ trait OdooIntegrationTrait
 
             $response = json_decode($response);
             curl_close($curl); // Close the connection
-
+            dd($response);
             if(isset($response->result) && isset($response->result->success) && $response->result->success){
                 return true;
             }

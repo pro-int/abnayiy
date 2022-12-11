@@ -65,7 +65,6 @@ class AdminPlanController extends Controller
             'down_payment',
             'active',
             'odoo_id',
-            'odoo_key',
             'transaction_methods',
             'contract_methods'
         ]));
@@ -125,7 +124,6 @@ class AdminPlanController extends Controller
             'down_payment',
             'active',
             'odoo_id',
-            'odoo_key',
             'transaction_methods',
             'contract_methods'
         ]));

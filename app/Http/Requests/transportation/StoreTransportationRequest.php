@@ -30,6 +30,7 @@ class StoreTransportationRequest extends GeneralRequest
             'semester_fees' => 'required|numeric',
             'monthly_fees' => 'required|numeric',
             'odoo_product_id' => 'Nullable|string',
+            'odoo_account_code' => 'Nullable|string'
         ];
     }
 

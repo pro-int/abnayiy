@@ -26,11 +26,18 @@ $breadcrumbs = [[['link' => route('genders.index'), 'name' => "الأقسام "]
     <div class="col-md  mb-1">
       <x-inputs.select.generic label="نوع" name="gender_type" data-placeholder="اختر نوع" data-msg="رجاء اختيار نوع" :options="['1' => 'بنين' , '0' => 'بنات' ,'2' => 'مشترك']" />
     </div>
-
-      <div class="col-md">
-          <x-inputs.text.Input type="text" label="Odoo Product ID" icon="anchor" name="odoo_product_id" placeholder="ادخل Odoo Product ID" data-msg="ادخل Odoo Product ID بشكل صحيح" />
-      </div>
   </div>
+
+    <div class="row mb-1 center">
+        <div class="col-md">
+            <x-inputs.text.Input type="text" label="Odoo Product ID" icon="anchor" name="odoo_product_id" placeholder="ادخل Odoo Product ID" data-msg="ادخل Odoo Product ID بشكل صحيح" />
+        </div>
+
+        <div class="col-md">
+            <x-inputs.text.Input type="text" label="Odoo Account Code" icon="anchor" name="odoo_account_code" placeholder="ادخل Odoo Account Code" data-msg="ادخل Odoo Account Code بشكل صحيح" />
+        </div>
+    </div>
+
     <div class="row mb-1 center">
         <div class="col-md">
             <x-inputs.text.Input label="اسم المسار التعليمي في نظام نور" icon="file-text" name="grade_name_noor" placeholder="ادخل اسم المسار التعليمي في نظام نور" data-msg="ااسم المسار التعليمي في نظام نور بشكل صحيح" />
