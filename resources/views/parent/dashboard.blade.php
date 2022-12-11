@@ -20,34 +20,26 @@
 <section id="dashboard-ecommerce">
   <div class="row match-height">
     <!-- Statistics Card -->
-    <div class="col-xl-6 col-md-8 col-12" style="margin: auto;">
+    <div class="col-6" style="margin: auto;">
       <div class="card card-statistics">
         <div class="card-header">
           <h4 class="card-title">مرحبا بك ... {{ Auth::user()->first_name }}</h4>
         </div>
         <div class="card-body statistics-body">
           <div class="row">
-              <div class="col-xl-3">
-              <div class="d-flex flex-row">
+              <div class="col-lg-12">
                   <a href="{{route('parent.showChildrens')}}">
-                      <button type="button" class="btn btn-info mb-1" style="width: 205%">أبنائي</button>
+                      <button type="button" class="btn btn-info mb-1">أبنائي</button>
                   </a>
-              </div>
+
+                  <a href="{{route('parent.applications.create')}}">
+                      <button type="button" class="btn btn-primary mb-1">تقديم طلب التحاق</button>
+                  </a>
+
+                  <a href="{{route('parent.withdrawals.create')}}">
+                      <button type="button" class="btn btn-dark mb-1">تقديم طلب انسحاب</button>
+                  </a>
             </div>
-              <div class="col-xl-3">
-                  <div class="d-flex flex-row">
-                      <a href="{{route('parent.applications.create')}}">
-                          <button type="button" class="btn btn-primary mb-1" style="width: 107%">تقديم طلب التحاق</button>
-                      </a>
-                  </div>
-              </div>
-              <div class="col-xl-3">
-                  <div class="d-flex flex-row">
-                      <a href="{{route('parent.withdrawals.create')}}">
-                          <button type="button" class="btn btn-dark mb-1" style="width: 111%">تقديم طلب انسحاب</button>
-                      </a>
-                  </div>
-              </div>
           </div>
         </div>
       </div>
