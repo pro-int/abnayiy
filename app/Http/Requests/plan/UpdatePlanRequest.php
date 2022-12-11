@@ -30,7 +30,6 @@ class UpdatePlanRequest extends GeneralRequest
             'transaction_methods' => 'required|array',
             'contract_methods'=> 'required|array',
             'odoo_id' => 'Nullable|string',
-            'odoo_key' => 'Nullable|string',
             'payment_due_determination' => 'requiredif:plan_based_on,semester,selected_date',
             'beginning_installment_calculation' => 'requiredif:plan_based_on,=,selected_date',
             'down_payment' => 'requiredif:plan_based_on,=,selected_date',

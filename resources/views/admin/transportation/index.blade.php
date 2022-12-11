@@ -9,7 +9,7 @@ $breadcrumbs = [[['link' => route('transportations.index'), 'name' => "خطط ا
 @section('content')
 
 <!-- Striped rows start -->
-<x-ui.table :autoWith="false">
+<x-ui.table>
     <x-slot name="title">خطط النقل </x-slot>
     <x-slot name="cardbody">يمكن لأولياء الأمور اختيار خطة السداد اثناء تقديم طلب الألتحاق او الترفيع</x-slot>
     <x-slot name="button">
@@ -25,6 +25,7 @@ $breadcrumbs = [[['link' => route('transportations.index'), 'name' => "خطط ا
             <th scope="col">اشتراك الفصل</th>
             <th scope="col">الاشتراك الشهري</th>
             <th scope="col">Odoo Product ID</th>
+            <th scope="col">Odoo Account Code</th>
             <th scope="col">الحالة</th>
             <th scope="col">بواسطة</th>
             <th scope="col">اخر تحديث</th>
@@ -42,6 +43,7 @@ $breadcrumbs = [[['link' => route('transportations.index'), 'name' => "خطط ا
             <td>{{ $transportation->semester_fees }}</td>
             <td>{{ $transportation->monthly_fees }}</td>
             <td>{{ $transportation->odoo_product_id }}</td>
+            <td>{{ $transportation->odoo_account_code }}</td>
 
             <td>{{ $transportation->active ? 'مفعل' : 'غير مفعل' }}</td>
             <td>{{ $transportation->admin_name }}</td>

@@ -18,7 +18,7 @@ $breadcrumbs = [[['link' => route('genders.index'), 'name' => "الأقسام"]]
 </x-forms.search>
 
 <!-- Striped rows start -->
-<x-ui.table :autoWith="false">
+<x-ui.table>
     <x-slot name="title">الأقسام </x-slot>
     <x-slot name="cardbody">قائمة الأقسام المسجلة بالمدرسة .. {{ isset($type) ?  'الأقسام  الخاصة بالنظام : ' . $type->school_name  : 'الأقسام ( بنين - بنات - مشترك)' }} </x-slot>
     <x-slot name="button">
@@ -36,6 +36,7 @@ $breadcrumbs = [[['link' => route('genders.index'), 'name' => "الأقسام"]]
             <th scope="col">قسم المقابلات</th>
             <th scope="col">حساب نور</th>
             <th scope="col">Odoo Product ID</th>
+            <th scope="col">Odoo Account Code</th>
             <th scope="col">الحالة</th>
             <th scope="col">الاجراءات المتاحة</th>
         </tr>
@@ -52,7 +53,8 @@ $breadcrumbs = [[['link' => route('genders.index'), 'name' => "الأقسام"]]
                 <td>{{ $gender->section_name }}</td>
                 <td>{{ $gender->account_name }}</td>
                 <td>{{ $gender->odoo_product_id }}</td>
-            <td>{{ $gender->active == 1 ? 'فعال' : 'غير مفعل' }}</td>
+                <td>{{ $gender->odoo_account_code }}</td>
+                <td>{{ $gender->active == 1 ? 'فعال' : 'غير مفعل' }}</td>
             <td>
                 @can('genders-list')
                 <x-inputs.btn.view :route="route('genders.show',$gender->id)" />
