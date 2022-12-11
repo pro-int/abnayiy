@@ -43,15 +43,6 @@ $breadcrumbs = [[['link' => route('plans.index'), 'name' => "خطط السداد
 
     <div class="row mb-1">
         <div class="col-md">
-            <x-inputs.text.Input type="text" label="Odoo ID" icon="anchor" name="odoo_id" placeholder="ادخل Odoo ID" data-msg="ادخل Odoo ID بشكل صحيح" />
-        </div>
-        <div class="col-md">
-            <x-inputs.text.Input type="text" label="Odoo Key" icon="anchor" name="odoo_key" placeholder="ادخل Odoo Key" data-msg="ادخل Odoo Key بشكل صحيح" />
-        </div>
-    </div>
-
-    <div class="row mb-1">
-        <div class="col-md">
             <span id="payment_due_determination_span" style="display: none;" data-bs-toggle="tooltip" class="text-danger" data-bs-placement="top" title="">
                 <em data-feather="info"></em></span>
             <x-inputs.text.Input type="number" min="1" max="28" icon="calendar" label="موعد استحقاق الدفعات المتكررة" name="payment_due_determination" placeholder="اختر سياسة الدفعة المقدمة اولا .. " />
@@ -67,6 +58,10 @@ $breadcrumbs = [[['link' => route('plans.index'), 'name' => "خطط السداد
                 من نفس الشهر. وإلا يكون 27 الشهر التال">
                 <em data-feather="info"></em></span>
             <x-inputs.text.Input type="number" icon="calendar" min="1" max="28" label="اصدار القسط في نفس الشهر في حالة التعاقد قبل يوم" name="beginning_installment_calculation" placeholder="في حالة التعاقد قبل يوم ؟ - سيتم مطالبة ولي الأمر بالقسط في نفس الشهر طبقا للتهيئة " />
+        </div>
+
+        <div class="col-md">
+            <x-inputs.text.Input type="text" label="Odoo ID" icon="anchor" name="odoo_id" placeholder="ادخل Odoo ID" data-msg="ادخل Odoo ID بشكل صحيح" />
         </div>
 
     </div>

@@ -43,6 +43,7 @@ class GenderService
             'appointment_section_id',
             'noor_account_id',
             'odoo_product_id',
+            'odoo_account_code',
             'active',
         ));
     }
@@ -62,6 +63,7 @@ class GenderService
             'appointment_section_id',
             'noor_account_id',
             'odoo_product_id',
+            'odoo_account_code',
             'active',
         ));
     }

@@ -23,7 +23,6 @@ class Plan extends Model
         'down_payment',
         'active',
         'odoo_id',
-        'odoo_key',
         'transaction_methods',
         'contract_methods'
     ];
