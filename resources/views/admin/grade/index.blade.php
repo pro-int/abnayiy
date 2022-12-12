@@ -46,7 +46,7 @@ $breadcrumbs = [[['link' => route('grades.index'), 'name' => "المسارات �
             @foreach ($grades as $grade)
             <th scope="row">{{ $grade->id }}</th>
             <td>{{ $grade->grade_name }}</td>
-            <td>{{ $grade->gender->gender_name }}</td>
+            <td>{{ $grade?->gender?->gender_name }}</td>
             <td>{{ $grade?->gender?->school?->school_name }}</td>
 
             <td>{!! isActive($grade->active) !!}</td>
