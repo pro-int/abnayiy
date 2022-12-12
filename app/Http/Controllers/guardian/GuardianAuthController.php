@@ -95,7 +95,7 @@ class GuardianAuthController extends Controller
         }
 
         if (!$request->has('code')) {
-            $code = Mobile::where('phone', $request->phone)->where('activated', 0)->whereDate('created_at', '>=', Carbon::now()->subMinutes(15)->toDateTimeString())->first();
+            $code = Mobile::where('phone', $request->phone)->where('activated', 0)->where('created_at', '>=', Carbon::now()->subMinutes(2)->toDateTimeString())->first();
             $user = User::where('phone', $request->phone)->first();
 
             if (!$code) {
@@ -109,7 +109,7 @@ class GuardianAuthController extends Controller
 
             $notification = new ApplySingleNotification($code, 1, $user->id);
             $notification = $notification->fireNotification();
-
+            
             return response()->json([
                 'code' => 200,
                 'message' => 'تم ارسال كود التحقق الي رقم الجوال',
@@ -117,20 +117,19 @@ class GuardianAuthController extends Controller
         }
 
         if(preg_match("@^\d{4}$@", $request->code)){
-            $code = Mobile::where('phone', $request->phone)->where('activated', 0)->whereDate('created_at', '>=', Carbon::now()->subMinutes(15))->where('code', $request->code)->first();
+            $verificationCode = Mobile::where('phone', $request->phone)->where('activated', 0)->where('created_at', '>=', Carbon::now()->subMinutes(2)->toDateTimeString())->where('code', $request->code)->first();
         }else{
-            $code = null;
+            $verificationCode = null;
+            Mobile::where('phone', $request->phone)->where('activated', 0)->delete();
         }
 
-        if (!$code) {
+        if (!$verificationCode) {
             return response()->json([
                 'error' => 'كود التحقق غير صحيح',
                 'code' => 402,
                 'message' => 'رجاء ادخال كود التحقق المرسل الي الجوال',
             ], 200);
         }
-
-        $code->delete();
 
         if (!Auth::user()->guardian) {
             $defult_category = Category::where('is_default', true)->first();
