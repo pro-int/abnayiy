@@ -25,11 +25,11 @@ $breadcrumbs = [[['link' => route('years.index'), 'name' => "السنوات ال
         </div>
 
         <div class="col-md">
-            <x-inputs.select.generic label="النوع" name="gender_id" data-placeholder="اختر النوع" data-msg="رجاء اختيار النوع" />
+            <x-inputs.select.generic label="القسم" name="gender_id" data-placeholder="اختر القسم" data-msg="رجاء اختيار القسم" />
         </div>
 
         <div class="col-md">
-            <x-inputs.select.generic label="المرحلة" name="grade_id" data-placeholder="اختر المرحلة" data-msg="رجاء اختيار المرحلة" />
+            <x-inputs.select.generic label="المسار" name="grade_id" data-placeholder="اختر المسار" data-msg="رجاء اختيار المرحلة" />
         </div>
 
     </div>
