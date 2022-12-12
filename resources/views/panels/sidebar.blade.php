@@ -1,8 +1,5 @@
 @php
 $configData = Helper::applClasses();
-
-$checkAdminOrUser = \App\Models\admin::where("admin_id",\Illuminate\Support\Facades\Auth::id())->count();
-
 @endphp
 <div
   class="main-menu menu-fixed {{ $configData['theme'] === 'dark' || $configData['theme'] === 'semi-dark' ? 'menu-dark' : 'menu-light' }} menu-accordion menu-shadow"
@@ -10,7 +7,7 @@ $checkAdminOrUser = \App\Models\admin::where("admin_id",\Illuminate\Support\Faca
   <div class="navbar-header">
     <ul class="nav navbar-nav flex-row">
       <li class="nav-item me-auto">
-        <a class="navbar-brand" href="{{ $checkAdminOrUser? url('/') : url('parent/parent_dashboard')}}">
+        <a class="navbar-brand" href="{{ !Auth::user()->hasRole(\Spatie\Permission\Models\Role::where("name","parent")->first())? url('/') : url('parent/parent_dashboard')}}">
           <span class="brand-logo">
             <x-ui.logo />
           </span>
@@ -63,9 +60,8 @@ $checkAdminOrUser = \App\Models\admin::where("admin_id",\Illuminate\Support\Faca
             </li>
           @endif
         @endforeach
-      @endif
-      {{-- Foreach menu item ends --}}
-        @if (Auth::user()->hasRole(\Spatie\Permission\Models\Role::where("name","parent")->first())  && isset($menuData[2]))
+              {{-- Foreach menu item ends --}}
+        @elseif(Auth::user()->hasRole(\Spatie\Permission\Models\Role::where("name","parent")->first())  && isset($menuData[2]))
             @foreach ($menuData[2]->menu as $menu)
                 @if (isset($menu->navheader))
                     <li class="navigation-header">
