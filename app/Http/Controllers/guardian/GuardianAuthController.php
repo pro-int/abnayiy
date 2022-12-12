@@ -95,20 +95,20 @@ class GuardianAuthController extends Controller
         }
 
         if (!$request->has('code')) {
-//            $code = Mobile::where('phone', $request->phone)->where('activated', 0)->whereDate('created_at', '>=', Carbon::now()->subMinutes(2)->toDateTimeString())->first();
-//            $user = User::where('phone', $request->phone)->first();
-//
-//            if (!$code) {
-//                Mobile::where('phone', $request->phone)->where('activated', 0)->delete();
-//                $new_code = 1234;
-//                $code = new Mobile();
-//                $code->code = $new_code;
-//                $code->phone = $request->phone;
-//                $code->save();
-//            }
+            $code = Mobile::where('phone', $request->phone)->where('activated', 0)->whereDate('created_at', '>=', Carbon::now()->subMinutes(15)->toDateTimeString())->first();
+            $user = User::where('phone', $request->phone)->first();
 
-//            $notification = new ApplySingleNotification($code, 1, $user->id);
-//            $notification = $notification->fireNotification();
+            if (!$code) {
+                Mobile::where('phone', $request->phone)->where('activated', 0)->delete();
+                $new_code = rand(1000, 9999);
+                $code = new Mobile();
+                $code->code = $new_code;
+                $code->phone = $request->phone;
+                $code->save();
+            }
+
+            $notification = new ApplySingleNotification($code, 1, $user->id);
+            $notification = $notification->fireNotification();
 
             return response()->json([
                 'code' => 200,
@@ -116,9 +116,8 @@ class GuardianAuthController extends Controller
             ], 200);
         }
 
-        if(preg_match("@^\d{4}$@", $request->code) && $request->code == 1234){
-            $code = 1234;
-            //$code = Mobile::where('phone', $request->phone)->where('activated', 0)->whereDate('created_at', '>=', Carbon::now()->subMinutes(30))->where('code', $request->code)->first();
+        if(preg_match("@^\d{4}$@", $request->code)){
+            $code = Mobile::where('phone', $request->phone)->where('activated', 0)->whereDate('created_at', '>=', Carbon::now()->subMinutes(15))->where('code', $request->code)->first();
         }else{
             $code = null;
         }
@@ -131,7 +130,7 @@ class GuardianAuthController extends Controller
             ], 200);
         }
 
-        //$code->delete();
+        $code->delete();
 
         if (!Auth::user()->guardian) {
             $defult_category = Category::where('is_default', true)->first();
@@ -145,6 +144,7 @@ class GuardianAuthController extends Controller
         $user = $this->getAuthUser();
         $role = Role::select("id")->where("name","parent")->first();
         $user->assignRole([$role->id]);
+
         if ($user) {
             return response()->json([
                 'code' => 200,
