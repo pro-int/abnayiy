@@ -149,6 +149,7 @@ class GuardianAuthController extends Controller
         $user->assignRole([$role->id]);
 
         if ($user) {
+            Session::put("userLogin", 1);
             return response()->json([
                 'code' => 200,
                 'message' => 'تم تسجيل الدخول بنجاح !!',

@@ -72,10 +72,10 @@
                           <div class="middle-section1">
                               <form id="otpVerification" method="POST" class="mt-5">
 
-                                  <input class="otp" id="opt1" type="text" oninput='digitValidate(this)' onkeyup='tabChange(1)' maxlength=1 >
-                                  <input class="otp" id="opt2" type="text" oninput='digitValidate(this)' onkeyup='tabChange(2)' maxlength=1 >
-                                  <input class="otp" id="opt3" type="text" oninput='digitValidate(this)' onkeyup='tabChange(3)' maxlength=1 >
-                                  <input class="otp" id="opt4" type="text" oninput='digitValidate(this)' onkeyup='tabChange(4)' maxlength=1 >
+                                  <input class="otp" id="opt1" type="number" inputmode="numeric" oninput='digitValidate(this)' onkeyup='tabChange(1)' maxlength=1 >
+                                  <input class="otp" id="opt2" type="number" inputmode="numeric" oninput='digitValidate(this)' onkeyup='tabChange(2)' maxlength=1 >
+                                  <input class="otp" id="opt3" type="number" inputmode="numeric" oninput='digitValidate(this)' onkeyup='tabChange(3)' maxlength=1 >
+                                  <input class="otp" id="opt4" type="number" inputmode="numeric" oninput='digitValidate(this)' onkeyup='tabChange(4)' maxlength=1 >
                               </form>
                           </div>
                           <p class="heading">هذا الكود صالح لحد أقصي 2 دقيقه</p>
