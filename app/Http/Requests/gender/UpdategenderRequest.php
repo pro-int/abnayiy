@@ -44,9 +44,9 @@ class UpdategenderRequest extends GeneralRequest
             'gender_name.required' => 'اسم القسم مطلوب',
             'gender_name.unique' => 'اسم القسم مسجل مسبقا في نفس المدرسة',
 
-            'gender_type.required' => 'النوع مسجل مسبقا ينفس المسار',
-            'gender_type.string' => 'اسم النوع يجب ان يكون حروف فقط',
-            'gender_type.unique' => 'النوع مسجل مسبقا ضمن نفس النظام التعليمي',
+            'gender_type.required' => 'القسم مسجل مسبقا ينفس المسار',
+            'gender_type.string' => 'اسم القسم يجب ان يكون حروف فقط',
+            'gender_type.unique' => 'القسم مسجل مسبقا ضمن نفس النظام التعليمي',
 
             'grade_name_noor.required' => 'اسم المرحلة التعليمية بنظام نور مطلوب',
             'grade_name_noor.string' => 'اسم المرحلة التعليمية بنظام نور يجب ان يكون حروف فقط',
@@ -57,7 +57,7 @@ class UpdategenderRequest extends GeneralRequest
     {
         return  [
             'school_id' => 'النظام التعليمي',
-            'gender_type' => 'النوع',
+            'gender_type' => 'القسم',
         ];
     }
 

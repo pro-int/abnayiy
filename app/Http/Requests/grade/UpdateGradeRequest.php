@@ -43,8 +43,8 @@ class UpdateGradeRequest extends GeneralRequest
 
             'school_id.required' => 'رجاء المسار التعليمي',
 
-            'gender_id.required' => 'رجاء اختيار االنوع',
-            'gender_id.exists' => 'رجاء اختيار النوع من القائمة',
+            'gender_id.required' => 'رجاء اختيار القسم',
+            'gender_id.exists' => 'رجاء اختيار القسم من القائمة',
 
             'grade_name.required' => 'اسم المرحلة التعليمية مطلوب',
             'grade_name.string' => 'اسم المرحلة التعليمية يجب ان يكون حروف فقط',

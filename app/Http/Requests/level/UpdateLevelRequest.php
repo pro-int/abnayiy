@@ -45,8 +45,8 @@ class UpdateLevelRequest extends GeneralRequest
             'school_id.required' => 'رجاء النظام التعليمي',
             'school_id.exists' => 'رجاء اختيار النظام التعليمي من القائمة',
 
-            'gender_id.required' => 'رجاء اختيار االنوع',
-            'gender_id.exists' => 'رجاء اختيار النوع من القائمة',
+            'gender_id.required' => 'رجاء اختيار القسم',
+            'gender_id.exists' => 'رجاء اختيار القسم من القائمة',
 
             'grade_id.required' => 'اسم المرحلة التعليمية مطلوب',
             'gender_id.exists' => 'رجاء اختيار المرحلة من القائمة',
