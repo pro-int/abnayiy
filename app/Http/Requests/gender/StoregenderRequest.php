@@ -43,9 +43,9 @@ class StoregenderRequest extends GeneralRequest
 
             'gender_name.required' => 'اسم القسم مطلوب',
             'gender_name.unique' => 'اسم القسم مسجل مسبقا في نفس المدرسة',
-            'gender_type.required' => 'النوع مسجل مسبقا ينفس المسار',
-            'gender_type.string' => 'اسم النوع يجب ان يكون حروف فقط',
-            'gender_type.unique' => 'النوع مسجل مسبقا ضمن نفس اختيار المدرسة',
+            'gender_type.required' => 'القسم مسجل مسبقا ينفس المسار',
+            'gender_type.string' => 'اسم القسم يجب ان يكون حروف فقط',
+            'gender_type.unique' => 'القسم مسجل مسبقا ضمن نفس اختيار المدرسة',
         ];
     }
 }

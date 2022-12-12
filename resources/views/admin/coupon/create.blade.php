@@ -43,11 +43,11 @@ $breadcrumbs = [[['link' => route('coupons.index'), 'name' => "قسائم الخ
         </div>
 
         <div class="col-md">
-            <x-inputs.select.generic select2="" label="النوع" name="gender_id" data-placeholder="اختر النوع" data-msg="رجاء اختيار النوع" :options="old('school_id')  ? App\Models\Gender::genders(true,old('school_id') ) : []" />
+            <x-inputs.select.generic select2="" label="القسم" name="gender_id" data-placeholder="اختر القسم" data-msg="رجاء اختيار القسم" :options="old('school_id')  ? App\Models\Gender::genders(true,old('school_id') ) : []" />
         </div>
 
         <div class="col-md">
-            <x-inputs.select.generic select2="" label="المرحلة" name="grade_id" data-placeholder="اختر المرحلة" data-msg="رجاء اختيار المرحلة" :options="old('gender_id')  ? App\Models\Grade::grades(true,old('gender_id') ) : []" />
+            <x-inputs.select.generic select2="" label="المسار" name="grade_id" data-placeholder="اختر المسار" data-msg="رجاء اختيار المسار" :options="old('gender_id')  ? App\Models\Grade::grades(true,old('gender_id') ) : []" />
         </div>
 
         <div class="col-md">
@@ -102,7 +102,7 @@ $breadcrumbs = [[['link' => route('coupons.index'), 'name' => "قسائم الخ
             </div>
         </div>
 
-      
+
         <div class="row mb-1">
             <div class="col-md">
                 <x-inputs.text.Input label="متاح ابتداء من" class="form-control flatpickr-basic" icon="calendar" name="available_at" placeholder="ادخل متاح ابتداء من" />

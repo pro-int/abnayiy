@@ -23,7 +23,7 @@ class UpdateClassRoomRequest extends GeneralRequest
      * @return array
      */
     public function rules()
-    {       
+    {
         return [
             'class_name' => 'required|string|' . Rule::unique('class_rooms')->where('level_id', $this->level_id)->where('academic_year_id', $this->year)->ignore($this->classroom->id),
             'level_id' => 'required|exists:levels,id',
@@ -46,11 +46,11 @@ class UpdateClassRoomRequest extends GeneralRequest
             'school_id.required' => 'رجاء النظام التعليمي',
             'school_id.exists' => 'رجاء اختيار النظام التعليمي من القائمة',
 
-            'gender_id.required' => 'رجاء اختيار االنوع',
-            'gender_id.exists' => 'رجاء اختيار النوع من القائمة',
+            'gender_id.required' => 'رجاء اختيار القسم',
+            'gender_id.exists' => 'رجاء اختيار القسم من القائمة',
 
-            'grade_id.required' => 'اسم المرحلة التعليمية مطلوب',
-            'gender_id.exists' => 'رجاء اختيار المرحلة من القائمة',
+            'grade_id.required' => 'اسم المسار التعليمية مطلوب',
+            'gender_id.exists' => 'رجاء اختيار المسار من القائمة',
         ];
     }
 }

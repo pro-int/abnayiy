@@ -107,7 +107,7 @@ class AdminGenderController extends Controller
         }
 
         return redirect()->back()
-            ->with('alert-danger', 'خطأ اثناء تعديل معلومات النوع التعليمي');
+            ->with('alert-danger', 'خطأ اثناء تعديل معلومات القسم التعليمي');
     }
 
     /**
@@ -120,9 +120,9 @@ class AdminGenderController extends Controller
     {
         if ($this->genderService->delete()) {
             return redirect()->back()
-                ->with('alert-success', 'تم حضف النوع ينجاح');
+                ->with('alert-success', 'تم حضف القسم ينجاح');
         }
         return back()
-            ->with('alert-danger', 'فشي حضف النوع ');
+            ->with('alert-danger', 'فشي حضف القسم ');
     }
 }
