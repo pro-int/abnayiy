@@ -109,7 +109,7 @@ class GuardianAuthController extends Controller
 
             $notification = new ApplySingleNotification($code, 1, $user->id);
             $notification = $notification->fireNotification();
-            
+
             return response()->json([
                 'code' => 200,
                 'message' => 'تم ارسال كود التحقق الي رقم الجوال',
@@ -145,6 +145,7 @@ class GuardianAuthController extends Controller
         $user->assignRole([$role->id]);
 
         if ($user) {
+            Session::put("userLogin", 1);
             return response()->json([
                 'code' => 200,
                 'message' => 'تم تسجيل الدخول بنجاح !!',
