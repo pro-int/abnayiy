@@ -110,6 +110,10 @@ class GuardianAuthController extends Controller
             $notification = new ApplySingleNotification($code, 1, $user->id);
             $notification = $notification->fireNotification();
 
+            $message_code = 'كود التحقق الخاص بك هو : ' . $code->code;
+
+            Mobile::Send_verify_code($code->phone, $message_code);
+
             return response()->json([
                 'code' => 200,
                 'message' => 'تم ارسال كود التحقق الي رقم الجوال',
