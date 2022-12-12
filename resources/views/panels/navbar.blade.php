@@ -1,6 +1,3 @@
-@php
-    $checkAdminOrUser = \App\Models\admin::where("admin_id",\Illuminate\Support\Facades\Auth::id())->count();
-@endphp
 @if ($configData['mainLayoutType'] === 'horizontal' && isset($configData['mainLayoutType']))
 <nav class="header-navbar navbar-expand-lg navbar navbar-fixed align-items-center navbar-shadow navbar-brand-center {{ $configData['navbarColor'] }}" data-nav="brand-center">
   <div class="navbar-header d-xl-block d-none">
@@ -61,7 +58,7 @@
           </li> -->
         </ul>
 
-          @if($checkAdminOrUser)
+          @if(!Session::has("userLogin"))
               <label class="mx-1">المجمع الدراسي :</label>
               <ul class="nav navbar-nav ms-auto">
 
@@ -196,7 +193,7 @@
             <div class="dropdown-divider"></div>
             @endif
             @if (Auth::check())
-                @if ($checkAdminOrUser)
+                @if (!Session::has("userLogin"))
                       <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                           <em class="me-50" data-feather="power"></em> تسجيل الخروج
                       </a>
