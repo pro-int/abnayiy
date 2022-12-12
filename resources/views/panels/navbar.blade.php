@@ -58,7 +58,7 @@
           </li> -->
         </ul>
 
-          @if(!Auth::user()->hasRole(\Spatie\Permission\Models\Role::where("name","parent")->first()))
+          @if(!Session::has("userLogin"))
               <label class="mx-1">المجمع الدراسي :</label>
               <ul class="nav navbar-nav ms-auto">
 
@@ -193,7 +193,7 @@
             <div class="dropdown-divider"></div>
             @endif
             @if (Auth::check())
-                @if (!Auth::user()->hasRole(\Spatie\Permission\Models\Role::where("name","parent")->first()))
+                @if (!Session::has("userLogin"))
                       <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                           <em class="me-50" data-feather="power"></em> تسجيل الخروج
                       </a>

@@ -7,7 +7,7 @@ $configData = Helper::applClasses();
   <div class="navbar-header">
     <ul class="nav navbar-nav flex-row">
       <li class="nav-item me-auto">
-        <a class="navbar-brand" href="{{ !Auth::user()->hasRole(\Spatie\Permission\Models\Role::where("name","parent")->first())? url('/') : url('parent/parent_dashboard')}}">
+        <a class="navbar-brand" href="{{ !Session::has("userLogin") ? url('/') : url('parent/parent_dashboard')}}">
           <span class="brand-logo">
             <x-ui.logo />
           </span>
@@ -27,7 +27,7 @@ $configData = Helper::applClasses();
     <ul class="navigation navigation-main" id="main-menu-navigation" data-menu="menu-navigation">
       {{-- Foreach menu item starts --}}
 
-      @if (!Auth::user()->hasRole(\Spatie\Permission\Models\Role::where("name","parent")->first())  && isset($menuData[0]))
+      @if (!Session::has("userLogin")  && isset($menuData[0]))
         @foreach ($menuData[0]->menu as $menu)
           @if (isset($menu->navheader))
             <li class="navigation-header">
@@ -61,7 +61,7 @@ $configData = Helper::applClasses();
           @endif
         @endforeach
               {{-- Foreach menu item ends --}}
-        @elseif(Auth::user()->hasRole(\Spatie\Permission\Models\Role::where("name","parent")->first())  && isset($menuData[2]))
+        @elseif(Session::has("userLogin")  && isset($menuData[2]))
             @foreach ($menuData[2]->menu as $menu)
                 @if (isset($menu->navheader))
                     <li class="navigation-header">
