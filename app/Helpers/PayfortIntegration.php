@@ -1,8 +1,8 @@
 <?php
 
 /**
- * @copyright Copyright PayFort 2012-2016 
- * 
+ * @copyright Copyright PayFort 2012-2016
+ *
  */
 
 namespace App\Helpers;
@@ -437,7 +437,7 @@ class PayfortIntegration
         curl_setopt($ch, CURLOPT_FAILONERROR, 1);
         curl_setopt($ch, CURLOPT_ENCODING, "compress, gzip");
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // allow redirects		
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1); // allow redirects
         //curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1); // return into a variable
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 0); // The number of seconds to wait while trying to connect
         //curl_setopt($ch, CURLOPT_TIMEOUT, Yii::app()->params['apiCallTimeout']); // timeout in seconds
@@ -489,8 +489,9 @@ class PayfortIntegration
     public function convertFortAmount($amount, $currencyCode)
     {
         $total = $amount;
-        $decimalPoints    = $this->getCurrencyDecimalPoints($currencyCode);
-        return round((float) $total, $decimalPoints) * (pow(10, $decimalPoints));
+        $decimalPoints = $this->getCurrencyDecimalPoints($currencyCode);
+        //return round((float) $total, $decimalPoints) * (pow(10, $decimalPoints));
+        return (int)ceil($total) * (pow(10, $decimalPoints));
     }
 
     public  function castAmountFromFort($params)
@@ -501,9 +502,9 @@ class PayfortIntegration
     }
 
     /**
-     * 
+     *
      * @param string $currency
-     * @param integer 
+     * @param integer
      */
     public function getCurrencyDecimalPoints($currency)
     {
@@ -547,7 +548,7 @@ class PayfortIntegration
 
 
     /**
-     * 
+     *
      * @param type $po payment option
      * @return string payment option name
      */
