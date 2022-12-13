@@ -27,7 +27,7 @@
   const is_admin = document.getElementById('is_admin')
   const is_teacher = document.getElementById('is_teacher')
   const is_guardian = document.getElementById('is_guardian')
-  
+
   let dataArray = [];
   let eventsArray = [];
   let event = new Event('change');
@@ -217,16 +217,16 @@
     $('#selected_time').empty().trigger("change");
 
     let data = { selected_date: new Date(e.value) };
-    if (grade_id && grade_id.value) {
-      data.grade_id = grade_id.value
+    if (gender_id && gender_id.value) {
+      data.gender_id = gender_id.value
     } else {
-      const grade_input = document.getElementById('grade_id')
-      if (grade_input) {
-        data.grade_id = grade_input.value
+      const gender_input = document.getElementById('gender_id')
+      if (gender_input) {
+        data.gender_id = gender_input.value
       }
     }
-    if (!data.grade_id) {
-      showAlert('رجاء اختيار المسار الدراسي اولا لتتمكن من اختيار موعد المقابلة', 'error')
+    if (!data.gender_id) {
+      showAlert('رجاء اختيار القسم اولا لتتمكن من اختيار موعد المقابلة', 'error')
       return
     }
     const selected_date = e.value;
@@ -674,7 +674,7 @@
 
 
 
-  // handel transportation 
+  // handel transportation
   const payment_type = document.getElementById('payment_type')
   const transportation_id = document.getElementById('transportation_id')
   let transportationArray = []

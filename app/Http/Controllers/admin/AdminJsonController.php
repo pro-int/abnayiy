@@ -163,7 +163,7 @@ class AdminJsonController extends Controller
     {
         if ($request->filled('selected_date')) {
 
-            $section_id =  Grade::select('appointment_section_id')->findOrFail($request->grade_id)->appointment_section_id;
+            $section_id =  Gender::select('appointment_section_id')->findOrFail($request->gender_id)->appointment_section_id;
             $selected_date = $request->selected_date;
             $response = $this->CheckAvailableAppointments($selected_date, $section_id);
 

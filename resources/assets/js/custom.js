@@ -210,10 +210,10 @@ async function getMeetingSlots(e, application_id = '') {
 
     let data = { selected_date: new Date(e.value) };
     if (application_id == '') {
-        if (grade_id && grade_id.value) {
-            data.grade_id = grade_id.value
+        if (gender_id && gender_id.value) {
+            data.gender_id = gender_id.value
         } else {
-            showAlert('رجاء اختيار المسار الدراسي اولا لتتمكن من اختيار موعد المقابلة', 'error')
+            showAlert('رجاء اختيار القسم اولا لتتمكن من اختيار موعد المقابلة', 'error')
         }
     } else {
         data.application_id = application_id
@@ -642,7 +642,7 @@ frequent && frequent.dispatchEvent(event);
 
 
 
-// handel transportation 
+// handel transportation
 const payment_type = document.getElementById('payment_type')
 const transportation_id = document.getElementById('transportation_id')
 let transportationArray = []
