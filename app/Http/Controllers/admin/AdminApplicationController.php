@@ -445,11 +445,11 @@ class AdminApplicationController extends Controller
     public function meeting_result(Request $request)
     {
         if ($request->isMethod('put')) {
-
             $application = Application::findorfail($request->application_id);
 
             $appointment = ReservedAppointment::select('reserved_appointments.*', 'applications.id as application_id')
                 ->leftjoin('applications', 'applications.appointment_id', 'reserved_appointments.id')
+                ->where("applications.id", $request->application_id)
                 ->findOrFail($request->appointment_id);
 
             $appointment->update(array_merge(['admin_id' => Auth::id()], $request->only('summary', 'attended')));
@@ -479,9 +479,10 @@ class AdminApplicationController extends Controller
             return redirect()->back()
                 ->with('alert-danger', 'خطأ اثناء اضافة نتيجة المقابلة  ');
         } else {
-            if ($request->filled('appointment_id')) {
+            if ($request->filled('appointment_id') && $request->filled('application_id')) {
                 $meeting = ReservedAppointment::select('reserved_appointments.*', 'applications.id as application_id')
                     ->leftjoin('applications', 'applications.appointment_id', 'reserved_appointments.id')
+                    ->where("applications.id", $request->application_id)
                     ->findOrFail($request->appointment_id);
 
                 if ($meeting) {
