@@ -466,7 +466,9 @@ async function GetMettingInfo(btn) {
 async function updateMettingresult(btn) {
     const ipAPI = BASEURL + '/applications/meetingresult'
 
-    postData(ipAPI, { appointment_id: btn.getAttribute('data-id') })
+    var btnData = btn.getAttribute('data-id').split(",");
+
+    postData(ipAPI, { appointment_id: btnData[0], application_id: btnData[1] })
         .then(data => {
             let modal = document.getElementById('meetingModal')
             modal.innerHTML = data.html

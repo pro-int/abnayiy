@@ -61,7 +61,7 @@ $breadcrumbs = [[['link' => route('applications.index'), 'name' => "الطلبا
             </div>
         </div>
     </x-slot>
-    
+
 </x-forms.search>
 
 <!-- Striped rows start -->
@@ -97,7 +97,7 @@ $breadcrumbs = [[['link' => route('applications.index'), 'name' => "الطلبا
         @endcan
 
         @can('applications-edit')
-        @if($application->status_id < 2)         
+        @if($application->status_id < 2)
         <x-inputs.btn.edit :route="route('applications.edit',$application->id)" />
 
         @endif
@@ -105,7 +105,7 @@ $breadcrumbs = [[['link' => route('applications.index'), 'name' => "الطلبا
         @case(1)
         <x-inputs.btn.generic icon="message-circle" colorClass="warning" data-id="{{ $application->appointment_id }}" onClick="GetMettingInfo(this)" data-bs-original-title="تفاصيل المقابلة" />
 
-        <x-inputs.btn.generic icon="message-circle" colorClass="secondary" data-id="{{ $application->appointment_id }}" onClick="updateMettingresult(this)" data-bs-original-title="نتيجة المقابلة" />
+        <x-inputs.btn.generic icon="message-circle" colorClass="secondary" data-id="{{ $application->appointment_id }}, {{ $application->id }}" onClick="updateMettingresult(this)" data-bs-original-title="نتيجة المقابلة" />
             @break
 
             @case(2)
@@ -116,17 +116,17 @@ $breadcrumbs = [[['link' => route('applications.index'), 'name' => "الطلبا
             <x-inputs.btn.generic icon="link" colorClass="warning" data-id="{{ $application->id }}" onClick="ChangeStatus(this)" data-bs-original-title="قائمة الانتظار" data-changeTo="pending" />
 
             <x-inputs.btn.generic icon="link" colorClass="warning" data-id="{{ $application->id }}" onClick="ChangeStatus(this)" data-bs-original-title="قبول نهائي " data-changeTo="confirm" />
-  
+
             @break
 
             @case(4)
             <x-inputs.btn.generic icon="link" colorClass="warning" data-id="{{ $application->id }}" onClick="ChangeStatus(this)" data-bs-original-title="قبول نهائي " data-changeTo="confirm" />
-  
+
             @break
 
             @case(6)
             <x-inputs.btn.generic icon="book-open" colorClass="warning" data-id="{{ $application->id }}" onClick="ChangeStatus(this)" data-bs-original-title="اعادة فتح الطلب" data-changeTo="reopen" />
-  
+
             @break
             @endswitch
             @endcan
@@ -134,7 +134,7 @@ $breadcrumbs = [[['link' => route('applications.index'), 'name' => "الطلبا
             @can('applications-delete')
             <x-inputs.btn.delete :route="route('applications.destroy',$application->id)" />
             @endcan
-              
+
         </td>
         <th>{{ $application->id }}</th>
         <td>@if(!$application->contract) {{ $application->student_name }} @else <a href="{{ route('students.index',http_build_query(['search'=> $application->national_id, 'academic_year_id' => $application->academic_year_id])) }}">{{ $application->student_name }}</a> @endif</td>
