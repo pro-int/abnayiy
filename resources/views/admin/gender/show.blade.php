@@ -40,7 +40,7 @@ $breadcrumbs = [[['link' => route('genders.index'), 'name' => "الأقسام "]
 
     <div class="row mb-1 center">
         <div class="col-md">
-            <x-inputs.text.Input label="اسم المسار التعليمي في نظام نور" icon="file-text" name="grade_name_noor" placeholder="ادخل اسم المسار التعليمي في نظام نور" data-msg="ااسم المسار التعليمي في نظام نور بشكل صحيح" />
+            <x-inputs.text.Input label="اسم القسم التعليمي في نظام نور" icon="file-text" name="grade_name_noor" placeholder="ادخل اسم القسم التعليمي في نظام نور" data-msg="ااسم القسم التعليمي في نظام نور بشكل صحيح" />
         </div>
         <div class="col-md">
             <x-inputs.select.generic label="حساب نظام نور" name="noor_account_id" data-placeholder="اختر حساب نظام نور" data-msg="رجاء اختيار حساب نظام نور" :options="App\Models\NoorAccount::accounts()" />
