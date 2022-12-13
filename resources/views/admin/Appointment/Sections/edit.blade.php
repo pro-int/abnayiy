@@ -1,9 +1,9 @@
 @extends('layouts.contentLayoutMaster')
 @php
-$breadcrumbs = [[['link' => route('appointments.sections.index'), 'name' => "اقسام المقابلات"], ['link' => route('appointments.sections.edit',$section), 'name' => "نعديل معلومات القسم : $section->section_name"]],['title'=> 'تعديل معلومات القسم']];
+$breadcrumbs = [[['link' => route('appointments.sections.index'), 'name' => "اقسام المقابلات"], ['link' => route('appointments.sections.edit',$section), 'name' => "نعديل معلومات قسم المقابلات : $section->section_name"]],['title'=> 'تعديل معلومات قسم المقابلات']];
 @endphp
 
-@section('title', 'تعديل معلومات القسم')
+@section('title', 'تعديل معلومات قسم المقابلات')
 
 @section('content')
 
@@ -11,11 +11,11 @@ $breadcrumbs = [[['link' => route('appointments.sections.index'), 'name' => "ا�
 
 {!! Form::model($section,['route' => ['appointments.sections.update',$section],'method'=>'PUT' , 'onsubmit' => 'showLoader()'])  !!}
 
-<x-ui.divider>معلومات القسم</x-ui-divider>
+<x-ui.divider>معلومات قسم المقابلات</x-ui-divider>
 
 <div class="row mb-1">
     <div class="col-md">
-        <x-inputs.text.Input icon="file-text" label="اسم القسم" name="section_name" placeholder="ادخل اسم القسم" data-msg="'اسم القسم بشكل صحيح" />
+        <x-inputs.text.Input icon="file-text" label="اسم قسم المقابلات" name="section_name" placeholder="ادخل اسم قسم المقابلات" data-msg="'اسم قسم المقابلات بشكل صحيح" />
     </div>
 
     <div class="col-md">
@@ -24,7 +24,7 @@ $breadcrumbs = [[['link' => route('appointments.sections.index'), 'name' => "ا�
 </div>
 
 <div class="col-12 text-center mt-2">
-    <x-inputs.submit >تعديل القسم</x-inputs.submit>
+    <x-inputs.submit >تعديل قسم المقابلات</x-inputs.submit>
     <x-inputs.link route="appointments.sections.index">عودة</x-inputs.link>
 </div>
 {!! Form::close() !!}

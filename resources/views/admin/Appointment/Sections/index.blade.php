@@ -9,7 +9,7 @@ $breadcrumbs = [[['link' => route('appointments.sections.index'), 'name' => "ا�
 @section('content')
 
 <!-- Striped rows start -->
-<x-ui.table>
+<x-ui.table :autoWith="false">
     <x-slot name="title">اقسام المقابلات </x-slot>
     <x-slot name="cardbody">قائمة اقسام المقابلات .. يمكن لأولياء الأمور اختيار احد اقسام المقابلات المفعلة اثناء دفع الرسوم الدراسية ..</x-slot>
     <x-slot name="button">
@@ -20,7 +20,7 @@ $breadcrumbs = [[['link' => route('appointments.sections.index'), 'name' => "ا�
     <x-slot name="thead">
         <tr>
             <th scope="col">كود</th>
-            <th scope="col">اسم القسم</th>
+            <th scope="col">اسم قسم المقابلات</th>
             <th scope="col">اقصي موعد خلال</th>
             <th scope="col" style="min-width: 180px;">الاجراءات </th>
         </tr>
