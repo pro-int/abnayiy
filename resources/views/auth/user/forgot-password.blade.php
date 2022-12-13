@@ -184,13 +184,16 @@
         }
 
         $(".customBtn").on('click',function(){
+            var code = $("#opt1").val() + $("#opt2").val() + $("#opt3").val() + $("#opt4").val();
+            var validCode = code == ''?"null":code;
+
             if($("#password").val().length >= 8){
                 $.ajax({
                     url: "{{route("forgotPassword")}}",
                     method: 'post',
                     data: {
                         "phone": $("#phone").val(),
-                        "code": $("#opt1").val() + $("#opt2").val() + $("#opt3").val() + $("#opt4").val(),
+                        "code": validCode,
                         "password": $("#password").val()
                     },
                     success: function (response){
