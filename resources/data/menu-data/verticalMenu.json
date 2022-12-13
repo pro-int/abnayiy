@@ -374,7 +374,7 @@
       "submenu": [
         {
           "url": "appointments.sections.index",
-          "name": "ادارة الاقسام",
+          "name": "ادارة اقسام المقابلات",
           "icon": "circle",
           "slug": "appointments.sections.index"
         },
