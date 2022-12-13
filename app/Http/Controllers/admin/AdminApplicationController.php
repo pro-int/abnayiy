@@ -244,7 +244,6 @@ class AdminApplicationController extends Controller
             }
             return redirect()->back()->with('alert-danger', $msg)->withInput();
         } catch (\Throwable $th) {
-            dd($th);
             return redirect()->back()
                 ->with('alert-danger', 'خطأ اثناء اضافة الطلب')->withInput();
         }
