@@ -42,7 +42,7 @@ class AdminApplicationController extends Controller
     /**
      * return gardes can be managed by admin
      *
-     * @return array App\Modals\ApplicationManager 
+     * @return array App\Modals\ApplicationManager
      */
     protected function can_manage()
     {
@@ -191,12 +191,12 @@ class AdminApplicationController extends Controller
         try {
             $user = User::whereHas('guardian')->with('guardian')->findOrFail($request->guardian_id);
             if ($user) {
-                // get gender 
+                // get gender
                 $gender = Gender::findOrFail($request->gender_id);
                 $level = Level::select('grade_id')->findOrFail($request->level_id);
-                $grade = Grade::select('appointment_section_id')->findOrFail($level->grade_id);
+                //$grade = Grade::select('appointment_section_id')->findOrFail($level->grade_id);
 
-                $new_meetig = $this->bookNewAppointment($request, $grade->appointment_section_id, $request->guardian_id);
+                $new_meetig = $this->bookNewAppointment($request, $gender->appointment_section_id, $request->guardian_id);
                 if ($new_meetig['success'] && isset($new_meetig['appointment'])) {
                     $application = new Application();
                     $application->student_name = $request->student_name;
@@ -244,7 +244,7 @@ class AdminApplicationController extends Controller
             }
             return redirect()->back()->with('alert-danger', $msg)->withInput();
         } catch (\Throwable $th) {
-
+            dd($th);
             return redirect()->back()
                 ->with('alert-danger', 'خطأ اثناء اضافة الطلب')->withInput();
         }
