@@ -5,6 +5,8 @@
 @section('page-style')
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+
     {{-- Page Css files --}}
   <link rel="stylesheet" href="{{ asset(mix('css/base/pages/authentication.css')) }}">
 @endsection
@@ -15,7 +17,7 @@
       <!-- Forgot Password basic -->
       <div class="card mb-0">
         <div class="card-body">
-          <a href="javascript:void(0);" class="brand-logo">
+          <a href="/" class="brand-logo">
          <x-ui.logo />
           </a>
 
@@ -182,7 +184,6 @@
         }
 
         $(".customBtn").on('click',function(){
-            console.log($("#password").val().trim().length);
             if($("#password").val().length >= 8){
                 $.ajax({
                     url: "{{route("forgotPassword")}}",
