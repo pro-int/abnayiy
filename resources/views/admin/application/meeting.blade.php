@@ -14,7 +14,7 @@
 
     <input type="hidden" name="appointment_id" value="{{ $meeting->id }}">
     <input type="hidden" name="application_id" value="{{ $meeting->application_id }}">
-    <input type="hidden" id="grade_id" name="grade_id" value="{{$meeting->grade_id}}">
+    <input type="hidden" id="gender_id" name="gender_id" value="{{$meeting->gender_id}}">
 
     <x-ui.divider>الموعد الحالي</x-ui-divider>
 

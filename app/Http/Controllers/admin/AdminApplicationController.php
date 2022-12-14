@@ -426,10 +426,12 @@ class AdminApplicationController extends Controller
                 ->with('alert-danger', $result['message'] ?? 'خطأ اثناء تعديل معلومات المقابلة  ');
         } else {
 
-            $meeting = ReservedAppointment::select('reserved_appointments.*', 'applications.id as application_id', 'levels.grade_id', 'appointment_offices.office_name', 'appointment_offices.employee_name')
+            $meeting = ReservedAppointment::select('reserved_appointments.*', 'applications.id as application_id', 'genders.id as gender_id', 'appointment_offices.office_name', 'appointment_offices.employee_name')
                 ->leftjoin('applications', 'applications.appointment_id', 'reserved_appointments.id')
                 ->leftjoin('appointment_offices', 'appointment_offices.id', 'reserved_appointments.office_id')
                 ->leftjoin('levels', 'levels.id', 'applications.level_id')
+                ->leftjoin('grades', 'grades.id', 'levels.grade_id')
+                ->leftjoin('genders', 'genders.id', 'grades.gender_id')
                 ->findOrFail($request->appointment_id);
 
             if ($meeting) {
