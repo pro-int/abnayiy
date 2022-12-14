@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\withdrawalApplication\StoreWithdrawalApplicationRequest;
 use App\Http\Requests\withdrawalApplication\UpdateWithdrawalApplicationRequest;
 use App\Http\Traits\ContractTrait;
+use App\Models\AcademicYear;
 use App\Models\Contract;
 use App\Models\guardian;
 use App\Models\Student;
@@ -58,8 +59,8 @@ class GuardianWithdrawalApplicationController extends Controller
      */
     public function create()
     {
-        $year = $this->GetAdmissionAcademicYear();
-        return view('parent.withdrawalApplication.create', compact("year"));
+        //$year = $this->GetAdmissionAcademicYear();
+        return view('parent.withdrawalApplication.create');
     }
 
     /**
@@ -72,7 +73,8 @@ class GuardianWithdrawalApplicationController extends Controller
     {
         $time = Carbon::now()->toDateString();
         $amount_fees = 0;
-        $year = $this->GetAdmissionAcademicYear();
+
+        $year = AcademicYear::where('current_academic_year', 1)->first();
 
         $period = WithdrawalPeriod::select("withdrawal_periods.*")
         ->where("withdrawal_periods.apply_start", "<=", $time)->where("withdrawal_periods.apply_end", ">=", $time)->where("withdrawal_periods.active", 1)->first();
@@ -89,6 +91,11 @@ class GuardianWithdrawalApplicationController extends Controller
             }else{
                 $amount_fees = ($contract->tuition_fees * ($period->fees / 100));
             }
+        }
+
+        if($amount_fees == 0){
+            return redirect()->back()
+                ->with('alert-danger', 'خطأ اثناء اضافة طلب الانسحاب بسبب عدم وجود فتره انسحاب صحيحة');
         }
 
         $withdrawalApplication = WithdrawalApplication::create([
