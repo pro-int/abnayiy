@@ -22,7 +22,7 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
 
 @section('content')
 
-@component('components.forms.formCard',['title' => sprintf('طلب انسحاب جديد للعام الدراسي %s',$year->year_name)])
+@component('components.forms.formCard',['title' => sprintf('تسجيل طلب انسحاب جديد')])
 
 {{ Form::open(['route' => 'withdrawals.store','method'=> 'POST' , 'class' => 'row','id' => 'adminform' , 'onsubmit' => 'showLoader()']) }}
 
