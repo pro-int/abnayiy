@@ -64,9 +64,9 @@ trait ContractInstallments
 
             $contract->update_total_payments();
 
-            $this->setOdooKeys($contract);
+            //$this->setOdooKeys($contract);
 
-            $this->createInvoiceInOdoo($this->odooIntegrationKeys);
+            //$this->createInvoiceInOdoo($this->odooIntegrationKeys);
 
             return true;
         } else {
