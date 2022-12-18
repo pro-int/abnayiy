@@ -17,6 +17,7 @@ class WithdrawalApplication extends Model
         'date',
         'comment',
         'amount_fees',
+        'transportation_fees',
         'application_status',
         'school_name'
     ];

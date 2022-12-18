@@ -10,11 +10,13 @@ use App\Models\AcademicYear;
 use App\Models\Contract;
 use App\Models\guardian;
 use App\Models\Student;
+use App\Models\StudentTransportation;
 use App\Models\WithdrawalApplication;
 use App\Models\WithdrawalPeriod;
 use App\Services\WithdrawalFeesServices;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class AdminWithdrawalApplicationController extends Controller
 {
@@ -37,7 +39,7 @@ class AdminWithdrawalApplicationController extends Controller
      */
     public function index()
     {
-        $withdrawalApplication = WithdrawalApplication::select("withdrawal_applications.*", "students.student_name", "students.national_id", "levels.level_name", "academic_years.year_name")
+        $withdrawalApplication = WithdrawalApplication::select("student_transportations.id as trans_id","withdrawal_applications.*", "students.student_name", "students.national_id", "levels.level_name", "academic_years.year_name")
             ->leftjoin("students", "students.id", "withdrawal_applications.student_id")
             ->leftjoin('contracts', function ($join){
                 $join->on('contracts.student_id', '=', 'withdrawal_applications.student_id')
@@ -45,7 +47,13 @@ class AdminWithdrawalApplicationController extends Controller
             })
             ->leftJoin('levels', 'levels.id', 'contracts.level_id')
             ->leftJoin('academic_years', 'academic_years.id', 'contracts.academic_year_id')
+            ->leftjoin('student_transportations', function ($join){
+                $join->on('student_transportations.student_id', '=', 'students.id')
+                    ->on('student_transportations.contract_id', '=', 'contracts.id');
+            })
             ->paginate(10);
+
+       // dd($withdrawalApplication);
 
         return view('admin.withdrawalApplication.index', compact('withdrawalApplication'));
     }
@@ -85,9 +93,10 @@ class AdminWithdrawalApplicationController extends Controller
                 ->first();
 
             if($period->fees_type == "money"){
-                $amount_fees = $period->fees;
+                $convertedAmount = ($period->fees / $contract->tuition_fees);
+                $amount_fees = ($contract->tuition_fees * $convertedAmount) + ($contract->vat_amount * $convertedAmount);
             }else{
-                $amount_fees = ($contract->tuition_fees * ($period->fees / 100));
+                $amount_fees = ($contract->tuition_fees * ($period->fees / 100)) + ($contract->vat_amount * ($period->fees / 100));
             }
         }
 
@@ -143,22 +152,37 @@ class AdminWithdrawalApplicationController extends Controller
      * @param  \App\Models\WithdrawalApplication  $withdrawalApplication
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(UpdateWithdrawalApplicationRequest $request,$id)
     {
-
         $withdrawalApplication = WithdrawalApplication::findOrFail($id);
+        $studentTrans = StudentTransportation::where("student_id", $withdrawalApplication->student_id)->count();
+
+        $transportationFees = null;
+        $amountFees = $withdrawalApplication->amount_fees;
+
+        if($studentTrans > 0 && $request->get("fees") != ''){
+            $transportationFees = $request->get("fees");
+            $amountFees += $transportationFees;
+        }
+
         $withdrawalPeriodTable = $withdrawalApplication->update([
-            "application_status" => 1
+            "application_status" => 1,
+            "transportation_fees" => $transportationFees,
+            "amount_fees" => $amountFees
         ]);
 
         if ($withdrawalPeriodTable) {
             $this->withdrawalService->saveWithdrawalFees($withdrawalApplication);
-            return redirect()->route('withdrawals.index')
-                ->with('alert-success', 'تم تعديل طلب الانسحاب بنجاح');
+            return response()->json([
+                'code' => 200,
+                'message' => 'تم تعديل طلب الانسحاب بنجاح',
+            ], 200);
         }
-        return redirect()->back()
-            ->with('alert-danger', 'خطأ اثناء تعديل طلب الانسحاب');
 
+        return response()->json([
+            'code' => 400,
+            'message' => 'خطأ اثناء تعديل طلب الانسحاب',
+        ], 200);
     }
 
     /**

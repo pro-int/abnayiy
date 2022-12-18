@@ -28,7 +28,7 @@ class StoreWithdrawalApplicationRequest extends GeneralRequest
             'student_id' => 'required|numeric|unique:withdrawal_applications',
             'reason' => 'required|string',
             'comment' => 'required|string|min:1|max:150',
-            'school_name' => 'nullable|min:1|max:50',
+            'school_name' => 'string|min:1|max:50',
             'date' => 'nullable|string'
         ];
     }
