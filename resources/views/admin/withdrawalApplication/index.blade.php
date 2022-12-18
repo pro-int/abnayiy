@@ -19,10 +19,16 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
 
 @section('content')
 
+    <div class="message alert mb-1 rounded-0" role="alert" style="display: none">
+        <div class="messageBody alert-body"></div>
+    </div>
+    <div class="alert alert-warning mb-1 rounded-0" role="alert">
+        <div class="alert-body" style="font-weight: bold">  لا يمكن مسح طلب الانسحاب بعد تاكيد الطلب ولا يمكن استرجاع الدفعات المحذوفه من التعاقد</div>
+    </div>
+
 <!-- Striped rows start -->
 <x-ui.table>
     <x-slot name="title">طلبات الأنسحاب بالمدرسة </x-slot>
-    <x-slot name="cardbody">قائمة الطلبات المقدمة من اولياء الأمور .. {{$withdrawalApplication->count()}} طلب</x-slot>
 
     <x-slot name="thead">
         <tr>
@@ -36,7 +42,9 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
             <th scope="col">سبب الانسحاب</th>
             <th scope="col">التعليق</th>
             <th scope="col">المدرسه المحول لها</th>
-            <th scope="col">رسوم الطلب</th>
+            <th scope="col">رسوم الطلب(الدراسيه + الضرائب)</th>
+            <th scope="col">رسوم النقل</th>
+            <th scope="col">اجمالي الرسوم</th>
             <th scope="col">الاجراءات</th>
         </tr>
     </x-slot>
@@ -56,7 +64,9 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
             <td>{{ $application->reason }}</td>
             <td>{{ $application->comment }}</td>
             <td>{{ $application->school_name }}</td>
-            <td>{{ $application->amount_fees }}</td>
+            <td>{{ $application->transportation_fees? ($application->amount_fees - $application->transportation_fees) : $application->amount_fees }}</td>
+            <td>{{ $application->transportation_fees }}</td>
+            <td>{{ $application->amount_fees}}</td>
             <td>
                 @can('applications-list')
                     <x-inputs.btn.view route="{{ route('withdrawals.show',$application->id) }}" />
@@ -64,9 +74,12 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
 
                 @can('applications-edit')
                     @if($application->application_status == 0)
-                        <x-inputs.btn.edit onclick="return confirm('هل انت متاكد من قبول طلب الانسحاب ؟')" title="قبول الطلب" :route="route('withdrawals.edit',$application->id)" />
+                            <a class="btn btn-icon round btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="right" onclick='openConfirmModel({{$application->trans_id}})' title="قبول الطلب">
+                                <em data-feather="edit-2"></em>
+                            </a>
                     @endif
                 @endcan
+                    <p id="demo"></p>
 
             </td>
 
@@ -74,7 +87,6 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
         @endforeach
         </tbody>
     </x-slot>
-
 
     <x-slot name="pagination">
         {{ $withdrawalApplication->appends(request()->except('page'))->links() }}
@@ -96,6 +108,73 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
 @section('page-script')
 <!-- Page js files -->
 <script src="{{ asset(mix('js/scripts/forms/pickers/form-pickers.js')) }}"></script>
+
+    <script>
+        function openConfirmModel(e) {
+            if(e){
+                let fees = prompt("ادخل قيمة رسوم النقل... علما بان الضفط علي زرا ok سوف يتم قبول الطلب فورا");
+                if (fees != null) {
+                    $.ajax(
+                        {
+                            type: "GET",
+                            url: "{{route("withdrawals.edit", $application->id)}}",
+                            data: {
+                                "fees": fees
+                            },
+                            success: function(response)
+                            {
+                                if(response.code == 200){
+                                    $(".message").css("display","block");
+                                    $('.message').removeClass("alert-danger");
+                                    $('.message').addClass("alert-success");
+                                    $('.messageBody').text(response.message);
+                                    window.setTimeout(function(){
+                                        location.reload()
+                                    }, 2000);
+                                }else{
+                                    $(".message").css("display","block");
+                                    $('.message').removeClass("alert-success");
+                                    $('.message').addClass("alert-danger");
+                                    $('.messageBody').text(response.message);
+                                }
+                            }
+                        }
+                    );
+                }
+            }else{
+                let conformInput = confirm("هل انت متاكد من قبول طلب الانسحاب ؟");
+                if(conformInput){
+                    $.ajax(
+                        {
+                            type: "GET",
+                            url: "{{route("withdrawals.edit", $application->id)}}",
+                            data: {
+                                "fees": null
+                            },
+                            success: function(response)
+                            {
+                                if(response.code == 200){
+                                    $(".message").css("display","block");
+                                    $('.message').removeClass("alert-danger");
+                                    $('.message').addClass("alert-success");
+                                    $('.messageBody').text(response.message);
+                                    window.setTimeout(function(){
+                                        location.reload()
+                                    }, 2000);
+                                }else{
+                                    $(".message").css("display","block");
+                                    $('.message').removeClass("alert-success");
+                                    $('.message').addClass("alert-danger");
+                                    $('.messageBody').text(response.message);
+                                }
+                            }
+                        }
+                    );
+                }
+            }
+
+        }
+    </script>
 @endsection
 
 @section('page-script')

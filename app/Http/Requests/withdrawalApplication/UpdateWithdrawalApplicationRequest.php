@@ -25,17 +25,14 @@ class UpdateWithdrawalApplicationRequest extends GeneralRequest
     public function rules()
     {
         return [
-            'reason' => 'required|string',
-            'comment' => 'required|string'
+            'fees' => 'Nullable|integer',
         ];
     }
 
     public function attributes()
     {
         return [
-            'reason' => 'سبب الانسحاب',
-
-            'comment' => 'تعليقك',
+            'fees' => 'رسوم النقل',
         ];
     }
 }

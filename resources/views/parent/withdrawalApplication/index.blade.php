@@ -22,7 +22,6 @@ $breadcrumbs = [[['link' => route('parent.withdrawals.index'), 'name' => "الط
 <!-- Striped rows start -->
 <x-ui.table>
     <x-slot name="title">طلبات الأنسحاب بالمدرسة </x-slot>
-    <x-slot name="cardbody">قائمة الطلبات المقدمة  .. {{$withdrawalApplication->count()}} طلب</x-slot>
 
     <x-slot name="thead">
         <tr>
@@ -36,7 +35,9 @@ $breadcrumbs = [[['link' => route('parent.withdrawals.index'), 'name' => "الط
             <th scope="col">سبب الانسحاب</th>
             <th scope="col">التعليق</th>
             <th scope="col">المدرسه المحول لها</th>
-            <th scope="col">رسوم الطلب</th>
+            <th scope="col">رسوم الطلب(الدراسيه + الضرائب)</th>
+            <th scope="col">رسوم النقل</th>
+            <th scope="col">اجمالي الرسوم</th>
             <th scope="col">الاجراءات</th>
         </tr>
     </x-slot>
@@ -56,7 +57,10 @@ $breadcrumbs = [[['link' => route('parent.withdrawals.index'), 'name' => "الط
             <td>{{ $application->reason }}</td>
             <td>{{ $application->comment }}</td>
             <td>{{ $application->school_name }}</td>
-            <td>{{ $application->amount_fees }}</td>
+            <td>{{ $application->transportation_fees? ($application->amount_fees - $application->transportation_fees) : $application->amount_fees }}</td>
+            <td>{{ $application->transportation_fees }}</td>
+            <td>{{ $application->amount_fees}}</td>
+
             <td>
                 @can('guardian-applications-list')
                     <x-inputs.btn.view route="{{ route('parent.withdrawals.show',$application->id) }}" />
