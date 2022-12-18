@@ -87,9 +87,10 @@ class GuardianWithdrawalApplicationController extends Controller
                 ->first();
 
             if($period->fees_type == "money"){
-                $amount_fees = $period->fees;
+                $convertedAmount = ($period->fees / $contract->tuition_fees);
+                $amount_fees = ($contract->tuition_fees * $convertedAmount) + ($contract->vat_amount * $convertedAmount);
             }else{
-                $amount_fees = ($contract->tuition_fees * ($period->fees / 100));
+                $amount_fees = ($contract->tuition_fees * ($period->fees / 100)) + ($contract->vat_amount * ($period->fees / 100));
             }
         }
 
