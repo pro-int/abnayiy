@@ -92,8 +92,8 @@ $breadcrumbs = [[['link' => route('home'), 'name' => "الرئيسية"],['link'
 
         <td>{{ $PaymentAttempt->received_ammount }}</td>
         <td>{{ $PaymentAttempt->method_name }} {!! $PaymentAttempt->bank_name ? sprintf('<abbr title="رقم الحساب : %s">(%s)</abbr>',$PaymentAttempt->account_number,$PaymentAttempt->bank_name) : '' !!} {!! $PaymentAttempt->network_name ? sprintf('<abbr title="رقم الحساب : %s">(%s)</abbr>',$PaymentAttempt->network_account_number,$PaymentAttempt->network_name) : '' !!}</td>
-        <td>@if(! empty($PaymentAttempt->attach_pathh) && Storage::disk('public')->exists($PaymentAttempt->attach_pathh))
-            <a class="btn btn-sm round btn-icon btn-warning" href="{{ Storage::url($PaymentAttempt->attach_pathh) }}" target="_blank"><em data-feather='eye'></em></a>
+        <td>@if(! empty($PaymentAttempt->attach_pathh) && Storage::disk('s3')->exists($PaymentAttempt->attach_pathh))
+            <a class="btn btn-sm round btn-icon btn-warning" href="{{ Storage::disk('s3')->url($PaymentAttempt->attach_pathh) }}" target="_blank"><em data-feather='eye'></em></a>
             @else {{ $PaymentAttempt->reference }} @endif
         </td>
         <td>{{ $PaymentAttempt->admin_name }}</td>

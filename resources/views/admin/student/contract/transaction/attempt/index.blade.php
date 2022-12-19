@@ -41,7 +41,7 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
         @foreach($PaymentAttempts as $key => $PaymentAttempt)
         <td>
 
-            
+
             @can('accuonts-list')
             @if($PaymentAttempt->getRawOriginal('approved') == 0)
             <a class="btn btn-icon round btn-sm btn-outline-success" href="#" data-id="{{ $PaymentAttempt->id }}" id="confirmTransaction-btn" onclick="handelModelIdConfirmTrans(this)" data-bs-toggle="tooltip" data-bs-placement="right" title="تأكيد الدفعة">
@@ -55,7 +55,7 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
             <a class="btn btn-icon round btn-sm btn-outline-warning" href="{{ route('students.contracts.transactions.attempts.show',['student' => request()->student,'contract' => request()->contract,'transaction' => $transaction->id,'attempt' => $PaymentAttempt->id]) }}" data-bs-toggle="tooltip" data-bs-placement="right" title="ايصال السداد">
                 <me data-feather="image"></me>
             </a>
-            
+
             @endif
             @endcan
             @can('accuonts-delete')
@@ -74,9 +74,9 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
         <td>{{ null !== $PaymentAttempt->coupon ? sprintf('خصم %s - (%s)',$PaymentAttempt->coupon_discount,$PaymentAttempt->coupon) : ''}}</td>
         <td>{{ $PaymentAttempt->period_discount }}</td>
         <td>{{ $PaymentAttempt->received_ammount }}</td>
-        <td>{{ $PaymentAttempt->approved()}}</td> 
-        <td>@if(in_array($PaymentAttempt->payment_method_id,[1,2,4]) && ! empty($PaymentAttempt->attach_pathh) && Storage::disk('public')->exists($PaymentAttempt->attach_pathh))
-            <a class="btn btn-sm btn-info" href="{{ Storage::url($PaymentAttempt->attach_pathh) }}" target="_blank"><em  data-feather="share"></em></a>
+        <td>{{ $PaymentAttempt->approved()}}</td>
+        <td>@if(in_array($PaymentAttempt->payment_method_id,[1,2,4]) && ! empty($PaymentAttempt->attach_pathh) && Storage::disk('s3')->exists($PaymentAttempt->attach_pathh))
+            <a class="btn btn-sm btn-info" href="{{ Storage::disk('s3')->url($PaymentAttempt->attach_pathh) }}" target="_blank"><em  data-feather="share"></em></a>
             @else {{ $PaymentAttempt->reference }} @endif
         </td>
         <td>{{ $PaymentAttempt->admin_name }}</td>

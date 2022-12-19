@@ -131,7 +131,7 @@ class RenewContractServices
 
                         $this->CreateConfirmedPaymentAttempt($transaction, $request, $this->oldContract->guardian_id, $data);
 
-                        // check if user request transporttation 
+                        // check if user request transporttation
                         if ($transaction->transaction_type == 'bus' && $this->transfer_requestr->transportation_id && $this->transfer_requestr->transportation_payment && $this->transfer_requestr->bus_fees) {
                             # store transportation plan
                             $this->CreateStudentTransportation($this->transfer_requestr->transportation_id, $this->transfer_requestr->transportation_payment, $newContract->student_id, $newContract->id, $transaction, $this->user->id);
@@ -139,7 +139,7 @@ class RenewContractServices
                     }
                 }
 
-                //transfer debt froom old to new transaction 
+                //transfer debt froom old to new transaction
                 $this->TransferDebToNewContract($this->oldContract, $newContract);
 
                 return $newContract;
@@ -166,8 +166,8 @@ class RenewContractServices
     }
 
     /**
-     * @param \App\Models\Contract $oldContract - old contract 
-     * @param \App\Models\Contract $newContract - new created contract 
+     * @param \App\Models\Contract $oldContract - old contract
+     * @param \App\Models\Contract $newContract - new created contract
      * @return void
      */
     protected function TransferDebToNewContract(contract $oldContract, Contract $newContract)
@@ -197,7 +197,7 @@ class RenewContractServices
 
     /**
      * @param array $transactionArray --transaction data to store
-     * @return \App\Models\Transaction $transaction -- created transaction 
+     * @return \App\Models\Transaction $transaction -- created transaction
      */
     protected function StoreNewTransaction(array $transactionArray)
     {
@@ -211,7 +211,7 @@ class RenewContractServices
     /**
      * @param \App\Models\Contract $contract -- must to be wwith transaction
      * @param double|int $amount -- amount to pay
-     * @return bool 
+     * @return bool
      */
     protected function payDebt(contract $contract, $amount)
     {
@@ -287,11 +287,7 @@ class RenewContractServices
             // generate a new filename. getClientOriginalExtension() for the file extension
             $filename = $guardian_id . '/receipt-' . $location . $guardian_id . '-T' . $transaction->id . '-' . time() . '.' . $file->getClientOriginalExtension();
 
-            $path = Storage::disk('public')->putFileAs(
-                'receipts',
-                $file,
-                $filename
-            );
+            $path = upload($file,'s3','receipts',$filename);
             $file_path = ['attach_pathh' => $path];
         }
 

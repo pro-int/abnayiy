@@ -127,11 +127,8 @@ class TransactionController extends Controller
         // generate a new filename. getClientOriginalExtension() for the file extension
         $filename = Auth::id() . '/receipt-byUser-U' . Auth::id() . '-T' . $transaction->id . '-' . time() . '.' . $file->getClientOriginalExtension();
 
-        $path = Storage::disk('public')->putFileAs(
-            'receipts',
-            $file,
-            $filename
-        );
+        $path = upload($file,'s3','receipts',$filename);
+
 
         $PaymentAttempt = $this->CreatePaymentAttempt($transaction, $request, ['attach_pathh' => $path, 'bank_id' => $request->bank_id]);
 
