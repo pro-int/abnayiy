@@ -128,8 +128,10 @@ trait OdooIntegrationTrait
                      ->with('alert-success', 'تم اضافه الطالب في odoo بنجاح');
              }
 
+             $msg = (isset($response->result))?$response->result->message:'';
+
              return redirect()->back()
-                 ->with('alert-danger', 'خطأ اثناء اضافه معلومات الطالب في odoo ....' . $response->result->message);
+                 ->with('alert-danger', 'خطأ اثناء اضافه معلومات الطالب في odoo ....' . $msg);
          }
     }
 
