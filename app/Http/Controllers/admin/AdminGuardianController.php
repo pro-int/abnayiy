@@ -8,6 +8,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\OdooIntegrationTrait;
 use App\Models\guardian;
 use App\Http\Requests\guardian\StoreGuardianRequest;
 use App\Http\Requests\guardian\UpdateGuardianRequest;
@@ -19,6 +20,7 @@ use Spatie\Permission\Models\Role;
 
 class AdminGuardianController extends Controller
 {
+    use OdooIntegrationTrait;
     function __construct()
     {
         $this->middleware('permission:guardians-list|guardians-create|guardians-edit|guardians-delete', ['only' => ['index', 'store']]);
@@ -93,5 +95,12 @@ class AdminGuardianController extends Controller
         }
         return redirect()->back()
             ->with('alert-danger', 'خطأ اثناء حذف حساب ولي الامر ');
+    }
+
+    public function storeStudentInOdoo(Request $request)
+    {
+        $guardian = guardian::findOrFail($request->get('id'));
+        $guardian->setOdooKeys($guardian);
+        return $this->createParentInOdoo($guardian->getOdooKeys());
     }
 }

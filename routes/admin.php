@@ -114,6 +114,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('ApplicationManagers', AdminApplicationManageController::class);
         Route::resource('teachers', AdminTeacherController::class)->only('index','destroy');
         Route::resource('guardians', AdminGuardianController::class)->only('index','destroy');
+        Route::get('resendToOdoo', [AdminGuardianController::class, 'storeStudentInOdoo'])->name('users.resendToOdoo');
         Route::resource('guardians.wallets', AdminGuardianWalletController::class);
         Route::resource('guardians.points', AdminGuardianPointsController::class)->only('index');
     });

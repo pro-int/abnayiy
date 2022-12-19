@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 
+use App\Models\guardian;
 use Ripcord\Ripcord as RipcordRipcord;
 use Ripcord\Client\Client as Client;
 
@@ -143,13 +144,27 @@ trait OdooIntegrationTrait
 
             $response = curl_exec($curl);
 
+            $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
             $response = json_decode($response);
             curl_close($curl); // Close the connection
 
+
+            $guardianInfo = guardian::findOrFail($parent["guardian_id"]);
+
+            $guardianInfo->update([
+                "odd_record_id" => $response->result->ID??null,
+                "odoo_sync_status" => $httpcode == 200 ? 1 : 0,
+                "odoo_message" => $response->result->message
+            ]);
+
             if(isset($response->result) && isset($response->result->success) && $response->result->success){
-                return true;
+                return redirect()->back()
+                    ->with('alert-success', 'تم اضافه ولي الامر في odoo بنجاح');
             }
-            return false;
+
+            return redirect()->back()
+                ->with('alert-danger', 'خطأ اثناء اضافه معلومات ولي الامر في odoo ....' . $response->result->message);
         }
     }
 
