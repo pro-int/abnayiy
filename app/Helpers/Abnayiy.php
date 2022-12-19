@@ -19,7 +19,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
-
+use Illuminate\Support\Facades\Storage;
 // file pathes
 const CIONTRACT_FILES = 'contract_files';
 const RECEIPTS_FILES = 'receipts';
@@ -31,9 +31,89 @@ const CREDIT_WALLET_SLUG = 'credit';
 const CREDIT_WALLET_DISC = 'غير قابل للسحب';
 
 const WALLET_RECEIPT_PATH = 'receipts/wallet_receipts';
+if (! function_exists('upload')) {
+    function upload($file, $disk = 's3', $folder = '', $filename = '')
+    {
+        $type = [
+            'jpg' => 'image',
+            'jpeg' => 'image',
+            'png' => 'image',
+            'svg' => 'image',
+            'webp' => 'image',
+            'gif' => 'image',
+            'mp4' => 'video',
+            'mpg' => 'video',
+            'mpeg' => 'video',
+            'webm' => 'video',
+            'ogg' => 'video',
+            'avi' => 'video',
+            'mov' => 'video',
+            'flv' => 'video',
+            'swf' => 'video',
+            'mkv' => 'video',
+            'wmv' => 'video',
+            'wma' => 'audio',
+            'aac' => 'audio',
+            'wav' => 'audio',
+            'mp3' => 'audio',
+            'zip' => 'archive',
+            'rar' => 'archive',
+            '7z' => 'archive',
+            'doc' => 'document',
+            'txt' => 'document',
+            'docx' => 'document',
+            'pdf' => 'document',
+            'csv' => 'document',
+            'xml' => 'document',
+            'ods' => 'document',
+            'xlr' => 'document',
+            'xls' => 'document',
+            'xlsx' => 'document',
+            'ppt' => 'document',
+            'odt' => 'document',
+            'odp' => 'document',
+        ];
+        if (isset($file)) {
+            $extension = strtolower($file->getClientOriginalExtension());
+            if (isset($type[$extension])) {
+                if ($disk == 's3') {
+                    $filePath = '/'.$folder;
+                    $spaceImage = Storage::disk($disk)->put($filePath, $file);
+//                    $spaceImage = Storage::disk($disk)->url($spaceImage);
+                } elseif ($disk == 'public') {
+                    $filename = ! empty($filename) ? $filename : rand().'.'. time() . '.' . $file->getClientOriginalExtension();
+
+                    $spaceImage=Storage::disk($disk)->putFileAs(
+                        $folder,
+                        $file,
+                        $filename
+                    );
+                }
+                return $spaceImage;
+            }
+        }
+
+        return null;
+    }
+}
+if (! function_exists('getSpaceUrl')) {
+    function getSpaceUrl($img = null)
+    {
+        return 'https://'.env('AWS_ROUTE').'/'.$img;
+    }
+}
+if (! function_exists('getFileUrl')) {
+    function getFileUrl($fileName, $disk = 's3', $folder = '')
+    {
+        if ($disk == 's3') {
+            return 'https://'.env('AWS_ROUTE').'/'.$fileName;
+        }
+        return null;
+    }
+}
 /**
  * get currant period based on  acadmimic year.
- * @param App\Models\AcademicYear|int $year  
+ * @param App\Models\AcademicYear|int $year
  *
  * @return App\Models\Period $period
  */
@@ -156,7 +236,7 @@ function paymentMethods($returnArray = true, $payment_method_id = null)
 }
 
 /**
- * return tuition fees based on semesters 
+ * return tuition fees based on semesters
  *
  * @param  \App\Models\Level|int  $year
  * @param  \App\Models\semester $semesters
@@ -231,7 +311,7 @@ function current_contract_term(): ContractTerms
 /**
  * @param bool $reurnArray
  * @param int $id
- * @return \App\Models\PermissionCase|array 
+ * @return \App\Models\PermissionCase|array
  */
 function getPermissionsCases($reurnArray = true, $id = null)
 {
@@ -308,7 +388,7 @@ function getFileTypes()
 }
 
 /**
- * 
+ *
  */
 function getStudentStatus($key = null)
 {
@@ -325,7 +405,7 @@ function getStudentStatus($key = null)
 }
 
 /**
- * 
+ *
  */
 
 function getRenewStatus()
@@ -339,7 +419,7 @@ function getRenewStatus()
 
 
 /**
- * 
+ *
  * @return \App\Models\Country
  */
 function getCountries()

@@ -199,11 +199,8 @@ trait TransactionTrait
             // generate a new filename. getClientOriginalExtension() for the file extension
             $filename = $guardian_id . '/receipt-' . $location . $user_id . '-T' . $transaction->id . '-' . time() . '.' . $file->getClientOriginalExtension();
 
-            $path = Storage::disk('public')->putFileAs(
-                'receipts',
-                $file,
-                $filename
-            );
+            $path = upload($file,'s3','receipts',$filename);
+
             $file_path = ['attach_pathh' => $path];
         }
 
