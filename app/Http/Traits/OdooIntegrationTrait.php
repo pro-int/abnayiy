@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 
+use App\Models\PaymentAttempt;
 use Ripcord\Ripcord as RipcordRipcord;
 use Ripcord\Client\Client as Client;
 
@@ -153,7 +154,7 @@ trait OdooIntegrationTrait
         }
     }
 
-    public function createPaymentInOdoo($payment){
+    public function createPaymentInOdoo($payment, $payment_id){
 
         if($this->getAccessServerOdoo() && $payment){
             $body = [
@@ -179,13 +180,26 @@ trait OdooIntegrationTrait
 
             $response = curl_exec($curl);
 
+            $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
             $response = json_decode($response);
             curl_close($curl); // Close the connection
 
+            $paymentInfo = PaymentAttempt::findOrFail($payment_id);
+
+            $paymentInfo->update([
+                "odd_record_id" => $response->result->ID??null,
+                "odoo_sync_status" => $httpcode == 200 ? 1 : 0,
+                "odoo_message" => $response->result->message
+            ]);
+
             if(isset($response->result) && isset($response->result->success) && $response->result->success){
-                return true;
+                return redirect()->back()
+                    ->with('alert-success', 'تم اضافه دفعه التعاقد في odoo بنجاح');
             }
-            return false;
+
+            return redirect()->back()
+                ->with('alert-danger', 'خطأ اثناء اضافه معلومات دفعه التعاقد في odoo ....' . $response->result->message);
         }
     }
 

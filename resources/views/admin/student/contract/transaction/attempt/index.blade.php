@@ -32,6 +32,8 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
             <th scope="col">المحصل</th>
             <th scope="col">حالة الدفع</th>
             <th scope="col">المرجع</th>
+            <th scope="col">مزامنة odoo</th>
+            <th scope="col">اخطاء مزامنة odoo</th>
             <th scope="col">بواسطة</th>
             <th scope="col">اخر تحديث</th>
         </tr>
@@ -41,7 +43,7 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
         @foreach($PaymentAttempts as $key => $PaymentAttempt)
         <td>
 
-            
+
             @can('accuonts-list')
             @if($PaymentAttempt->getRawOriginal('approved') == 0)
             <a class="btn btn-icon round btn-sm btn-outline-success" href="#" data-id="{{ $PaymentAttempt->id }}" id="confirmTransaction-btn" onclick="handelModelIdConfirmTrans(this)" data-bs-toggle="tooltip" data-bs-placement="right" title="تأكيد الدفعة">
@@ -55,13 +57,18 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
             <a class="btn btn-icon round btn-sm btn-outline-warning" href="{{ route('students.contracts.transactions.attempts.show',['student' => request()->student,'contract' => request()->contract,'transaction' => $transaction->id,'attempt' => $PaymentAttempt->id]) }}" data-bs-toggle="tooltip" data-bs-placement="right" title="ايصال السداد">
                 <me data-feather="image"></me>
             </a>
-            
+
             @endif
             @endcan
             @can('accuonts-delete')
             <x-inputs.btn.delete :route="route('students.contracts.transactions.attempts.destroy', [$student->id,$contract,$PaymentAttempt->transaction_id,$PaymentAttempt->id])" />
             @endcan
 
+            @if($student->odoo_sync_status == 0 && $PaymentAttempt->approved)
+                @can('accuonts-list')
+                    <x-inputs.btn.generic colorClass="primary btn-icon round" icon="repeat" :route="route('attempts.resendToOdoo', ['id' => $PaymentAttempt->id])" title="اعاده ارسال الطالب ل odoo مره اخري" />
+                @endcan
+            @endif
 
         </td>
 
@@ -74,11 +81,13 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
         <td>{{ null !== $PaymentAttempt->coupon ? sprintf('خصم %s - (%s)',$PaymentAttempt->coupon_discount,$PaymentAttempt->coupon) : ''}}</td>
         <td>{{ $PaymentAttempt->period_discount }}</td>
         <td>{{ $PaymentAttempt->received_ammount }}</td>
-        <td>{{ $PaymentAttempt->approved()}}</td> 
+        <td>{{ $PaymentAttempt->approved()}}</td>
         <td>@if(in_array($PaymentAttempt->payment_method_id,[1,2,4]) && ! empty($PaymentAttempt->attach_pathh) && Storage::disk('public')->exists($PaymentAttempt->attach_pathh))
             <a class="btn btn-sm btn-info" href="{{ Storage::url($PaymentAttempt->attach_pathh) }}" target="_blank"><em  data-feather="share"></em></a>
             @else {{ $PaymentAttempt->reference }} @endif
         </td>
+        <td>@if($PaymentAttempt->odoo_sync_status) <abbr title="{{ $PaymentAttempt->odoo_sync_status }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>
+        <td>{{ !$PaymentAttempt->odoo_sync_status? $PaymentAttempt->odoo_message : 'لا يوجد'}}</td>
         <td>{{ $PaymentAttempt->admin_name }}</td>
         <td><abbr title="تاريخ التسجيل : {{ $PaymentAttempt->created_at->format('Y-m-d h:m:s') }}">{{ $PaymentAttempt->updated_at->diffforhumans() }}</abbr></td>
         </tr>

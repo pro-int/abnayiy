@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Traits\OdooIntegrationTrait;
 use App\Models\PaymentAttempt;
 use App\Models\Student;
 use App\Models\Transaction;
@@ -23,7 +24,7 @@ use Illuminate\Support\Facades\Log;
 
 class AdminPaymentAttemptController extends Controller
 {
-    use TransactionTrait, CreatePdfFile;
+    use TransactionTrait, CreatePdfFile, OdooIntegrationTrait;
 
     function __construct()
     {
@@ -54,7 +55,10 @@ class AdminPaymentAttemptController extends Controller
             'payment_attempts.payment_method_id',
             'payment_attempts.transaction_id',
             'payment_attempts.coupon',
+            'payment_attempts.approved',
             'payment_attempts.coupon_discount',
+            'payment_attempts.odoo_sync_status',
+            'payment_attempts.odoo_message',
             'periods.period_name',
             'payment_attempts.period_discount',
             'payment_attempts.transaction_id',
@@ -303,7 +307,7 @@ class AdminPaymentAttemptController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * 
+     *
      * @param  \App\Models\PaymentAttempt  $paymentAttempt
      * @return \Illuminate\Http\Response
      */
@@ -354,18 +358,26 @@ class AdminPaymentAttemptController extends Controller
         ->join('levels', 'levels.id', 'contracts.level_id')
         ->join('students', 'students.id', 'contracts.student_id')
         ->findOrFail($contract_id);
-        
+
         if (! $contract->allow_late_payment) {
             $year = AcademicYear::findOrfail($academic_year_id);
             // check contract status - not closed
             if (!$year->fiscalYearStatus() && $contract->next_level_id) {
-                # refuse to enter page if theres next level id , so student can 
+                # refuse to enter page if theres next level id , so student can
                 return sprintf('تنتهي السنة المالية لهذا التعاقد في %s ولا يمكن او حذف اي دفعات اخري بعد هذا التاريخ', $year->fiscal_year_end->format('d-m-Y'));
             }
-            
+
             if ($contract->status == 2 && $contract->next_level_id) {
                 return sprintf('تم اغلاق هذا التعاقد ربما يكون الطالب قد ترم ترحيلة الي العام الدراسي التالي او ان ولي الامر قام بتقديم طلب تجديد تعاقد ', $year->fiscal_year_end->format('d-m-Y'));
             }
         }
     }
+
+    public function storePaymentInOdoo(Request $request)
+    {
+        $payment = PaymentAttempt::findOrFail($request->get('id'));
+
+        return $this->createPaymentInOdoo($payment->getOdooKeys(), $payment->id);
+    }
+
 }

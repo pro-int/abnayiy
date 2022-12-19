@@ -29,6 +29,9 @@ class PaymentAttempt extends Model
         'attach_pathh',
         'guardian_id',
         'admin_id',
+        'odd_record_id',
+        'odoo_sync_status',
+        'odoo_message',
     ];
 
     private $odooIntegrationKeys = [];
