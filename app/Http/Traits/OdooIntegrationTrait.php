@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 
+use App\Models\Contract;
 use Ripcord\Ripcord as RipcordRipcord;
 use Ripcord\Client\Client as Client;
 
@@ -189,7 +190,7 @@ trait OdooIntegrationTrait
         }
     }
 
-    public function createInvoiceInOdoo($invoice){
+    public function createInvoiceInOdoo($invoice, $contract_id){
 
         if($this->getAccessServerOdoo() && $invoice){
             $body = [
@@ -215,13 +216,26 @@ trait OdooIntegrationTrait
 
             $response = curl_exec($curl);
 
+            $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+
             $response = json_decode($response);
             curl_close($curl); // Close the connection
 
+            $contractInfo = Contract::findOrFail($contract_id);
+
+            $contractInfo->update([
+                "odd_record_id" => $response->result? $response->result->ID:null,
+                "odoo_sync_status" => $httpcode == 200 ? 1 : 0,
+                "odoo_message" => $response->result? $response->result->message : $response->error->message
+            ]);
+
             if(isset($response->result) && isset($response->result->success) && $response->result->success){
-                return true;
+                return redirect()->back()
+                    ->with('alert-success', 'تم اضافه التعاقد في odoo بنجاح');
             }
-            return false;
+
+            return redirect()->back()
+                ->with('alert-danger', 'خطأ اثناء اضافه معلومات التعاقد في odoo ....' . $response->result->message);
         }
     }
 

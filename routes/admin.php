@@ -172,6 +172,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('students/exam_results', [AdminContractController::class, 'storeStudentExsamResutls'])->name('students.store_exam_result');
     Route::resource('students', AdminStudentController::class)->except('create','store');
     Route::get('students.contracts.all', [AdminContractController::class, 'getAllContracts'])->name('contracts.all');
+    Route::get('contracts.resendToOdoo', [AdminContractController::class, 'storeInvoiceInOdoo'])->name('contracts.resendToOdoo');
     Route::resource('students/noor', AdminNoorQueueController::class)->only('create','store');
     Route::resource('students.contracts', AdminContractController::class);
     Route::resource('students.contracts.files', AdminContractFileController::class)->only('index', 'create', 'store', 'destroy');
