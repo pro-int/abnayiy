@@ -97,7 +97,7 @@ class AdminGuardianController extends Controller
             ->with('alert-danger', 'خطأ اثناء حذف حساب ولي الامر ');
     }
 
-    public function storeStudentInOdoo(Request $request)
+    public function storeParentInOdoo(Request $request)
     {
         $guardian = guardian::findOrFail($request->get('id'));
         $guardian->setOdooKeys($guardian);
