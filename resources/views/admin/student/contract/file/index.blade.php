@@ -20,7 +20,7 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
 
     <x-slot name="thead">
         <tr>
-            
+
             <th scope="col">#</th>
             <th scope="col">نوع المرفق</th>
             <th scope="col">رابط الملف</th>
@@ -37,13 +37,13 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
             {{ $file->id }}
         </th>
         <td>{!! $file->fileType() !!}</td>
-        <td><x-inputs.btn.generic colorClass="success" icon="download" :route="Storage::disk('public')->url($file->file_path)"/></td>
+        <td><x-inputs.btn.generic colorClass="success" icon="download" :route="Storage::disk('s3')->url($file->file_path)"/></td>
         <td>{{ $file->admin_name }}</td>
         <td><abbr title="{{ $file->updated_at->format('Y-m-d h:m:s') }}">{{ $file->updated_at->diffforhumans() }}</abbr></td>
         <td><abbr title="{{ $file->created_at->format('Y-m-d h:m:s') }}">{{ $file->created_at->diffforhumans() }}</abbr></td>
 
         <td>
-            
+
             @can('accuonts-list')
             <x-inputs.btn.delete :route="route('students.contracts.files.destroy', [$contract->student_id,$contract->id,$file->id])"/>
             @endcan

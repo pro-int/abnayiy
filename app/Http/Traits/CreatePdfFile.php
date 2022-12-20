@@ -76,13 +76,13 @@ trait CreatePdfFile
         $twmplete = ContractTemplate::first();
         if ($req == 'watermark') {
             $path = ContractTemplate::$default_water_mark_path;
-            if ($twmplete && Storage::disk('public')->exists($twmplete->school_watermark)) {
-                $path = 'storage/' . $twmplete->school_watermark;
+            if ($twmplete && Storage::disk('s3')->exists($twmplete->school_watermark)) {
+                $path = Storage::disk('s3')->url($twmplete->school_watermark);
             }
         } else if ($req == 'logo') {
             $path = ContractTemplate::$default_logo_path;
-            if ($twmplete && Storage::disk('public')->exists($twmplete->school_logo)) {
-                $path = 'storage/' . $twmplete->school_logo;
+            if ($twmplete && Storage::disk('s3')->exists($twmplete->school_logo)) {
+                $path = Storage::disk('s3')->url($twmplete->school_logo);
             }
         }
         return $path;

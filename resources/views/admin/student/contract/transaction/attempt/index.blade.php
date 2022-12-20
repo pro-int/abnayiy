@@ -82,8 +82,8 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
         <td>{{ $PaymentAttempt->period_discount }}</td>
         <td>{{ $PaymentAttempt->received_ammount }}</td>
         <td>{{ $PaymentAttempt->approved()}}</td>
-        <td>@if(in_array($PaymentAttempt->payment_method_id,[1,2,4]) && ! empty($PaymentAttempt->attach_pathh) && Storage::disk('public')->exists($PaymentAttempt->attach_pathh))
-            <a class="btn btn-sm btn-info" href="{{ Storage::url($PaymentAttempt->attach_pathh) }}" target="_blank"><em  data-feather="share"></em></a>
+        <td>@if(in_array($PaymentAttempt->payment_method_id,[1,2,4]) && ! empty($PaymentAttempt->attach_pathh) && Storage::disk('s3')->exists($PaymentAttempt->attach_pathh))
+            <a class="btn btn-sm btn-info" href="{{ Storage::disk('s3')->url($PaymentAttempt->attach_pathh) }}" target="_blank"><em  data-feather="share"></em></a>
             @else {{ $PaymentAttempt->reference }} @endif
         </td>
         <td>@if($PaymentAttempt->odoo_sync_status) <abbr title="{{ $PaymentAttempt->odoo_sync_status }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>

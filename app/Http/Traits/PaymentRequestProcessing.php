@@ -33,11 +33,8 @@ trait PaymentRequestProcessing
 
         // generate a new filename. getClientOriginalExtension() for the file extension
         $filename = Auth::id() . '/receipt-byUser-U' . Auth::id() . '-Transfer-' . $transfer->id . '-' . time() . '.' . $file->getClientOriginalExtension();
-        $path = Storage::disk('public')->putFileAs(
-            'receipts',
-            $file,
-            $filename
-        );
+        $path = upload($file,'s3','receipts',$filename);
+
 
         $transfer->payment_ref = $path;
         $transfer->status = 'pending';
