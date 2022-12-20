@@ -184,7 +184,7 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => "الطلاب"],[
         <td>{{ $student->student_care ? 'نعم' : 'لا' }}</td>
         <td>@if(null !== $student->last_noor_sync) <abbr title="{{ $student->last_noor_sync }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>
         <td>@if($student->odoo_sync_status) <abbr title="{{ $student->odoo_sync_status }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>
-        <td style="direction: ltr;">{{ !$student->odoo_sync_status? $student->odoo_message : 'لا يوجد'}}</td>
+        <td>{{ !$student->odoo_sync_status? $student->odoo_message : 'لا يوجد'}}</td>
         <td><abbr title="{{ $student->created_at->format('Y-m-d h:m:s') }}">{{ $student->updated_at->format('Y-m-d h:m:s') }}</abbr></td>
         </tr>
         @endforeach
