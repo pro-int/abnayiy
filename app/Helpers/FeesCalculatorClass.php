@@ -155,7 +155,7 @@ class FeesCalculatorClass
     {
         $is_contract_payment = true;
         foreach ($this->semesters as $semester) {
-            $semester_fees = $this->tuition_fees / 100 * $semester->semester_in_fees;
+            $semester_fees = $this->level->tuition_fees / 100 * $semester->semester_in_fees;
             $payment_due = Carbon::parse($semester->semester_start)->subDays($this->plan->payment_due_determination);
 
             $this->newPayment('رسوم ' . $semester->semester_name, $semester_fees, $payment_due, $is_contract_payment);
@@ -262,7 +262,7 @@ class FeesCalculatorClass
 
     /**
      * Execute the console command.
-     * @param int $num_of_installments 
+     * @param int $num_of_installments
      * @param int $i installment index
      * @return string
      */
