@@ -113,7 +113,7 @@ $breadcrumbs = [[['link' => route('guardians.index'), 'name' => "اولياء ا
                 @endif
 
                 @if($user->odoo_sync_status == 0)
-                    <x-inputs.btn.generic colorClass="primary btn-icon round" icon="repeat" :route="route('users.resendToOdoo', ['id' => $user->guardian_id])" title="مزامنة مع odoo" />
+                    <x-inputs.btn.generic colorClass="primary btn-icon round" icon="repeat" :route="route('users.resendToOdoo', ['id' => $user->guardian_id])" title="مزامنة حسابات odoo" />
                 @endif
             </td>
         </tr>
