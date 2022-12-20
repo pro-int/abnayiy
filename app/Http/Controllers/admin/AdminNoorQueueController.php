@@ -76,12 +76,9 @@ class AdminNoorQueueController extends Controller
 
         $job->job_result = $request->job_result;
         if ($request->has('attach')) {
-            Storage::putFileAs(
-                'noor-files',
-                $request->attach,
-                $job->id . '-result-file.xlsx'
-            );
-            $job->file_path = 'noor-files/' . $job->id . '-result-file.xlsx';
+            $path = upload($request->attach,'s3','noor-files',$job->id . '-result-file.xlsx');
+
+            $job->file_path =$path;
         }
         if (is_callable($job->func_name)) {
             call_user_func($job->func_name, $job);

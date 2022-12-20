@@ -56,9 +56,8 @@ class AdminContractFileController extends Controller
     public function store(StoreContractFileRequest $request, $student , $contract)
     {
      $file = $request->file('file_path');
+        $path = upload($file,'s3',CIONTRACT_FILES,'/byAdmin-U' . auth()->id() . '-' . time() . '.' . $file->getClientOriginalExtension());
 
-     $path = $file->storeAs(CIONTRACT_FILES, '/byAdmin-U' . auth()->id() . '-' . time() . '.' . $file->getClientOriginalExtension(), 'public');
-      
      $contractfile =  ContractFile::create([
         'file_path' => $path,
         'contract_id' => $contract,
@@ -82,7 +81,7 @@ class AdminContractFileController extends Controller
      */
     public function destroy($student, $contract , ContractFile $file)
     {
-        if (Storage::disk('public')->delete($file->file_path) && $file->delete()) {
+        if (Storage::disk('s3')->delete($file->file_path) && $file->delete()) {
             return redirect()->back()
                 ->with('alert-success', 'تم حضف الملف ينجاح');
         }
