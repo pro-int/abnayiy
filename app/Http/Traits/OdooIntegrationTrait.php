@@ -115,10 +115,12 @@ trait OdooIntegrationTrait
 
              $studentInfo = Student::findOrFail($student["student_id"]);
 
+             $msg = (isset($response->result))?$response->result->message:'';
+
              $studentInfo->update([
-                 "odd_record_id" => $response->result->ID??null,
-                 "odoo_sync_status" => $httpcode == 200 ? 1 : 0,
-                 "odoo_message" => $response->result->message
+                 "odd_record_id" => isset($response->result)?$response->result->ID:null,
+                 "odoo_sync_status" => ($httpcode == 200 && isset($response->result) && $response->result->success) ? 1 : 0,
+                 "odoo_message" => $msg
              ]);
 
              curl_close($curl); // Close the connection
@@ -128,10 +130,9 @@ trait OdooIntegrationTrait
                      ->with('alert-success', 'تم اضافه الطالب في odoo بنجاح');
              }
 
-             $msg = (isset($response->result))?$response->result->message:'';
 
              return redirect()->back()
-                 ->with('alert-danger', 'خطأ اثناء اضافه معلومات الطالب في odoo ....' . $msg);
+                 ->with('alert-danger', $msg);
          }
     }
 
