@@ -185,21 +185,23 @@ trait OdooIntegrationTrait
             $response = json_decode($response);
             curl_close($curl); // Close the connection
 
+            $msg = (isset($response->result))?$response->result->message:'';
+
             $paymentInfo = PaymentAttempt::findOrFail($payment_id);
 
             $paymentInfo->update([
-                "odd_record_id" => $response->result->ID??null,
-                "odoo_sync_status" => $httpcode == 200 ? 1 : 0,
-                "odoo_message" => $response->result->message
+                "odd_record_id" => isset($response->result)?$response->result->ID:null,
+                "odoo_sync_status" => ($httpcode == 200 && isset($response->result) && $response->result->success) ? 1 : 0,
+                "odoo_message" => $msg
             ]);
 
-            if(isset($response->result) && isset($response->result->success) && $response->result->success){
+            if($httpcode == 200 && isset($response->result) && isset($response->result->success) && $response->result->success){
                 return redirect()->back()
                     ->with('alert-success', 'تم اضافه دفعه التعاقد في odoo بنجاح');
             }
 
             return redirect()->back()
-                ->with('alert-danger', 'خطأ اثناء اضافه معلومات دفعه التعاقد في odoo ....' . $response->result->message);
+                ->with('alert-danger', $msg);
         }
     }
 
