@@ -125,7 +125,7 @@ trait OdooIntegrationTrait
 
              curl_close($curl); // Close the connection
 
-             if(isset($response->result) && isset($response->result->success) && $response->result->success){
+             if($httpcode == 200 && isset($response->result) && isset($response->result->success) && $response->result->success){
                  return redirect()->back()
                      ->with('alert-success', 'تم اضافه الطالب في odoo بنجاح');
              }
