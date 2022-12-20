@@ -67,7 +67,7 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
             @endcan
 
             @if($contract->odoo_sync_status == 0)
-                <x-inputs.btn.generic colorClass="primary btn-icon round" icon="repeat" :route="route('contracts.resendToOdoo', ['id' => $contract->id])" title="اعاده ارسال ولي الامر ل odoo مره اخري" />
+                <x-inputs.btn.generic colorClass="primary btn-icon round" icon="repeat" :route="route('contracts.resendToOdoo', ['id' => $contract->id])" title="مزامنه حسابات odoo" />
             @endif
 
         </td>

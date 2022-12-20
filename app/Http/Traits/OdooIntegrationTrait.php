@@ -221,21 +221,23 @@ trait OdooIntegrationTrait
             $response = json_decode($response);
             curl_close($curl); // Close the connection
 
+            $msg = (isset($response->result))?$response->result->message:'';
+
             $contractInfo = Contract::findOrFail($contract_id);
 
             $contractInfo->update([
-                "odd_record_id" => $response->result? $response->result->ID:null,
-                "odoo_sync_status" => $httpcode == 200 ? 1 : 0,
-                "odoo_message" => $response->result? $response->result->message : $response->error->message
+                "odd_record_id" => isset($response->result)?$response->result->ID:null,
+                "odoo_sync_status" => ($httpcode == 200 && isset($response->result) && $response->result->success) ? 1 : 0,
+                "odoo_message" => $msg
             ]);
 
-            if(isset($response->result) && isset($response->result->success) && $response->result->success){
+            if($httpcode == 200 && isset($response->result) && isset($response->result->success) && $response->result->success){
                 return redirect()->back()
                     ->with('alert-success', 'تم اضافه التعاقد في odoo بنجاح');
             }
 
             return redirect()->back()
-                ->with('alert-danger', 'خطأ اثناء اضافه معلومات التعاقد في odoo ....' . $response->result->message);
+                ->with('alert-danger', $msg);
         }
     }
 
