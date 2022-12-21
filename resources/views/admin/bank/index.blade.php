@@ -44,8 +44,8 @@ $breadcrumbs = [[['link' => route('banks.index'), 'name' => "البنوك"]],['t
             <td>{{ $bank->account_name }}</td>
             <td>{{ $bank->account_number }}</td>
             <td>{{ $bank->account_iban }}</td>
-            <td>{{ $bank->journal_id }}</td>
             <td>{{ $bank->odoo_account_number }}</td>
+            <td>{{ $bank->journal_id }}</td>
             <td>{{ $bank->active == 1 ? 'فعال' : 'غير مفعل' }}</td>
             <td>{{ $bank->admin_name }}</td>
             <td>
