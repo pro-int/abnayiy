@@ -171,6 +171,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('applications', AdminApplicationController::class);
     Route::get('students/exam_results', [AdminContractController::class, 'showStudentExsamResutls'])->name('students.show_exam_result');
     Route::post('students/exam_results', [AdminContractController::class, 'storeStudentExsamResutls'])->name('students.store_exam_result');
+    Route::get('students/resendToOdoo', [AdminStudentController::class, 'storeStudentInOdoo'])->name('students.resendToOdoo');
     Route::resource('students', AdminStudentController::class)->except('create','store');
     Route::get('students.contracts.all', [AdminContractController::class, 'getAllContracts'])->name('contracts.all');
     Route::get('contracts.resendToOdoo', [AdminContractController::class, 'storeInvoiceInOdoo'])->name('contracts.resendToOdoo');

@@ -9,6 +9,7 @@ namespace App\Http\Controllers\admin;
 
 use App\Exports\StudentsExport;
 use App\Http\Controllers\Controller;
+use App\Http\Traits\OdooIntegrationTrait;
 use App\Models\Student;
 use App\Http\Requests\student\StoreStudentRequest;
 use App\Http\Requests\student\UpdateStudentRequest;
@@ -21,7 +22,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AdminStudentController extends Controller
 {
-    use CreatePdfFile;
+    use CreatePdfFile, OdooIntegrationTrait;
 
     function __construct()
     {
@@ -50,6 +51,8 @@ class AdminStudentController extends Controller
             'students.graduated',
             'students.created_at',
             'students.updated_at',
+            'students.odoo_sync_status',
+            'students.odoo_message',
             DB::raw('CONCAT(users.first_name, " " , users.last_name) as guardian_name'),
             'users.phone',
             'nationalities.nationality_name',
@@ -183,7 +186,7 @@ class AdminStudentController extends Controller
             }
         }
 
-        
+
         $students = $this->fillter_students($request, $students)->orderBy('students.id', 'desc');
 
         if ($request->action == 'export_xlsx') {
@@ -196,7 +199,7 @@ class AdminStudentController extends Controller
             $students = $students->get();
             $html = view('admin.student.export', compact('students'))->render();
             $pdf = $this->getPdf($html)->setWaterMark(public_path('/assets/reportLogo45d.png'));
-            return count($students) ?  response($pdf->output('تثرير_الطلاب.pdf', "I"), 200, ['Content-Type', 'application/pdf']) : redirect()->back()->with('alert-warning', 'لا توجد نتائج لمعاير اليحث')->withInput();
+            return count($students) ? response($pdf->output('تثرير_الطلاب.pdf', "I"), 200, ['Content-Type', 'application/pdf']) : redirect()->back()->with('alert-warning', 'لا توجد نتائج لمعاير اليحث')->withInput();
         }
 
         // return $students->get()->pluck('id')->toArray();
@@ -257,7 +260,7 @@ class AdminStudentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\Http\Requests\StorestudentRequest  $request
+     * @param \App\Http\Requests\StorestudentRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(StorestudentRequest $request)
@@ -268,7 +271,7 @@ class AdminStudentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\student  $student
+     * @param \App\Models\student $student
      * @return \Illuminate\Http\Response
      */
     public function show($student)
@@ -285,19 +288,19 @@ class AdminStudentController extends Controller
             'users.email',
             'guardians.national_id as guardian_national_id'
         )
-        ->join('guardians','guardians.guardian_id','students.guardian_id')
-        ->join('users','users.id','guardians.guardian_id')
-        ->leftjoin('categories','categories.id','guardians.category_id')
-        ->leftjoin('nationalities','nationalities.id','guardians.nationality_id')
-        ->findOrFail($student);
-        
+            ->join('guardians', 'guardians.guardian_id', 'students.guardian_id')
+            ->join('users', 'users.id', 'guardians.guardian_id')
+            ->leftjoin('categories', 'categories.id', 'guardians.category_id')
+            ->leftjoin('nationalities', 'nationalities.id', 'guardians.nationality_id')
+            ->findOrFail($student);
+
         return view('admin.student.view', compact('student'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\student  $student
+     * @param \App\Models\student $student
      * @return \Illuminate\Http\Response
      */
     public function edit($student)
@@ -314,20 +317,20 @@ class AdminStudentController extends Controller
             'users.email',
             'guardians.national_id as guardian_national_id'
         )
-        ->join('guardians','guardians.guardian_id','students.guardian_id')
-        ->join('users','users.id','guardians.guardian_id')
-        ->leftjoin('categories','categories.id','guardians.category_id')
-        ->leftjoin('nationalities','nationalities.id','guardians.nationality_id')
-        ->findOrFail($student);
-        
+            ->join('guardians', 'guardians.guardian_id', 'students.guardian_id')
+            ->join('users', 'users.id', 'guardians.guardian_id')
+            ->leftjoin('categories', 'categories.id', 'guardians.category_id')
+            ->leftjoin('nationalities', 'nationalities.id', 'guardians.nationality_id')
+            ->findOrFail($student);
+
         return view('admin.student.edit', compact('student'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \App\Http\Requests\UpdatestudentRequest  $request
-     * @param  \App\Models\student  $student
+     * @param \App\Http\Requests\UpdatestudentRequest $request
+     * @param \App\Models\student $student
      * @return \Illuminate\Http\Response
      */
     public function update(UpdatestudentRequest $request, student $student)
@@ -355,7 +358,7 @@ class AdminStudentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\student  $student
+     * @param \App\Models\student $student
      * @return \Illuminate\Http\Response
      */
     public function destroy(student $student)
@@ -366,5 +369,12 @@ class AdminStudentController extends Controller
         }
         return redirect()->back()
             ->with('alert-danger', 'خطأ اثناء حذف الطالب ');
+    }
+
+    public function storeStudentInOdoo(Request $request)
+    {
+        $student = Student::findOrFail($request->get('id'));
+
+        return $this->createStudentInOdoo($student->getOdooKeys());
     }
 }

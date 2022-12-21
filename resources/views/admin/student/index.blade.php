@@ -131,6 +131,8 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => "الطلاب"],[
             @endif
             <th scope="col">الرعاية</th>
             <th scope="col">مزامنة نور</th>
+            <th scope="col">مزامنة odoo</th>
+            <th scope="col">اخطاء مزامنة odoo</th>
             <th scope="col">اخر تعديل</th>
         </tr>
     </x-slot>
@@ -155,7 +157,11 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => "الطلاب"],[
             <x-inputs.btn.generic colorClass="primary btn-icon round" icon="dollar-sign" :route="route('students.contracts.transactions.index', [$student->id,$student->contract_id])" title="تفاصيل تعاقد عام {{$year->year_name}}" />
             @endcan
             @endif
-
+            @if($student->odoo_sync_status == 0)
+            @can('accuonts-list')
+                <x-inputs.btn.generic colorClass="primary btn-icon round" icon="repeat" :route="route('students.resendToOdoo', ['id' => $student->id])" title="مزامنه حسابات odoo" />
+            @endcan
+            @endif
         </td>
 
         <th scope="row"> {{ $student->id }} </th>
@@ -177,6 +183,8 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => "الطلاب"],[
         @endif
         <td>{{ $student->student_care ? 'نعم' : 'لا' }}</td>
         <td>@if(null !== $student->last_noor_sync) <abbr title="{{ $student->last_noor_sync }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>
+        <td>@if($student->odoo_sync_status) <abbr title="{{ $student->odoo_sync_status }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>
+        <td>{{ !$student->odoo_sync_status? $student->odoo_message : 'لا يوجد'}}</td>
         <td><abbr title="{{ $student->created_at->format('Y-m-d h:m:s') }}">{{ $student->updated_at->format('Y-m-d h:m:s') }}</abbr></td>
         </tr>
         @endforeach
