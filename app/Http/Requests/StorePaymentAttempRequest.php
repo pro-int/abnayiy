@@ -28,7 +28,7 @@ class StorePaymentAttempRequest extends GeneralRequest
             'requested_ammount' => 'nullable|numeric|lte:max_amount',
             'method_id' => 'required',
             'coupon' => 'nullable|string',
-            'receipt' => 'required_If:method_id,==,1|file|mimes:jpg,jpeg,bmp,png,pdf',
+            'receipt' => 'required_If:method_id,==,1|file|mimes:jpg,jpeg,bmp,png,pdf|max:8192',
             'bank_id' => 'required_If:method_id,==,1',
             'payment_network_id' => 'required_If:method_id,==,4',
         ];

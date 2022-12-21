@@ -26,7 +26,7 @@ class ConfirmTransactionRequest extends FormRequest
         return [
             // 'approved' => 'required',
             'received_ammount' => 'required|numeric',
-            'attach_pathh' => 'nullable|file|mimes:jpg,jpeg,bmp,png,pdf',
+            'attach_pathh' => 'nullable|file|mimes:jpg,jpeg,bmp,png,pdf|max:8192',
         ];
     }
 }
