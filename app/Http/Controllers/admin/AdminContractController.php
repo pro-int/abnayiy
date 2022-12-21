@@ -7,6 +7,8 @@ use App\Exports\ContractsExport;
 use App\Exports\StudentsExport;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Contract\StudentExamResultRequest;
+use App\Http\Traits\ContractInstallments;
+use App\Http\Traits\OdooIntegrationTrait;
 use App\Models\Contract;
 use App\Http\Requests\UpdatecontractRequest;
 use App\Http\Traits\CreatePdfFile;
@@ -23,7 +25,7 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AdminContractController extends Controller
 {
-    use CreatePdfFile;
+    use CreatePdfFile, OdooIntegrationTrait, ContractInstallments;
 
 
     /**
@@ -288,7 +290,7 @@ class AdminContractController extends Controller
     public function show_student_report(Request $request)
     {
         $year = $request->filled('old_academic_year_id') ? AcademicYear::findOrFail($request->old_academic_year_id) : GetAcademicYear();
-        
+
         $students = student::select(
             'students.id',
             'students.student_name',
@@ -480,5 +482,12 @@ class AdminContractController extends Controller
         }
 
         return $students;
+    }
+
+    public function storeInvoiceInOdoo(Request $request)
+    {
+        $contract = Contract::findOrFail($request->get('id'));
+        $this->setOdooKeys($contract);
+        return $this->createInvoiceInOdoo($this->odooIntegrationKeys, $contract->id);
     }
 }

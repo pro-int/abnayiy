@@ -35,6 +35,8 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
             <th scope="col">خدمة النقل</th>
             <th scope="col">الدفع</th>
             <th scope="col">حالة التعاقد</th>
+            <th scope="col">مزامنة odoo</th>
+            <th scope="col">اخطاء مزامنة odoo</th>
             <th scope="col">بواسطة</th>
             <th scope="col">اخر تحديث</th>
         </tr>
@@ -50,7 +52,7 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
             @can('accuonts-delete')
             <x-inputs.btn.delete :route="route('students.contracts.destroy', [$student->id,$contract])" />
             @endcan
-            
+
             @can('transportations-list')
             <x-inputs.btn.generic colorClass="danger btn-icon round" icon="home" :route="route('students.contracts.transportations.index', [$contract->student_id,$contract->id])"  title="خدمة النقل"/>
             @endcan
@@ -63,6 +65,10 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
             @can('accuonts-list')
             <x-inputs.btn.generic colorClass="info btn-icon round" icon="file" :route="route('students.contracts.files.index', [$student->id,$contract->id])" title="ملفات التعاقد"/>
             @endcan
+
+            @if($contract->odoo_sync_status == 0)
+                <x-inputs.btn.generic colorClass="primary btn-icon round" icon="repeat" :route="route('contracts.resendToOdoo', ['id' => $contract->id])" title="مزامنه حسابات odoo" />
+            @endif
 
         </td>
 
@@ -86,6 +92,8 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
         <td>@if(count($contract->transportation)) مشترك @else غير مشترك @endif</td>
         <td>{!! ($contract->GetContractSpan()) !!}</td>
         <td>{!! $contract->getStatus() !!}</td>
+        <td>@if($contract->odoo_sync_status) <abbr title="{{ $contract->odoo_sync_status }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>
+        <td>{{ !$contract->odoo_sync_status? $contract->odoo_message : 'لا يوجد'}}</td>
         <td>{{ $contract->admin_name }}</td>
         <td><abbr title="تاريخ التسجيل : {{ $contract->created_at->format('Y-m-d h:m:s') }}">{{ $contract->updated_at->diffforhumans() }}</abbr></td>
 

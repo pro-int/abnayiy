@@ -114,6 +114,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::resource('ApplicationManagers', AdminApplicationManageController::class);
         Route::resource('teachers', AdminTeacherController::class)->only('index','destroy');
         Route::resource('guardians', AdminGuardianController::class)->only('index','destroy');
+        Route::get('resendToOdoo', [AdminGuardianController::class, 'storeParentInOdoo'])->name('users.resendToOdoo');
         Route::resource('guardians.wallets', AdminGuardianWalletController::class);
         Route::resource('guardians.points', AdminGuardianPointsController::class)->only('index');
     });
@@ -173,6 +174,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('students/resendToOdoo', [AdminStudentController::class, 'storeStudentInOdoo'])->name('students.resendToOdoo');
     Route::resource('students', AdminStudentController::class)->except('create','store');
     Route::get('students.contracts.all', [AdminContractController::class, 'getAllContracts'])->name('contracts.all');
+    Route::get('contracts.resendToOdoo', [AdminContractController::class, 'storeInvoiceInOdoo'])->name('contracts.resendToOdoo');
     Route::resource('students/noor', AdminNoorQueueController::class)->only('create','store');
     Route::resource('students.contracts', AdminContractController::class);
     Route::resource('students.contracts.files', AdminContractFileController::class)->only('index', 'create', 'store', 'destroy');
@@ -180,6 +182,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('students.contracts.transactions', AdminTransactionController::class);
     Route::resource('students.contracts.transportations', AdminStudentTransportationController::class);
     Route::resource('students.contracts.transactions.attempts', AdminPaymentAttemptController::class);
+    Route::get('attempts/resendToOdoo', [AdminPaymentAttemptController::class, 'storePaymentInOdoo'])->name('attempts.resendToOdoo');
     Route::get('reports/students', [AdminContractController::class,'show_student_report']);
     Route::resource('student/permissions', AdminStudentPermissionController::class)->only(['index', 'destroy', 'update']);
     Route::get('student/StudentAttendances/report/{class_id}', [AdminStudentAttendanceController::class, 'getStudentAttendanceReports'])->name('StudentAttendances.reports');
