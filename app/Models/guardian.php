@@ -29,7 +29,7 @@ class guardian extends Model implements Wallet, WalletFloat
         'category_id',
         'points_balance',
         'active',
-        'odd_record_id',
+        'odoo_record_id',
         'odoo_sync_status',
         'odoo_message',
     ];
