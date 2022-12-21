@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('contracts', function (Blueprint $table) {
-            $table->integer('odd_record_id')->nullable()->after('status');
+            $table->integer('odoo_record_id')->nullable()->after('status');
             $table->boolean('odoo_sync_status')->default(0)->after('status');
             $table->string('odoo_message')->nullable()->after('status');
         });
@@ -28,7 +28,7 @@ return new class extends Migration
     public function down()
     {
         Schema::table('contracts', function (Blueprint $table) {
-            $table->dropColumn('odd_record_id');
+            $table->dropColumn('odoo_record_id');
             $table->dropColumn('odoo_sync_status');
             $table->dropColumn('odoo_message');
         });

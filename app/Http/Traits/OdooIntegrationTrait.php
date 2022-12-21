@@ -226,14 +226,14 @@ trait OdooIntegrationTrait
             $contractInfo = Contract::findOrFail($contract_id);
 
             $contractInfo->update([
-                "odd_record_id" => isset($response->result)?$response->result->ID:null,
+                "odoo_record_id" => isset($response->result)?$response->result->ID:null,
                 "odoo_sync_status" => ($httpcode == 200 && isset($response->result) && $response->result->success) ? 1 : 0,
                 "odoo_message" => $msg
             ]);
 
             if($httpcode == 200 && isset($response->result) && isset($response->result->success) && $response->result->success){
                 return redirect()->back()
-                    ->with('alert-success', 'تم اضافه التعاقد في odoo بنجاح');
+                    ->with('alert-info', 'تم اضافه التعاقد في odoo بنجاح');
             }
 
             return redirect()->back()

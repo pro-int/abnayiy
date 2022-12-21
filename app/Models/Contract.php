@@ -46,7 +46,7 @@ class Contract extends Model
         'old_contract_id',
         'class_id',
         'status',
-        'odd_record_id',
+        'odoo_record_id',
         'odoo_sync_status',
         'odoo_message',
     ];
