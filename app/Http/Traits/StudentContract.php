@@ -34,7 +34,6 @@ trait StudentContract
         $this->semesters = match_semesters($this->year, Carbon::now());
 
         $this->tuition_fees = semesters_tuition_fees($application->level_id, $this->semesters);
-
         $result =  DB::transaction(function () use ($application) {
             return $this->CreateNewStudent($application);
         });
@@ -43,7 +42,7 @@ trait StudentContract
 
     public function CreateNewStudent(Application $application)
     {
-      
+
         #add student to student List
         $student = Student::create([
             'student_name' => $application->student_name,
@@ -64,9 +63,7 @@ trait StudentContract
 
     public function CreateNewContract(Application $application, Student $student)
     {
-
         $vat = CalculateVat($student->nationality_id, $this->tuition_fees);
-
         $contract = Contract::create([
             'student_id' => $student->id,
             'application_id' => $application->id,
@@ -87,7 +84,6 @@ trait StudentContract
 
     public function CheckStudentTransportation(Application $application, Student $student, Contract $contract)
     {
-
         if (null !== $application->transportation_id) {
             $this->CreateStudentTransportation($application->transportation_id, $application->transportation_payment, $student->id, $contract->id);
         }
