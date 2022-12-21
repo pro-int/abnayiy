@@ -41,7 +41,7 @@ $breadcrumbs = [[['link' => route('guardians.index'), 'name' => "اولياء ا
             <td>{{ getWalletMeta($transaction->meta, 'description') }}</td>
             <td>
                 @if($path = getWalletMeta($transaction->meta, 'file_path'))
-                <x-inputs.btn.generic icon="paperclip" title="ايصال الدفع" colorClass="danger btn-icon" :route="Storage::url($path)" />
+                <x-inputs.btn.generic icon="paperclip" title="ايصال الدفع" colorClass="danger btn-icon" :route="Storage::disk('s3')->url($path)" />
 
                 @elseif($url = getWalletMeta($transaction->meta, 'url'))
                 <x-inputs.btn.generic icon="aperture" title="المرجع" colorClass="primary btn-icon" :route="$url" />

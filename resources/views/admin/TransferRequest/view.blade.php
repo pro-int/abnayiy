@@ -149,7 +149,7 @@ $breadcrumbs = [[['link' => route('transfers.index'), 'name' => "طلبات ال
                             @endif
                             <x-ui.divider color="warning">تفاصيل السداد</x-ui-divider>
 
-                                @php $hasFile = $transfer->payment_ref && Storage::disk('public')->exists($transfer->payment_ref) @endphp
+                                @php $hasFile = $transfer->payment_ref && Storage::disk('s3')->exists($transfer->payment_ref) @endphp
 
                                 @php $status = $transfer->getStatus(1); @endphp
                                 <div>
@@ -161,7 +161,7 @@ $breadcrumbs = [[['link' => route('transfers.index'), 'name' => "طلبات ال
                                 <div class="col-3">
                                     @if ($hasFile)
                                     <label class="form-label mb-1" for="confirmed"> ايصال السداد : </label>
-                                    <a href="{{ Storage::disk('public')->url($transfer->payment_ref) }}" class="btn btn-outline-warning btn-sm round">
+                                    <a href="{{ Storage::disk('s3')->url($transfer->payment_ref) }}" class="btn btn-outline-warning btn-sm round">
                                         <em data-feather="download" class="me-25"></em>
                                         <span>ايصال السداد</span>
                                     </a>
