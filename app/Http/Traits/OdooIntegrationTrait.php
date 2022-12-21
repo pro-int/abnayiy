@@ -3,6 +3,7 @@
 namespace App\Http\Traits;
 
 use App\Models\PaymentAttempt;
+use Illuminate\Support\Facades\DB;
 use Ripcord\Ripcord as RipcordRipcord;
 use Ripcord\Client\Client as Client;
 
@@ -185,17 +186,17 @@ trait OdooIntegrationTrait
             $response = json_decode($response);
             curl_close($curl); // Close the connection
 
-            $msg = isset($response->result)?$response->result->message:'';
-
-            $paymentAttemptInfo = PaymentAttempt::findOrFail($payment_id);
-
-            $paymentAttemptInfo->update([
-                "odoo_record_id" => isset($response->result)?$response->result->ID:null,
-                "odoo_sync_status" => ($httpcode == 200 && isset($response->result) && $response->result->success) ? 1 : 0,
-                "odoo_message" => $msg
-            ]);
+            $msg = ($httpcode == 200 && isset($response->result))?$response->result->message:'';
 
             if($httpcode == 200 && isset($response->result) && isset($response->result->success) && $response->result->success){
+
+                DB::transaction(function () use ($response,$msg,$payment_id){
+                    DB::table('payment_attempts')->where("id",$payment_id)->update([
+                        "odoo_record_id" => isset($response->result)?$response->result->ID:null,
+                        "odoo_sync_status" => (isset($response->result) && $response->result->success) ? 1 : 0,
+                        "odoo_message" => $msg
+                    ]);
+                });
                 return redirect()->back()
                     ->with('alert-info', 'تم اضافه دفعه التعاقد في odoo بنجاح');
             }
