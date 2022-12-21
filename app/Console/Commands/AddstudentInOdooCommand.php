@@ -32,7 +32,7 @@ class AddstudentInOdooCommand extends Command
      */
     public function handle()
     {
-        $students = Student::where("created_at",">=",Carbon::parse("01-08-2022 00:00:00"))->where("odoo_sync_status", 0)->get();
+        $students = Student::where("odoo_sync_status", 0)->get();
 
         foreach ($students as $student){
             $this->createStudentInOdoo($student->getOdooKeys());

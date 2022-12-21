@@ -3,6 +3,7 @@
 namespace App\Http\Traits;
 
 use App\Models\Student;
+use Illuminate\Support\Facades\DB;
 use Ripcord\Ripcord as RipcordRipcord;
 use Ripcord\Client\Client as Client;
 
@@ -108,24 +109,23 @@ trait OdooIntegrationTrait
              curl_setopt($curl, CURLOPT_TIMEOUT, 30);
 
              $response = curl_exec($curl);
-
              $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
              $response = json_decode($response);
-
-             $studentInfo = Student::findOrFail($student["student_id"]);
-
-             $msg = (isset($response->result))?$response->result->message:'';
-
-             $studentInfo->update([
-                 "odoo_record_id" => isset($response->result)?$response->result->ID:null,
-                 "odoo_sync_status" => ($httpcode == 200 && isset($response->result) && $response->result->success) ? 1 : 0,
-                 "odoo_message" => $msg
-             ]);
 
              curl_close($curl); // Close the connection
 
+             $msg = ($httpcode == 200 && isset($response->result))?$response->result->message:'';
+             $student_id = $student["student_id"];
+
              if($httpcode == 200 && isset($response->result) && isset($response->result->success) && $response->result->success){
+                 DB::transaction(function () use ($response,$msg,$student_id){
+                     DB::table('students')->where("id",$student_id)->update([
+                         "odoo_record_id" => isset($response->result)?$response->result->ID:null,
+                         "odoo_sync_status" => (isset($response->result) && $response->result->success) ? 1 : 0,
+                         "odoo_message" => $msg
+                     ]);
+                 });
+
                  return redirect()->back()
                      ->with('alert-info', 'تم اضافه الطالب في odoo بنجاح');
              }
