@@ -180,6 +180,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('students.contracts.transactions', AdminTransactionController::class);
     Route::resource('students.contracts.transportations', AdminStudentTransportationController::class);
     Route::resource('students.contracts.transactions.attempts', AdminPaymentAttemptController::class);
+    Route::get('attempts/resendToOdoo', [AdminPaymentAttemptController::class, 'storePaymentInOdoo'])->name('attempts.resendToOdoo');
     Route::get('reports/students', [AdminContractController::class,'show_student_report']);
     Route::resource('student/permissions', AdminStudentPermissionController::class)->only(['index', 'destroy', 'update']);
     Route::get('student/StudentAttendances/report/{class_id}', [AdminStudentAttendanceController::class, 'getStudentAttendanceReports'])->name('StudentAttendances.reports');

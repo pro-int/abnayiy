@@ -32,6 +32,8 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
             <th scope="col">المحصل</th>
             <th scope="col">حالة الدفع</th>
             <th scope="col">المرجع</th>
+            <th scope="col">مزامنة odoo</th>
+            <th scope="col">اخطاء مزامنة odoo</th>
             <th scope="col">بواسطة</th>
             <th scope="col">اخر تحديث</th>
         </tr>
@@ -62,6 +64,11 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
             <x-inputs.btn.delete :route="route('students.contracts.transactions.attempts.destroy', [$student->id,$contract,$PaymentAttempt->transaction_id,$PaymentAttempt->id])" />
             @endcan
 
+            @if($PaymentAttempt->odoo_sync_status == 0 && $PaymentAttempt->approved)
+                @can('accuonts-list')
+                    <x-inputs.btn.generic colorClass="primary btn-icon round" icon="repeat" :route="route('attempts.resendToOdoo', ['id' => $PaymentAttempt->id])" title="مزامنه حسابات odoo" />
+                @endcan
+            @endif
 
         </td>
 
@@ -79,6 +86,8 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
             <a class="btn btn-sm btn-info" href="{{ Storage::disk('s3')->url($PaymentAttempt->attach_pathh) }}" target="_blank"><em  data-feather="share"></em></a>
             @else {{ $PaymentAttempt->reference }} @endif
         </td>
+        <td>@if($PaymentAttempt->odoo_sync_status) <abbr title="{{ $PaymentAttempt->odoo_sync_status }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>
+        <td>{{ !$PaymentAttempt->odoo_sync_status? $PaymentAttempt->odoo_message : 'لا يوجد'}}</td>
         <td>{{ $PaymentAttempt->admin_name }}</td>
         <td><abbr title="تاريخ التسجيل : {{ $PaymentAttempt->created_at->format('Y-m-d h:m:s') }}">{{ $PaymentAttempt->updated_at->diffforhumans() }}</abbr></td>
         </tr>
