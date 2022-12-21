@@ -2,6 +2,7 @@
 
 namespace App\Http\Traits;
 
+use App\Models\guardian;
 use App\Models\Contract;
 use App\Models\PaymentAttempt;
 use Illuminate\Support\Facades\DB;
@@ -145,14 +146,28 @@ trait OdooIntegrationTrait
             curl_setopt($curl, CURLOPT_TIMEOUT, 30);
 
             $response = curl_exec($curl);
-
+            $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
             $response = json_decode($response);
             curl_close($curl); // Close the connection
 
-            if(isset($response->result) && isset($response->result->success) && $response->result->success){
-                return true;
+            $msg = ($httpcode == 200 && isset($response->result))?$response->result->message:'';
+            $guardian_id = $parent["guardian_id"];
+
+            DB::transaction(function () use ($response,$msg,$guardian_id,$httpcode){
+                DB::table('guardians')->where("guardian_id",$guardian_id)->update([
+                    "odoo_record_id" => ($httpcode == 200 && isset($response->result))?$response->result->ID:null,
+                    "odoo_sync_status" => ($httpcode == 200 && isset($response->result) && $response->result->success) ? 1 : 0,
+                    "odoo_message" => $msg
+                ]);
+            });
+
+            if($httpcode == 200 && isset($response->result) && isset($response->result->success) && $response->result->success){
+                return redirect()->back()
+                    ->with('alert-info', 'تم اضافه ولي الامر في odoo بنجاح');
             }
-            return false;
+
+            return redirect()->back()
+                ->with('alert-danger', $msg);
         }
     }
 
