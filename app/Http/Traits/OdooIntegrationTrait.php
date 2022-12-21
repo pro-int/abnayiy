@@ -190,7 +190,7 @@ trait OdooIntegrationTrait
             $paymentAttemptInfo = PaymentAttempt::findOrFail($payment_id);
 
             $paymentAttemptInfo->update([
-                "odd_record_id" => isset($response->result)?$response->result->ID:null,
+                "odoo_record_id" => isset($response->result)?$response->result->ID:null,
                 "odoo_sync_status" => ($httpcode == 200 && isset($response->result) && $response->result->success) ? 1 : 0,
                 "odoo_message" => $msg
             ]);
