@@ -31,7 +31,7 @@ class UpdateTransferRequestRequest extends FormRequest
             }),
             'receipt' => Rule::requiredIf(function () {
                 return $this->payment_method_id == 1;
-            }) .'|file|mimes:jpg,jpeg,bmp,png,pdf'
+            }) .'|file|mimes:jpg,jpeg,bmp,png,pdf|max:8192'
         ];
     }
 

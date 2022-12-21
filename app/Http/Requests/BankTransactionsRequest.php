@@ -24,7 +24,7 @@ class BankTransactionsRequest extends FormRequest
     public function rules()
     {
         return [
-            'receipt' => 'required|file|mimes:jpg,jpeg,bmp,png,pdf',
+            'receipt' => 'required|file|mimes:jpg,jpeg,bmp,png,pdf|max:8192',
             'bank_id' => 'required'
         ];
     }
