@@ -3,6 +3,7 @@
 namespace App\Http\Traits;
 
 use App\Models\Contract;
+use Illuminate\Support\Facades\DB;
 use Ripcord\Ripcord as RipcordRipcord;
 use Ripcord\Client\Client as Client;
 
@@ -215,21 +216,19 @@ trait OdooIntegrationTrait
             curl_setopt($curl, CURLOPT_TIMEOUT, 30);
 
             $response = curl_exec($curl);
-
             $httpcode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
             $response = json_decode($response);
             curl_close($curl); // Close the connection
 
-            $msg = (isset($response->result))?$response->result->message:'';
+            $msg = ($httpcode == 200 && isset($response->result))?$response->result->message:'';
 
-            $contractInfo = Contract::findOrFail($contract_id);
-
-            $contractInfo->update([
-                "odoo_record_id" => isset($response->result)?$response->result->ID:null,
-                "odoo_sync_status" => ($httpcode == 200 && isset($response->result) && $response->result->success) ? 1 : 0,
-                "odoo_message" => $msg
-            ]);
+            DB::transaction(function () use ($response,$msg,$contract_id,$httpcode){
+                DB::table('contracts')->where("id",$contract_id)->update([
+                    "odoo_record_id" => ($httpcode == 200 && isset($response->result))?$response->result->ID:null,
+                    "odoo_sync_status" => ($httpcode == 200 && isset($response->result) && $response->result->success) ? 1 : 0,
+                    "odoo_message" => $msg
+                ]);
+            });
 
             if($httpcode == 200 && isset($response->result) && isset($response->result->success) && $response->result->success){
                 return redirect()->back()
