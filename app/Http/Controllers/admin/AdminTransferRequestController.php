@@ -66,7 +66,7 @@ class AdminTransferRequestController extends Controller
 
             if ($request->filled('search')) {
                 if ($request->search[0] == '=') {
-    
+
                     $transfers = $transfers->where(function ($query) use ($request) {
                         $query->where('transfer_requests.id', substr($request->search, 1));
                     });
@@ -94,7 +94,7 @@ class AdminTransferRequestController extends Controller
                 $expoert = new TransferRequestExport($transfers);
                 return Excel::download($expoert, 'طلبات_تجديد_التعاقد.xlsx');
             }
-    
+
              $transfers =  $transfers->paginate(config('view.per_page', 30));
 
              return view('admin.TransferRequest.index', compact('transfers', 'year'));
@@ -126,7 +126,7 @@ class AdminTransferRequestController extends Controller
         return $transfers;
     }
 
-    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -245,11 +245,8 @@ class AdminTransferRequestController extends Controller
                     // generate a new filename. getClientOriginalExtension() for the file extension
                     $filename = $new_contract->student->guardian_id . '/file-byAdmin-U' . Auth::id() . '-C' . $new_contract->id . '-' . time() . '.' . $file->getClientOriginalExtension();
 
-                    $path = Storage::disk('public')->putFileAs(
-                        'contract_files',
-                        $file,
-                        $filename
-                    );
+                    $path = upload($file,'s3','contract_files',$filename);
+
 
                     ContractFile::create([
                         'file_path' => $path,
@@ -283,7 +280,7 @@ class AdminTransferRequestController extends Controller
             if ($contract) {
                 # contract still apper
                 return redirect()->back()
-                ->with('alert-warning', 'لتتمكن من حذف طلب تجديد التعاقد .. رجاء حذف التعاقد رقم ' . $contract->id . ' اولا ثم حاول مرة اخري.');       
+                ->with('alert-warning', 'لتتمكن من حذف طلب تجديد التعاقد .. رجاء حذف التعاقد رقم ' . $contract->id . ' اولا ثم حاول مرة اخري.');
             }
          }
 

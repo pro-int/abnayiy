@@ -26,7 +26,7 @@ $breadcrumbs = [[['link' => route('contract_design.edit'), 'name' => 'تصميم
                     <div class="border rounded p-2">
                         <h4 class="mb-1">شعار المدرسة</h4>
                         <div class="d-flex flex-column flex-md-row">
-                            <img src="{{ Storage::disk('public')->exists($template->school_logo) ? asset('storage/'.$template->school_logo) : asset('assets/logo-removebg-preview.png') }}" id="blog-feature-image" class="rounded me-2 mb-1 mb-md-0" width="170" height="110" alt="Blog Featured Image" />
+                            <img src="{{ Storage::disk('s3')->exists($template->school_logo) ? getSpaceUrl($template->school_logo) : asset('assets/logo-removebg-preview.png') }}" id="blog-feature-image" class="rounded me-2 mb-1 mb-md-0" width="170" height="110" alt="Blog Featured Image" />
                             <div class="featured-info">
                                 <small class="text-muted">غي حالة عدم رفع شعار المدرسية سيتم استخدام الشعار الأفتراضي</small>
                                 <p class="my-50">
@@ -50,7 +50,7 @@ $breadcrumbs = [[['link' => route('contract_design.edit'), 'name' => 'تصميم
                     <div class="border rounded p-2">
                         <h4 class="mb-1">الشعار المائي</h4>
                         <div class="d-flex flex-column flex-md-row">
-                            <img src="{{  Storage::disk('public')->exists($template->school_watermark) ? asset('storage/'. $template->school_watermark) : asset('assets/reportLogo45d.png')}}" id="blog-feature-image" class="rounded me-2 mb-1 mb-md-0" width="170" height="110" alt="Blog Featured Image" />
+                            <img src="{{  Storage::disk('s3')->exists($template->school_watermark) ? getSpaceUrl($template->school_watermark) : asset('assets/reportLogo45d.png')}}" id="blog-feature-image" class="rounded me-2 mb-1 mb-md-0" width="170" height="110" alt="Blog Featured Image" />
                             <div class="featured-info">
                                 <small class="text-muted">غي حالة عدم رفع شعار المدرسية سيتم استخدام الشعار الأفتراضي</small>
                                 <p class="my-50">

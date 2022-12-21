@@ -85,7 +85,7 @@ class AdminGuardianWalletController extends Controller
         $meta['description'] = $request->description;
 
         if ($logo = $request->file('receipt')) {
-            $path = $logo->storeAs(WALLET_RECEIPT_PATH, '/byAdmin-U' . auth()->id() . '-' . time() . '.' . $logo->getClientOriginalExtension(), 'public');
+            $path = upload($logo,'s3',WALLET_RECEIPT_PATH,'/byAdmin-U' . auth()->id() . '-' . time() . '.' . $logo->getClientOriginalExtension());
             $meta['file_path'] = $path;
         }
 

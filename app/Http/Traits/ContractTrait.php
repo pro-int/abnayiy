@@ -25,7 +25,7 @@ trait ContractTrait
     use TransactionTrait, ContractTransportation;
 
     /**
-     * Create New Contract For student 
+     * Create New Contract For student
      * @param array $contractArray
      * @param \App\Models\Student|int $student
      * @return \App\Models\Contract $contract
@@ -77,8 +77,8 @@ trait ContractTrait
     }
 
     /**
-     * @param \App\Models\Contract $oldContract - old contract 
-     * @param \App\Models\Contract $newContract - new created contract 
+     * @param \App\Models\Contract $oldContract - old contract
+     * @param \App\Models\Contract $newContract - new created contract
      * @return void
      */
     protected function TransferDebToNewContract(contract $oldContract, Contract $newContract)
@@ -109,7 +109,7 @@ trait ContractTrait
 
     /**
      * @param array $transactionArray --transaction data to store
-     * @return \App\Models\Transaction $transaction -- created transaction 
+     * @return \App\Models\Transaction $transaction -- created transaction
      */
     protected function StoreNewTransaction(array $transactionArray)
     {
@@ -123,7 +123,7 @@ trait ContractTrait
     /**
      * @param \App\Models\Contract $contract -- must to be wwith transaction
      * @param double|int $amount -- amount to pay
-     * @return bool 
+     * @return bool
      */
     protected function payDebt(contract $contract, $amount)
     {
@@ -167,11 +167,11 @@ trait ContractTrait
         if ($debt) {
             $data['debt'] = $debt;
         }
-        
+
         $data['exam_result'] = $contract->exam_result;
         $data['next_school_year_id'] = $year->id;
         $data['next_level_id'] = $contract->exam_result == 'pass' ? $contract->next_level_id : $contract->level_id;
-        
+
         if ($data['plan_id']) {
 
             $fees = new FeesCalculatorClass($data['plan_id'], $data['next_level_id'], $period, $user->guardian->category_id, $contract->nationality_id, $year);
@@ -213,11 +213,8 @@ trait ContractTrait
             // generate a new filename. getClientOriginalExtension() for the file extension
             $filename = $guardian_id . '/receipt-' . $location . $guardian_id . '-T' . $transaction->id . '-' . time() . '.' . $file->getClientOriginalExtension();
 
-            $path = Storage::disk('public')->putFileAs(
-                'receipts',
-                $file,
-                $filename
-            );
+            $path = upload($file,'s3','receipts',$filename);
+
             $file_path = ['attach_pathh' => $path];
         }
 
@@ -266,14 +263,14 @@ trait ContractTrait
                 $this->payDebt($oldContract, $transfer->dept_paid);
             }
 
-            // get user id 
+            // get user id
             if (Auth()->check()) {
                 $user_id = auth()->id();
             } else {
                 $user_id = $oldContract->guardian_id;
             }
 
-            
+
             // prepare new contract data
             $newContractData = [
                 'academic_year_id' => $newContractArray['next_school_year_id'],
@@ -306,7 +303,7 @@ trait ContractTrait
 
                         $this->CreateConfirmedPaymentAttempt($transaction, $request, $oldContract->guardian_id, $data);
 
-                        // check if user request transporttation 
+                        // check if user request transporttation
                         if ($transaction->transaction_type == 'bus' && $transfer->transportation_id && $transfer->transportation_payment && $transfer->bus_fees) {
                             # store transportation plan
                             $this->CreateStudentTransportation($transfer->transportation_id, $transfer->transportation_payment, $newContract->student_id, $newContract->id, $transaction, $user_id);
@@ -314,7 +311,7 @@ trait ContractTrait
                     }
                 }
 
-                //transfer debt froom old to new transaction 
+                //transfer debt froom old to new transaction
                 $this->TransferDebToNewContract($oldContract, $newContract);
 
 
