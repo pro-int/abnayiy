@@ -2,14 +2,8 @@
 
 namespace App\Http\Traits;
 
-use App\Models\Student;
-use App\Models\guardian;
-use App\Models\Contract;
-use App\Models\PaymentAttempt;
 use App\Services\OdooCURLServices;
 use Illuminate\Support\Facades\DB;
-use Ripcord\Ripcord as RipcordRipcord;
-use Ripcord\Client\Client as Client;
 
 trait OdooIntegrationTrait
 {
@@ -17,15 +11,15 @@ trait OdooIntegrationTrait
         $service = new OdooCURLServices();
         $result = $service->sendStudentToOdoo($student);
 
-        if(isset($result["error"])){
+        if(isset($result["code"]) && $result["code"] == 401){
             return redirect()->back()
                 ->with('alert-danger', $result["message"]);
         }
 
-        $httpcode = $result["status_code"];
+        $httpcode = $result["code"];
         $response = $result["response"];
 
-        $msg = ($httpcode == 200 && isset($response->result)) ? $response->result->message : '';
+        $msg = (isset($response->result)) ? $response->result->message : '';
         $student_id = $student["student_id"];
 
         DB::transaction(function () use ($response, $msg, $student_id, $httpcode) {
@@ -59,7 +53,7 @@ trait OdooIntegrationTrait
         $httpcode = $result["status_code"];
         $response = $result["response"];
 
-        $msg = ($httpcode == 200 && isset($response->result))?$response->result->message:'';
+        $msg = (isset($response->result))?$response->result->message:'';
         $guardian_id = $parent["guardian_id"];
 
         DB::transaction(function () use ($response,$msg,$guardian_id,$httpcode){
@@ -84,15 +78,15 @@ trait OdooIntegrationTrait
         $service = new OdooCURLServices();
         $result = $service->sendPaymentToOdoo($payment);
 
-        if(isset($result["error"])){
+        if(isset($result["code"]) && $result["code"] == 401){
             return redirect()->back()
                 ->with('alert-danger', $result["message"]);
         }
 
-        $httpcode = $result["status_code"];
+        $httpcode = $result["code"];
         $response = $result["response"];
 
-        $msg = ($httpcode == 200 && isset($response->result))?$response->result->message:'';
+        $msg = (isset($response->result))?$response->result->message:'';
 
         DB::transaction(function () use ($response,$msg,$payment_id,$httpcode){
             DB::table('payment_attempts')->where("id",$payment_id)->update([
@@ -116,15 +110,15 @@ trait OdooIntegrationTrait
         $service = new OdooCURLServices();
         $result = $service->sendInvoiceToOdoo($invoice);
 
-        if(isset($result["error"])){
+        if(isset($result["code"]) && $result["code"] == 401){
             return redirect()->back()
                 ->with('alert-danger', $result["message"]);
         }
 
-        $httpcode = $result["status_code"];
+        $httpcode = $result["code"];
         $response = $result["response"];
 
-        $msg = ($httpcode == 200 && isset($response->result))?$response->result->message: '';
+        $msg = (isset($response->result))?$response->result->message: '';
 
         DB::transaction(function () use ($response,$msg,$contract_id,$httpcode){
             DB::table('contracts')->where("id",$contract_id)->update([
