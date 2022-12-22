@@ -155,7 +155,6 @@ class TransactionController extends Controller
         $objFort->itemName = $transaction->installment_name;
         $objFort->return_url = $return_url;
 //        $objFort->return_url = route('payfort_processResponse', $transaction->id);
-        dd($objFort->return_url);
         $form_array = $objFort->processRequest($ref);
         if ($PaymentAttempt) {
             # return payment array
