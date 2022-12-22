@@ -16,7 +16,9 @@ class GuardianObserver
      */
     public function created(guardian $guardian)
     {
-        $this->createParentInOdoo($guardian->getOdooKeys());
+        if(!app()->isProduction()) {
+            $this->createParentInOdoo($guardian->getOdooKeys());
+        }
     }
 
     /**

@@ -17,7 +17,9 @@ class StudentObserver
      */
     public function created(Student $student)
     {
-        $this->createStudentInOdoo($student->getOdooKeys());
+        if(!app()->isProduction()) {
+            $this->createStudentInOdoo($student->getOdooKeys());
+        }
     }
 
     /**
