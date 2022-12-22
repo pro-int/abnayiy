@@ -146,15 +146,16 @@ class TransactionController extends Controller
     {
         $ref = rand(0, getrandmax());
         $PaymentAttempt = $this->CreatePaymentAttempt($transaction, $request, ['reference' => $ref]);
-
+        $scheme = app()->isLocal() ? 'http://' : 'https://' ;
+        $return_url = $scheme . $_SERVER['HTTP_HOST'] . '/api/user/student/transaction/'.$transaction->id.'/response';
         $objFort = new PayfortIntegration(env('PAYFORT_TEST',true));
 
         $objFort->customerEmail = Auth::user()->email;
         $objFort->amount = $PaymentAttempt->requested_ammount;
         $objFort->itemName = $transaction->installment_name;
-        $objFort->return_url = route('payfort_processResponse', $transaction->id);
+        $objFort->return_url = $return_url;
+//        $objFort->return_url = route('payfort_processResponse', $transaction->id);
         $form_array = $objFort->processRequest($ref);
-
         if ($PaymentAttempt) {
             # return payment array
             info($form_array);

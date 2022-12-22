@@ -8,25 +8,15 @@ class OdooCURLServices
 {
     private string $GET_ACCESS_API = '/web/session/authenticate';
     private string $CREATE_STUDENT_API = '/api/create/student';
-    private string $CREATE_INVOICE_API = '/api/create/invoice';
+    private string $CREATE_STUDY_INVOICE_API = '/api/create/invoice/study';
+    private string $CREATE_TRANSPORTATION_INVOICE_API = '/api/create/invoice/transportation';
     private string $CREATE_PARENT_API = '/api/create/parent';
     private string $CREATE_PAYMENT_API = '/api/create/payment';
-
-    private $SESSION_ID = null;
-
-    private string $odoo_db;
-    private string $odoo_url;
-    private string $odoo_password;
 
     public function getAccessServerOdoo(): bool{
         $db = config("odoo_configuration")['db'];
         $username = config("odoo_configuration")['username'];
         $password = config("odoo_configuration")['password'];
-        $url = config("odoo_configuration")['url'];
-
-        $this->odoo_url = $url;
-        $this->odoo_db = $db;
-        $this->odoo_password = $password;
 
         $body = [
             "db" => $db ,
@@ -36,7 +26,7 @@ class OdooCURLServices
 
         $result = $this->sendCURLRequestToOdoo($body, $this->GET_ACCESS_API, "GET", "getAccess");
 
-        if(isset($result["response"]->result) && $this->SESSION_ID != null){
+        if(isset($result["response"]->result) && session()->has("odoo_session_id")){
             return true;
         }
 
@@ -54,10 +44,10 @@ class OdooCURLServices
         $headers = array(
             'Accept: application/json',
             'Content-Type: application/json',
-            $this->SESSION_ID ? 'Cookie: frontend_lang=en_US; session_id=' . $this->SESSION_ID : null
+            session()->has("odoo_session_id") ? 'Cookie: frontend_lang=en_US; session_id=' . session()->get("odoo_session_id") : null
         );
 
-        curl_setopt($curl, CURLOPT_URL, $this->odoo_url . $url);
+        curl_setopt($curl, CURLOPT_URL, config("odoo_configuration")['url'] . $url);
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_POST, true);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
@@ -83,7 +73,7 @@ class OdooCURLServices
         curl_close($curl); // Close the connection
 
         return [
-            "status_code" => $httpcode??null,
+            "code" => $httpcode??null,
             "response" => $response
         ];
     }
@@ -95,52 +85,103 @@ class OdooCURLServices
             parse_str($item, $cookie);
             $cookies = array_merge($cookies, $cookie);
         }
-        $this->SESSION_ID = $cookies['session_id'];
+
+        session()->put("odoo_session_id", $cookies['session_id']);
     }
 
     private function checkOdooAuth(): array{
-        if(!$this->SESSION_ID && !$this->getAccessServerOdoo()){
+        if($this->getAccessServerOdoo()){
             return [
-                "error" => true,
-                "message" => "يرجي الرجوع لحسابات odoo للتاكد من صلاحيات الدخول"
+                "code" => 200
             ];
         }
-        return ["error" => false];
+        return ["code" => 401, "message" => "يرجي الرجوع لحسابات odoo للتاكد من صلاحيات الدخول"];
     }
 
     public function sendStudentToOdoo($student): array{
-        $result = $this->checkOdooAuth();
-        if($result["error"]){
+        if(session()->has('odoo_session_id')){
+            $result = $this->sendCURLRequestToOdoo($student, $this->CREATE_STUDENT_API, "POST");
+            if($result["code"] == 401){
+                $authResult= $this->checkOdooAuth();
+                if($authResult["code"] == 200){
+                    return $this->sendStudentToOdoo($student);
+                }else{
+                    return $authResult;
+                }
+            }
             return $result;
+        }else{
+           $result = $this->checkOdooAuth();
+           if($result["code"] == 401){
+               return $result;
+           }
+           return $this->sendStudentToOdoo($student);
         }
-        return $this->sendCURLRequestToOdoo($student, $this->CREATE_STUDENT_API, "POST");
+
     }
 
     public function sendInvoiceToOdoo($invoice): array{
-        $result = $this->checkOdooAuth();
-        if($result["error"]){
+        if(session()->has('odoo_session_id')){
+            $url = $invoice["name"] == 'رسوم دراسية'? $this->CREATE_STUDY_INVOICE_API : $this->CREATE_TRANSPORTATION_INVOICE_API;
+            $result = $this->sendCURLRequestToOdoo($invoice, $url, "POST");
+            if($result["code"] == 401){
+                $authResult= $this->checkOdooAuth();
+                if($authResult["code"] == 200){
+                    return $this->sendInvoiceToOdoo($invoice);
+                }else{
+                    return $authResult;
+                }
+            }
             return $result;
+        }else{
+            $result = $this->checkOdooAuth();
+            if($result["code"] == 401){
+                return $result;
+            }
+            return $this->sendInvoiceToOdoo($invoice);
         }
-
-        return $this->sendCURLRequestToOdoo($invoice, $this->CREATE_INVOICE_API, "POST");
     }
 
     public function sendPaymentToOdoo($payment): array{
-        $result = $this->checkOdooAuth();
-        if($result["error"]){
+        if(session()->has('odoo_session_id')){
+            $result = $this->sendCURLRequestToOdoo($payment, $this->CREATE_PAYMENT_API, "POST");
+            if($result["code"] == 401){
+                $authResult= $this->checkOdooAuth();
+                if($authResult["code"] == 200){
+                    return $this->sendPaymentToOdoo($payment);
+                }else{
+                    return $authResult;
+                }
+            }
             return $result;
+        }else{
+            $result = $this->checkOdooAuth();
+            if($result["code"] == 401){
+                return $result;
+            }
+            return $this->sendPaymentToOdoo($payment);
         }
-
-        return $this->sendCURLRequestToOdoo($payment, $this->CREATE_PAYMENT_API, "POST");
     }
 
     public function sendParentToOdoo($parent): array{
-        $result = $this->checkOdooAuth();
-        if($result["error"]){
+        if(session()->has('odoo_session_id')){
+            $result = $this->sendCURLRequestToOdoo($parent, $this->CREATE_PARENT_API, "POST");
+            if($result["code"] == 401){
+                $authResult= $this->checkOdooAuth();
+                if($authResult["code"] == 200){
+                    return $this->sendParentToOdoo($parent);
+                }else{
+                    return $authResult;
+                }
+            }
             return $result;
+        }else{
+            $result = $this->checkOdooAuth();
+            if($result["code"] == 401){
+                return $result;
+            }
+            return $this->sendParentToOdoo($parent);
         }
-
-        return $this->sendCURLRequestToOdoo($parent, $this->CREATE_PARENT_API, "POST");
     }
 
 }
