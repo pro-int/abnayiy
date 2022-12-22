@@ -66,7 +66,8 @@ trait ContractInstallments
 
             //$this->setOdooKeys($contract);
 
-            //$this->createInvoiceInOdoo($this->odooIntegrationKeys);
+            $this->createInvoiceInOdoo($this->odooIntegrationKeys, $contract->id);
+
 
             return true;
         } else {

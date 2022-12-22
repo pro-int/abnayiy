@@ -25,7 +25,7 @@ class UpdateAdminTransferRequestRequest extends GeneralRequest
     public function rules()
     {
         return [
-            'attach_pathh' => 'nullable|file|mimes:jpg,jpeg,bmp,png,pdf',
+            'attach_pathh' => 'nullable|file|mimes:jpg,jpeg,bmp,png,pdf|max:8192',
             'method_id' => 'required',
             'bank_id' => 'requiredIf:method_id,1',
             'confirmed' => 'required'

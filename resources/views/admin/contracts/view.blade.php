@@ -125,7 +125,7 @@ $breadcrumbs = [[['link' => route('contracts.all'), 'name' => "التعاقدا�
                                     <tbody>
                                         <tr>
                                             <td class="pe-2 fw-bolder">اسم الطالب :</td>
-                                            <td><span class="fw-bold">{{ $student->student_name }}</span> ({{ $student->gender_type ? 'ذكر' : 'انثي' }})</td>
+                                            <td><span class="fw-bold">{{ $student->student_name }}</span> ({{ $student->gender ? 'ذكر' : 'انثي' }})</td>
                                         </tr>
                                         <tr>
                                             <td class="pe-2 fw-bolder">الجنسية :</td>

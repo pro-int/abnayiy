@@ -31,7 +31,7 @@ class StoreTransferRequestRequest extends FormRequest
                 'transportation_id'         => 'bail|required_If:transportation_required,==,true',
                 'transportation_payment_id'    => 'bail|required_If:transportation_required,==,true',
                 'payment_method_id' => 'bail|required',
-                'receipt' => 'required_If:payment_method_id,==,1|file|mimes:jpg,jpeg,bmp,png,pdf',
+                'receipt' => 'required_If:payment_method_id,==,1|file|mimes:jpg,jpeg,bmp,png,pdf|max:8192',
                 'bank_id' => 'required_If:payment_method_id,==,1',
             ];
         }

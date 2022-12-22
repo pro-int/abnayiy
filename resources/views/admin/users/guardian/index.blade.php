@@ -51,6 +51,8 @@ $breadcrumbs = [[['link' => route('guardians.index'), 'name' => "اولياء ا
             <th scope="col">الأبناء</th>
             <th scope="col">تاريخ النقاط</th>
             <th scope="col">الرصيد</th>
+            <th scope="col">مزامنة odoo</th>
+            <th scope="col">اخطاء مزامنة odoo</th>
             <th scope="col">الاجراءات</th>
         </tr>
     </x-slot>
@@ -73,22 +75,24 @@ $breadcrumbs = [[['link' => route('guardians.index'), 'name' => "اولياء ا
                 <x-inputs.btn.generic icon="clock" colorClass="secondary" :route="route('guardians.points.index',$user->guardian_id)" />
             </td>
             <td>{!! $user->getbalance() !!}</td>
+            <td>@if($user->odoo_sync_status) <abbr title="{{ $user->odoo_sync_status }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>
+            <td>{{ !$user->odoo_sync_status? $user->odoo_message : 'لا يوجد'}}</td>
             <td>
-                
+
                 @can('accuonts-list')
                 <x-inputs.btn.generic icon="credit-card" title="المحفظة" colorClass="primary btn-icon" :route="route('guardians.wallets.index',$user->guardian_id)" />
                 @endcan
-                
+
                 @if(Route::has('UserNotifications'))
                 @can('notifications-list')
                 <x-inputs.btn.generic icon="bell" title="الأشعارات" colorClass="info btn-icon" :route="route('UserNotifications',$user->guardian_id)" />
                 @endcan
                 @endif
-                
+
                 @can('users-list')
                 <x-inputs.btn.view :route="route('users.show',$user->guardian_id)" />
                 @endcan
-                
+
                 @can('users-edit')
                 <x-inputs.btn.edit :route="route('users.edit',$user->guardian_id)" />
                 @endcan
@@ -106,6 +110,10 @@ $breadcrumbs = [[['link' => route('guardians.index'), 'name' => "اولياء ا
                 </button>
 
                 @endcan
+                @endif
+
+                @if($user->odoo_sync_status == 0)
+                    <x-inputs.btn.generic colorClass="primary btn-icon round" icon="repeat" :route="route('users.resendToOdoo', ['id' => $user->guardian_id])" title="مزامنة حسابات odoo" />
                 @endif
             </td>
         </tr>

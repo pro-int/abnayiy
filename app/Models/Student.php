@@ -20,6 +20,9 @@ class Student extends Model
         'guardian_id',
         'nationality_id',
         'gender',
+        'odoo_record_id',
+        'odoo_sync_status',
+        'odoo_message',
         'allow_late_payment',
         'last_noor_sync'
     ];

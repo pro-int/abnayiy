@@ -29,6 +29,9 @@ class PaymentAttempt extends Model
         'attach_pathh',
         'guardian_id',
         'admin_id',
+        'odoo_record_id',
+        'odoo_sync_status',
+        'odoo_message',
     ];
 
     private $odooIntegrationKeys = [];
@@ -79,7 +82,8 @@ class PaymentAttempt extends Model
     public function getOdooKeys()
     {
         if($this->approved == 1){
-            $transaction = transaction::select('transactions.id', 'transactions.contract_id','contracts.student_id',)
+
+            $transaction = Transaction::select('transactions.id', 'transactions.contract_id','contracts.student_id',)
                 ->leftjoin('contracts', 'contracts.id', 'transactions.contract_id')
                 ->where('transactions.id', $this->transaction_id)
                 ->first();

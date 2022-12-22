@@ -27,7 +27,7 @@ class StoreGuardianWalletRequest extends GeneralRequest
             'amount'            => 'required|numeric|min:1',
             'description'       => 'required|string',
             'transaction_type'  => 'required|in:withdraw,deposit',
-            'receipt'           => 'requiredif:file_required,==,true|file|mimes:jpg,jpeg,bmp,png,pdf',
+            'receipt'           => 'requiredif:file_required,==,true|file|mimes:jpg,jpeg,bmp,png,pdf|max:8192',
         ];
     }
 

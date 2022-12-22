@@ -27,7 +27,7 @@ class PaymentAttemptObserver
      */
     public function updated(PaymentAttempt $paymentAttempt)
     {
-        //$this->createPaymentInOdoo($paymentAttempt->getOdooKeys());
+        $this->createPaymentInOdoo($paymentAttempt->getOdooKeys(), $paymentAttempt->id);
     }
 
     /**
