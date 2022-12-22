@@ -95,21 +95,26 @@ class GuardianAuthController extends Controller
         }
 
         if (!$request->has('code')) {
+
             $code = Mobile::where('phone', $request->phone)->where('activated', 0)->where('created_at', '>=', Carbon::now()->subMinutes(2)->toDateTimeString())->first();
             $user = User::where('phone', $request->phone)->first();
 
             if (!$code) {
                 Mobile::where('phone', $request->phone)->where('activated', 0)->delete();
-                $new_code = rand(1000, 9999);
+                if(!app()->isProduction()){
+                    $new_code = 1234;
+                }else{
+                    $new_code = rand(1000, 9999);
+                }
                 $code = new Mobile();
                 $code->code = $new_code;
                 $code->phone = $request->phone;
                 $code->save();
             }
-
-            $notification = new ApplySingleNotification($code, 1, $user->id);
-            $notification = $notification->fireNotification();
-
+            if(app()->isProduction()) {
+                $notification = new ApplySingleNotification($code, 1, $user->id);
+                $notification = $notification->fireNotification();
+            }
 //            $message_code = 'كود التحقق الخاص بك هو : ' . $code->code;
 //
 //            Mobile::Send_verify_code($code->phone, $message_code);
