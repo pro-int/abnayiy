@@ -104,7 +104,7 @@ class OdooCURLServices
             if($result["code"] == 401){
                 $authResult= $this->checkOdooAuth();
                 if($authResult["code"] == 200){
-                    $this->sendStudentToOdoo($student);
+                    return $this->sendStudentToOdoo($student);
                 }else{
                     return $authResult;
                 }
@@ -115,8 +115,9 @@ class OdooCURLServices
            if($result["code"] == 401){
                return $result;
            }
-           $this->sendStudentToOdoo($student);
+           return $this->sendStudentToOdoo($student);
         }
+
     }
 
     public function sendInvoiceToOdoo($invoice): array{
@@ -126,7 +127,7 @@ class OdooCURLServices
             if($result["code"] == 401){
                 $authResult= $this->checkOdooAuth();
                 if($authResult["code"] == 200){
-                    $this->sendInvoiceToOdoo($invoice);
+                    return $this->sendInvoiceToOdoo($invoice);
                 }else{
                     return $authResult;
                 }
@@ -137,7 +138,7 @@ class OdooCURLServices
             if($result["code"] == 401){
                 return $result;
             }
-            $this->sendInvoiceToOdoo($invoice);
+            return $this->sendInvoiceToOdoo($invoice);
         }
     }
 
@@ -147,7 +148,7 @@ class OdooCURLServices
             if($result["code"] == 401){
                 $authResult= $this->checkOdooAuth();
                 if($authResult["code"] == 200){
-                    $this->sendPaymentToOdoo($payment);
+                    return $this->sendPaymentToOdoo($payment);
                 }else{
                     return $authResult;
                 }
@@ -158,7 +159,7 @@ class OdooCURLServices
             if($result["code"] == 401){
                 return $result;
             }
-            $this->sendPaymentToOdoo($payment);
+            return $this->sendPaymentToOdoo($payment);
         }
     }
 
@@ -168,7 +169,7 @@ class OdooCURLServices
             if($result["code"] == 401){
                 $authResult= $this->checkOdooAuth();
                 if($authResult["code"] == 200){
-                    $this->sendParentToOdoo($parent);
+                    return $this->sendParentToOdoo($parent);
                 }else{
                     return $authResult;
                 }
@@ -179,7 +180,7 @@ class OdooCURLServices
             if($result["code"] == 401){
                 return $result;
             }
-            $this->sendParentToOdoo($parent);
+            return $this->sendParentToOdoo($parent);
         }
     }
 
