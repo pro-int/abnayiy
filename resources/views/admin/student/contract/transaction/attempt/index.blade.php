@@ -64,7 +64,7 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
             <x-inputs.btn.delete :route="route('students.contracts.transactions.attempts.destroy', [$student->id,$contract,$PaymentAttempt->transaction_id,$PaymentAttempt->id])" />
             @endcan
 
-            @if($PaymentAttempt->odoo_sync_status == 0 && $PaymentAttempt->approved)
+            @if($PaymentAttempt->odoo_sync_status == 0 && $PaymentAttempt->approved && $year->id == $contractAcademicYear->academic_year_id)
                 @can('accuonts-list')
                     <x-inputs.btn.generic colorClass="primary btn-icon round" icon="repeat" :route="route('attempts.resendToOdoo', ['id' => $PaymentAttempt->id])" title="مزامنه حسابات odoo" />
                 @endcan
