@@ -24,7 +24,6 @@ $breadcrumbs = [[['link' => route('banks.index'), 'name' => "البنوك"]],['t
             <th scope="col">اسم الحساب</th>
             <th scope="col">رقم الحساب</th>
             <th scope="col">رقم IBAN</th>
-            <th scope="col">Odoo ِAccount Code</th>
             <th scope="col">Odoo Journal ID</th>
             <th scope="col">الحالة</th>
             <th scope="col">إنشاءه بواسطة</th>
@@ -44,7 +43,6 @@ $breadcrumbs = [[['link' => route('banks.index'), 'name' => "البنوك"]],['t
             <td>{{ $bank->account_name }}</td>
             <td>{{ $bank->account_number }}</td>
             <td>{{ $bank->account_iban }}</td>
-            <td>{{ $bank->odoo_account_number }}</td>
             <td>{{ $bank->journal_id }}</td>
             <td>{{ $bank->active == 1 ? 'فعال' : 'غير مفعل' }}</td>
             <td>{{ $bank->admin_name }}</td>

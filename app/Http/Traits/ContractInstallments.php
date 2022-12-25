@@ -110,6 +110,7 @@ trait ContractInstallments
         }else{
             $this->odooIntegrationKeys["tax_ids"] = [4];
         }
+
     }
 
     /**

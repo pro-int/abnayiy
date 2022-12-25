@@ -39,12 +39,6 @@ $breadcrumbs = [[['link' => route('banks.index'), 'name' => "البنوك"]],['t
         <div class="col-md">
             <x-inputs.text.Input label="رقم IBAN" icon="anchor" name="account_iban" placeholder="ادخل رقم IBAN بالصيغة الدولية" data-msg="ادخل رقم IBAN بشكل صحيح" />
         </div>
-    </div>
-
-    <div class="row mb-1">
-        <div class="col-md">
-            <x-inputs.text.Input label="Odoo ِAccount Code" icon="edit" name="odoo_account_number" placeholder="ادخل Odoo ِAccount Code" data-msg="ادخل Odoo ِAccount Code بشكل صحيح" />
-        </div>
         <div class="col-md">
             <x-inputs.text.Input label="Odoo Journal ID" icon="anchor" name="journal_id" placeholder="ادخل Odoo Journal ID" data-msg="ادخل Odoo Journal ID بشكل صحيح" />
         </div>

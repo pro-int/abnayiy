@@ -50,7 +50,7 @@ trait OdooIntegrationTrait
                 ->with('alert-danger', $result["message"]);
         }
 
-        $httpcode = $result["status_code"];
+        $httpcode = $result["code"];
         $response = $result["response"];
 
         $msg = (isset($response->result))?$response->result->message:'';
