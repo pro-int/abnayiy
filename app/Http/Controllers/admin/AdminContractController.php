@@ -38,6 +38,7 @@ class AdminContractController extends Controller
         $contracts = Contract::select(
             'contracts.*',
             'academic_years.year_name',
+            'academic_years.current_academic_year',
             'levels.level_name',
             'plans.plan_name',
             DB::raw('CONCAT(users.first_name, " " ,users.last_name) as admin_name')
