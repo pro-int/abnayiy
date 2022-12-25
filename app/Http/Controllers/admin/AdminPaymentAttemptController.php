@@ -42,6 +42,8 @@ class AdminPaymentAttemptController extends Controller
     public function index(Student $student, $contract, $transaction, PaymentAttempt $attemptum)
     {
         $transaction = $this->Get_transactions($transaction);
+        $year = AcademicYear::where('current_academic_year', 1)->first();
+        $contractAcademicYear = Contract::select("academic_year_id")->where("id",$contract)->first();
 
         $PaymentAttempts = PaymentAttempt::select(
             'payment_attempts.id',
@@ -78,7 +80,7 @@ class AdminPaymentAttemptController extends Controller
             ->orderBy('payment_attempts.id')
             ->get();
 
-        return view('admin.student..contract.transaction.attempt.index', compact('PaymentAttempts', 'student', 'contract', 'transaction'));
+        return view('admin.student..contract.transaction.attempt.index', compact('PaymentAttempts', 'student', 'contract', 'transaction','year','contractAcademicYear'));
     }
 
     /**
@@ -110,7 +112,6 @@ class AdminPaymentAttemptController extends Controller
      */
     public function store(StorePaymentAttempRequest $request, Student $student, $contract, $transaction)
     {
-        // return $request;
         $transaction = $this->Get_transactions($transaction);
 
         if ($msg = $this->CheckNewPaymentStatus($transaction->academic_year_id, $contract)) {

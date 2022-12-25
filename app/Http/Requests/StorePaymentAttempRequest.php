@@ -11,7 +11,7 @@ class StorePaymentAttempRequest extends GeneralRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize():bool
     {
         return true;
     }
@@ -21,23 +21,29 @@ class StorePaymentAttempRequest extends GeneralRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules():array
     {
         return [
 
             'requested_ammount' => 'nullable|numeric|lte:max_amount',
             'method_id' => 'required',
             'coupon' => 'nullable|string',
-            'receipt' => 'required_If:method_id,==,1|file|mimes:jpg,jpeg,bmp,png,pdf|max:8192',
+            'receipt' => 'required_If:method_id,==,1|file|mimes:jpg,jpeg,bmp,png,pdf|max:8000',
             'bank_id' => 'required_If:method_id,==,1',
             'payment_network_id' => 'required_If:method_id,==,4',
         ];
     }
-
-    public function attributes()
+    public function messages():array
     {
         return [
-            'requested_ammount' => 'قيمة الدفعة'
+            'receipt.max' => ' صورة الايصال لا يجب ان تكون اكبر من ٨ ميجا',
+        ];
+    }
+    public function attributes():array
+    {
+        return [
+            'requested_ammount' => 'قيمة الدفعة',
+            'receipt' => 'صورة الايصال'
         ];
     }
 }
