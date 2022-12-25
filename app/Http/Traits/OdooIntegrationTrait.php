@@ -107,6 +107,7 @@ trait OdooIntegrationTrait
     }
 
     public function createInvoiceInOdoo($invoice, $contract_id){
+        info($invoice);
         $service = new OdooCURLServices();
         $result = $service->sendInvoiceToOdoo($invoice);
 
