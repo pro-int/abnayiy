@@ -93,11 +93,11 @@ trait ContractInstallments
         if($application && $application->transportation_id){
             $this->odooIntegrationKeys["product_id"] = (int)$application->transportation_odoo_id;
             $this->odooIntegrationKeys["name"] = 'رسوم نقل';
-            $this->odooIntegrationKeys["account_code"] = (int)$application->transportation_odoo_account_code;
+            $this->odooIntegrationKeys["account_code"] = $application->transportation_odoo_account_code;
         }else if ($application && $application->transportation_id == null){
             $this->odooIntegrationKeys["product_id"] = (int)$application->gender_odoo_id;
             $this->odooIntegrationKeys["name"] = 'رسوم دراسية';
-            $this->odooIntegrationKeys["account_code"] = (int)$application->gender_odoo_account_code;
+            $this->odooIntegrationKeys["account_code"] = $application->gender_odoo_account_code;
         }
 
         $this->odooIntegrationKeys["price_unit"] = $contract->total_fees;
