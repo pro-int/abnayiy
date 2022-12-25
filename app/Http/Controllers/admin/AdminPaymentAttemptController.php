@@ -110,7 +110,6 @@ class AdminPaymentAttemptController extends Controller
      */
     public function store(StorePaymentAttempRequest $request, Student $student, $contract, $transaction)
     {
-         return $request->all();
         $transaction = $this->Get_transactions($transaction);
 
         if ($msg = $this->CheckNewPaymentStatus($transaction->academic_year_id, $contract)) {

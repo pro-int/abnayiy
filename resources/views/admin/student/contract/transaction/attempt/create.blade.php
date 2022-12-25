@@ -20,6 +20,13 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
 <link rel="stylesheet" href="{{ asset(mix('css/base/pages/modal-create-app.css')) }}">
 @endsection
 @section('content')
+    @if($errors->any())
+        <div class="alert alert-danger mb-1 rounded-0" role="alert">
+            @foreach($errors->all() as $error)
+                <div class="alert-body">{{ $error }}</div>
+            @endforeach
+        </div>
+    @endif
 @component('components.forms.formCard',['title' => sprintf('تسجيل دفعة %s #%s - متبقي %s',$transaction->installment_name,$transaction->id,$transaction->residual_amount)])
 
 <x-ui.divider>معلومات الدفعة</x-ui-divider>
