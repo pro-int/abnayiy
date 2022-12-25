@@ -51,7 +51,7 @@ class AdminBankController extends Controller
     public function store(StoreBankRequest $request)
     {
 
-        $bank = Bank::create($request->only('bank_name','account_name','account_number', 'journal_id', 'odoo_account_number', 'account_iban','active') + ['add_by' => Auth::id()]);
+        $bank = Bank::create($request->only('bank_name','account_name','account_number', 'journal_id', 'account_iban','active') + ['add_by' => Auth::id()]);
 
         if ($bank) {
             return redirect()->route('banks.index')
@@ -92,7 +92,7 @@ class AdminBankController extends Controller
      */
     public function update(UpdateBankRequest $request, bank $bank)
     {
-        $bank = $bank->update($request->only(['bank_name','account_name','account_number', 'journal_id', 'odoo_account_number','account_iban','active']) +  ['add_by' => Auth::id()]);
+        $bank = $bank->update($request->only(['bank_name','account_name','account_number', 'journal_id','account_iban','active']) +  ['add_by' => Auth::id()]);
         if (!$bank) {
             return redirect()->back()
                 ->with('alert-danger', 'خطأ اثناء تعديل معلومات البنك ');
