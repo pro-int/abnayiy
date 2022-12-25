@@ -100,7 +100,7 @@ trait ContractInstallments
             $this->odooIntegrationKeys["account_code"] = $application->gender_odoo_account_code;
         }
 
-        $this->odooIntegrationKeys["price_unit"] = $contract->total_fees;
+        $this->odooIntegrationKeys["price_unit"] = $contract->tuition_fees;
         $this->odooIntegrationKeys["quantity"] = 1;
 
         $student = Student::select("nationality_id")->where("id",$contract->student_id)->first();
@@ -110,6 +110,7 @@ trait ContractInstallments
         }else{
             $this->odooIntegrationKeys["tax_ids"] = [4];
         }
+
     }
 
     /**
