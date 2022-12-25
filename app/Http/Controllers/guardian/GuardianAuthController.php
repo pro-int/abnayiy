@@ -106,6 +106,9 @@ class GuardianAuthController extends Controller
                 }else{
                     $new_code = rand(1000, 9999);
                 }
+                if(!app()->isProduction()) {
+                    Mobile::where('code', 1234)->delete();
+                }
                 $code = new Mobile();
                 $code->code = $new_code;
                 $code->phone = $request->phone;
