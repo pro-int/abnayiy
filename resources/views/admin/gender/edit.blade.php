@@ -26,11 +26,19 @@ $breadcrumbs = [[['link' => route('genders.index'), 'name' => "الأقسام "]
 
     <div class="row mb-1 center">
         <div class="col-md">
-            <x-inputs.text.Input type="text" label="Odoo Product ID" icon="anchor" name="odoo_product_id" placeholder="ادخل Odoo Product ID" data-msg="ادخل Odoo Product ID بشكل صحيح" />
+            <x-inputs.text.Input type="text" label="Odoo Product ID رسوم دراسيه" icon="anchor" name="odoo_product_id_study" placeholder="ادخل Odoo Product ID" data-msg="ادخل Odoo Product ID بشكل صحيح" />
         </div>
 
         <div class="col-md">
-            <x-inputs.text.Input type="text" label="Odoo Account Code" icon="anchor" name="odoo_account_code" placeholder="ادخل Odoo Account Code" data-msg="ادخل Odoo Account Code بشكل صحيح" />
+            <x-inputs.text.Input type="text" label="Odoo Account Code رسوم دراسيه" icon="anchor" name="odoo_account_code_study" placeholder="ادخل Odoo Account Code" data-msg="ادخل Odoo Account Code بشكل صحيح" />
+        </div>
+
+        <div class="col-md">
+            <x-inputs.text.Input type="text" label="Odoo Product ID رسوم نقل" icon="anchor" name="odoo_product_id_transportation" placeholder="ادخل Odoo Product ID" data-msg="ادخل Odoo Product ID بشكل صحيح" />
+        </div>
+
+        <div class="col-md">
+            <x-inputs.text.Input type="text" label="Odoo Account Code رسوم نقل" icon="anchor" name="odoo_account_code_transportation" placeholder="ادخل Odoo Account Code" data-msg="ادخل Odoo Account Code بشكل صحيح" />
         </div>
     </div>
 

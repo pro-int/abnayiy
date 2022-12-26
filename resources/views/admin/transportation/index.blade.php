@@ -24,8 +24,6 @@ $breadcrumbs = [[['link' => route('transportations.index'), 'name' => "خطط ا
             <th scope="col">الاشتراك السنوي</th>
             <th scope="col">اشتراك الفصل</th>
             <th scope="col">الاشتراك الشهري</th>
-            <th scope="col">Odoo Product ID</th>
-            <th scope="col">Odoo Account Code</th>
             <th scope="col">الحالة</th>
             <th scope="col">بواسطة</th>
             <th scope="col">اخر تحديث</th>
@@ -42,8 +40,6 @@ $breadcrumbs = [[['link' => route('transportations.index'), 'name' => "خطط ا
             <td>{{ $transportation->annual_fees }}</td>
             <td>{{ $transportation->semester_fees }}</td>
             <td>{{ $transportation->monthly_fees }}</td>
-            <td>{{ $transportation->odoo_product_id }}</td>
-            <td>{{ $transportation->odoo_account_code }}</td>
 
             <td>{{ $transportation->active ? 'مفعل' : 'غير مفعل' }}</td>
             <td>{{ $transportation->admin_name }}</td>
