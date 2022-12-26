@@ -31,7 +31,7 @@ class AddParentInOdooCommands extends Command
      */
     public function handle()
     {
-        $guardians = guardian::where("odoo_sync_status", 0)->get();
+        $guardians = guardian::where("odoo_sync_status", 0)->cursor();
         foreach ($guardians as $guardian){
             $guardian->setOdooKeys($guardian);
             $this->createParentInOdoo($guardian->getOdooKeys());

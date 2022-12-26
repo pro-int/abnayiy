@@ -32,7 +32,7 @@ class AddInvoiceInOdooCommands extends Command
      */
     public function handle()
     {
-        $contracts = Contract::where("created_at",">=",Carbon::parse("01-08-2022 00:00:00"))->where("odoo_sync_status", 0)->get();
+        $contracts = Contract::where("created_at",">=",Carbon::parse("01-08-2022 00:00:00"))->where("odoo_sync_status", 0)->cursor();
         foreach ($contracts as $contract){
             $this->setOdooKeys($contract);
             $this->createInvoiceInOdoo($this->odooIntegrationKeys, $contract->id);
