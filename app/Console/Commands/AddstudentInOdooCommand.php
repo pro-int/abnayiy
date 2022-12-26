@@ -35,7 +35,12 @@ class AddstudentInOdooCommand extends Command
         $students = Student::where("odoo_sync_status", 0)->get();
 
         foreach ($students as $student){
-            $this->createStudentInOdoo($student->getOdooKeys());
+            try {
+                $this->createStudentInOdoo($student->getOdooKeys());
+            }catch (\Exception $exception){
+                info($exception);
+                info($student->id);
+            }
         }
         return Command::SUCCESS;
     }
