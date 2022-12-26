@@ -14,8 +14,6 @@ class Transportation extends Model
         'annual_fees',
         'semester_fees',
         'monthly_fees',
-        'odoo_product_id',
-        'odoo_account_code',
         'active',
         'add_by',
     ];

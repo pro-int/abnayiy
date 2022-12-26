@@ -42,8 +42,10 @@ class GenderService
             'grade_name_noor',
             'appointment_section_id',
             'noor_account_id',
-            'odoo_product_id',
-            'odoo_account_code',
+            'odoo_product_id_study',
+            'odoo_account_code_study',
+            'odoo_product_id_transportation',
+            'odoo_account_code_transportation',
             'active',
         ));
     }
@@ -62,8 +64,10 @@ class GenderService
             'grade_name_noor',
             'appointment_section_id',
             'noor_account_id',
-            'odoo_product_id',
-            'odoo_account_code',
+            'odoo_product_id_study',
+            'odoo_account_code_study',
+            'odoo_product_id_transportation',
+            'odoo_account_code_transportation',
             'active',
         ));
     }

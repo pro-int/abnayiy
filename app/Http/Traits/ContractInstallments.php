@@ -82,7 +82,12 @@ trait ContractInstallments
         $this->odooIntegrationKeys["date"] = Carbon::parse($contract->created_at)->toDateString();
         $this->odooIntegrationKeys["global_order_discount"] =  $contract->period_discounts + $contract->coupon_discounts;
 
-        $application = Application::select("genders.odoo_account_code as gender_odoo_account_code", "transportations.odoo_account_code as transportation_odoo_account_code", "transportations.id as transportation_id", "transportations.odoo_product_id as transportation_odoo_id", 'genders.id as gender_id', 'genders.odoo_product_id as gender_odoo_id')
+        $application = Application::select('genders.odoo_product_id_study',
+            'genders.odoo_account_code_study',
+            'genders.odoo_product_id_transportation',
+            'genders.odoo_account_code_transportation',
+            'transportations.id as transportation_id',
+            'genders.id as gender_id')
             ->leftjoin('levels', 'levels.id', 'applications.level_id')
             ->leftjoin('grades', 'grades.id', 'levels.grade_id')
             ->leftjoin('genders', 'genders.id', 'grades.gender_id')
@@ -91,13 +96,13 @@ trait ContractInstallments
             ->where("applications.id", $contract->application_id)->first();
 
         if($application && $application->transportation_id){
-            $this->odooIntegrationKeys["product_id"] = (int)$application->transportation_odoo_id;
+            $this->odooIntegrationKeys["product_id"] = (int)$application->odoo_product_id_transportation;
             $this->odooIntegrationKeys["name"] = 'رسوم نقل';
-            $this->odooIntegrationKeys["account_code"] = $application->transportation_odoo_account_code;
+            $this->odooIntegrationKeys["account_code"] = $application->odoo_account_code_transportation;
         }else if ($application && $application->transportation_id == null){
-            $this->odooIntegrationKeys["product_id"] = (int)$application->gender_odoo_id;
+            $this->odooIntegrationKeys["product_id"] = (int)$application->odoo_product_id_study;
             $this->odooIntegrationKeys["name"] = 'رسوم دراسية';
-            $this->odooIntegrationKeys["account_code"] = $application->gender_odoo_account_code;
+            $this->odooIntegrationKeys["account_code"] = $application->odoo_account_code_study;
         }
 
         $this->odooIntegrationKeys["price_unit"] = $contract->tuition_fees;
@@ -110,7 +115,6 @@ trait ContractInstallments
         }else{
             $this->odooIntegrationKeys["tax_ids"] = [4];
         }
-
     }
 
     /**

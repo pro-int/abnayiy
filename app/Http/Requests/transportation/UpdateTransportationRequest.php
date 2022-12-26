@@ -29,9 +29,7 @@ class UpdateTransportationRequest extends GeneralRequest
             'transportation_type' => 'required|string|', Rule::unique('transportations')->ignore($request->transportation->id),
             'annual_fees' => 'required|numeric',
             'semester_fees' => 'required|numeric',
-            'monthly_fees' => 'required|numeric',
-            'odoo_product_id' => 'Nullable|string',
-            'odoo_account_code' => 'Nullable|string'
+            'monthly_fees' => 'required|numeric'
         ];
     }
 
