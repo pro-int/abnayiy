@@ -79,6 +79,7 @@ trait ContractInstallments
     public function setOdooKeys($contract){
 
         $this->odooIntegrationKeys["student_id"] = $contract->student_id;
+        $this->odooIntegrationKeys["invoice_code_abnai"] = $contract->id;
         $this->odooIntegrationKeys["date"] = Carbon::parse($contract->created_at)->toDateString();
         $this->odooIntegrationKeys["global_order_discount"] =  $contract->period_discounts + $contract->coupon_discounts;
 
