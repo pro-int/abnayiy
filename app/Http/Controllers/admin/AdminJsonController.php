@@ -150,14 +150,14 @@ class AdminJsonController extends Controller
     {
         if ($request->filled('q')) {
             $academic_year = AcademicYear::where('current_academic_year', 1)->first()->id;
-
-            $students =  Student::select("contracts.academic_year_id",'students.id', 'students.student_name', 'students.national_id', 'levels.level_name')
-                ->orWhere('student_name', 'LIKE', '%' . $request->q . '%')
-                ->orWhere('national_id', 'LIKE', '%' . $request->q . '%')
-                ->leftJoin('contracts', function ($join) use ($academic_year){
-                    $join->on('contracts.student_id', '=', 'students.id')
-                        ->where('contracts.academic_year_id', $academic_year);
+            $search = $request->q;
+            $students =  Student::select('students.id', 'students.student_name', 'students.national_id', 'levels.level_name')
+                ->where(function($query) use ($search){
+                    $query->where('student_name', 'LIKE', '%' . $search . '%')
+                        ->orWhere('national_id', 'LIKE', '%' . $search . '%');
                 })
+                ->leftJoin('contracts','contracts.student_id', 'students.id')
+                ->where('contracts.academic_year_id', $academic_year)
                 ->leftjoin('levels', 'levels.id', 'contracts.level_id')
                 ->get();
 

@@ -153,10 +153,8 @@ class ParentJsonController extends Controller
                     $query->where('student_name', 'LIKE', '%' . $search . '%')
                         ->orWhere('national_id', 'LIKE', '%' . $search . '%');
                 })
-                ->leftJoin('contracts', function ($join) use ($academic_year){
-                    $join->on('contracts.student_id', '=', 'students.id')
-                        ->where('contracts.academic_year_id', $academic_year);
-                })
+                ->leftJoin('contracts','contracts.student_id', 'students.id')
+                ->where('contracts.academic_year_id', $academic_year)
                 ->leftjoin('levels', 'levels.id', 'contracts.level_id')
                 ->get();
 
