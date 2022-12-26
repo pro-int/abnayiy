@@ -92,7 +92,8 @@ class PaymentAttempt extends Model
                 $bankObject = Bank::select("journal_id")->where("id",$this->bank_id)->first();
                 $bankJournalID = $bankObject->journal_id;
             }else if($this->payment_network_id){
-                $bankJournalID = 9;
+                $bankObject = Bank::select("journal_id")->where("id",9)->first();
+                $bankJournalID = $bankObject->journal_id;
             }else{
                 // static el riad bank
                 $bankObject = Bank::select("journal_id")->where("id",8)->first();
@@ -100,6 +101,7 @@ class PaymentAttempt extends Model
             }
 
             $this->odooIntegrationKeys["student_id"] = $transaction->student_id;
+            $this->odooIntegrationKeys["payment_code_abnai"] = $this->id;
             $this->odooIntegrationKeys["amount"] =  $this->received_ammount;
             $this->odooIntegrationKeys["date"] = Carbon::parse($this->updated_at)->toDateString();
             $this->odooIntegrationKeys["journal_id"] = (int)$bankJournalID;
