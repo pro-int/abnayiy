@@ -430,14 +430,14 @@ class AdminContractController extends Controller
         if ($request->action == 'export_xlsx') {
             $students = $students->get();
             $export = new StudentsExport($students);
-            return count($students) ? Excel::download($export, 'تثرير_الطلاب.xlsx') : redirect()->back()->with('alert-warning', 'لا توجد نتائج لمعاير اليحث')->withInput();
+            return count($students) ? Excel::download($export, 'تقرير_الطلاب.xlsx') : redirect()->back()->with('alert-warning', 'لا توجد نتائج لمعاير اليحث')->withInput();
         }
 
         if ($request->action == 'export_pdf') {
             $students = $students->get();
             $html = view('admin.student.export', compact('students'))->render();
             $pdf = $this->getPdf($html)->setWaterMark(public_path('/assets/reportLogo45d.png'));
-            return count($students) ?  response($pdf->output('تثرير_الطلاب.pdf', "I"), 200, ['Content-Type', 'application/pdf']) : redirect()->back()->with('alert-warning', 'لا توجد نتائج لمعاير اليحث')->withInput();
+            return count($students) ?  response($pdf->output('تقرير_الطلاب.pdf', "I"), 200, ['Content-Type', 'application/pdf']) : redirect()->back()->with('alert-warning', 'لا توجد نتائج لمعاير اليحث')->withInput();
         }
 
         // return $students->get()->pluck('id')->toArray();
