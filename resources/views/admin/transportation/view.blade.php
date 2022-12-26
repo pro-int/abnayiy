@@ -18,20 +18,12 @@ $breadcrumbs = [[['link' => route('transportations.index'), 'name' => "خطط ا
         <div class="col-md">
             <x-inputs.text.Input icon="home" label="'اسم خطة النقل" name="transportation_type" placeholder="ادخل اسم خطة النقل" />
         </div>
-
         <div class="col-md">
-            <x-inputs.text.Input type="text" label="Odoo Product ID" icon="anchor" name="odoo_product_id" placeholder="ادخل Odoo Product ID" data-msg="ادخل Odoo Product ID بشكل صحيح" />
-        </div>
-        <div class="col-md">
-            <x-inputs.text.Input type="text" label="Odoo Account Code" icon="anchor" name="odoo_account_code" placeholder="ادخل Odoo Account Code" data-msg="ادخل Odoo Account Code بشكل صحيح" />
+            <x-inputs.number.Input label="الرسوم السنوية" icon="dollar-sign" name="annual_fees" placeholder="ادخل الرسوم السنوية" data-msg="االرسوم السنوية بشكل صحيح" />
         </div>
     </div>
 
     <div class="row mb-1">
-        <div class="col-md">
-            <x-inputs.number.Input label="الرسوم السنوية" icon="dollar-sign" name="annual_fees" placeholder="ادخل الرسوم السنوية" data-msg="االرسوم السنوية بشكل صحيح" />
-        </div>
-
         <div class="col-md">
             <x-inputs.number.Input label="رسوم الفصل الدراسي" icon="dollar-sign" name="semester_fees" placeholder="ادخل رسوم الفصل الدراسي" data-msg="ارسوم الفصل الدراسي بشكل صحيح" />
         </div>

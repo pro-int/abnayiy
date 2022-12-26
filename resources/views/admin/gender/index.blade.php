@@ -35,8 +35,10 @@ $breadcrumbs = [[['link' => route('genders.index'), 'name' => "الأقسام"]]
             <th scope="col">الاسم في نور</th>
             <th scope="col">قسم المقابلات</th>
             <th scope="col">حساب نور</th>
-            <th scope="col">Odoo Product ID</th>
-            <th scope="col">Odoo Account Code</th>
+            <th scope="col">Odoo Product ID رسوم دراسيه</th>
+            <th scope="col">Odoo Account Code رسوم دراسيه</th>
+            <th scope="col">Odoo Product ID رسوم نقل</th>
+            <th scope="col">Odoo Account Code رسوم نقل</th>
             <th scope="col">الحالة</th>
             <th scope="col">الاجراءات المتاحة</th>
         </tr>
@@ -52,8 +54,10 @@ $breadcrumbs = [[['link' => route('genders.index'), 'name' => "الأقسام"]]
                 <td>{{ $gender->grade_name_noor }}</td>
                 <td>{{ $gender->section_name }}</td>
                 <td>{{ $gender->account_name }}</td>
-                <td>{{ $gender->odoo_product_id }}</td>
-                <td>{{ $gender->odoo_account_code }}</td>
+                <td>{{ $gender->odoo_product_id_study }}</td>
+                <td>{{ $gender->odoo_account_code_study }}</td>
+                <td>{{ $gender->odoo_product_id_transportation }}</td>
+                <td>{{ $gender->odoo_account_code_transportation }}</td>
                 <td>{{ $gender->active == 1 ? 'فعال' : 'غير مفعل' }}</td>
             <td>
                 @can('genders-list')
