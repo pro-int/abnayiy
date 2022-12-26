@@ -37,9 +37,9 @@
                 <th scope="row" style="background-color: yellow;">الجنسية</th>
                 <th scope="row" style="background-color: yellow;">الفئة</th>
                 @if(request('academic_year_id'))
-                <th scope="row" style="background-color: yellow;">النظام</th>
-                <th scope="row" style="background-color: yellow;">النوع</th>
-                <th scope="row" style="background-color: yellow;">المرحلة</th>
+                <th scope="row" style="background-color: yellow;">المدرسه</th>
+                <th scope="row" style="background-color: yellow;">القسم</th>
+                <th scope="row" style="background-color: yellow;">المسار</th>
                 <th scope="row" style="background-color: yellow;">الصف</th>
                 <th scope="row" style="background-color: yellow;">حالة التعاقد</th>
                 <th scope="row" style="background-color: yellow;">الخطة</th>
@@ -80,7 +80,7 @@
                 <td>{{ $student->nationality_name }}</td>
                 <td><span class="badge bg-{{$student->color }}">{{ $student->category_name }}</span></td>
                 @if($student->contract_id)
-                
+
                 <td>{{ $student->school_name }}</td>
                 <td>{{ $student->gender_name }}</td>
                 <td>{{ $student->grade_name }}</td>
@@ -106,7 +106,7 @@
                 <td style="background-color:orange ;">سداد جزئي</td>
                 @endif
                 <td>{{ $student->contract->getContractPaidPersent()  }}</td>
-                
+
                 @else
                 <td><span class="badge bg-danger">لم يسدد</td>
                 @endif
