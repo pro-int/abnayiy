@@ -32,7 +32,7 @@ class AddstudentInOdooCommand extends Command
      */
     public function handle()
     {
-        $students = Student::where("odoo_sync_status", 0)->get();
+        $students = Student::where("odoo_sync_status", 0)->cursor();
 
         foreach ($students as $student){
             try {
@@ -40,6 +40,7 @@ class AddstudentInOdooCommand extends Command
             }catch (\Exception $exception){
                 \Log::error("Exception error = ". $exception);
                 \Log::error("student id = " . $student->id);
+
             }
         }
         return Command::SUCCESS;

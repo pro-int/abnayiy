@@ -144,7 +144,7 @@ class guardian extends Model implements Wallet, WalletFloat
 
     public function setOdooKeys(guardian $guardian)
     {
-        $this->odooIntegrationKeys["name"] =  $guardian->user()->first()->getFullName();
+        $this->odooIntegrationKeys["name"] =  $guardian?->user()?->first()?->getFullName();
         $this->odooIntegrationKeys["guardian_id"] = $guardian->guardian_id;
         $this->odooIntegrationKeys["guardian_national_id"] = $guardian->national_id;
         $this->odooIntegrationKeys["student_id"] = null;
