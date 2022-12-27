@@ -38,8 +38,8 @@ class AddstudentInOdooCommand extends Command
             try {
                 $this->createStudentInOdoo($student->getOdooKeys());
             }catch (\Exception $exception){
-                info($exception);
-                info("student id = " . $student->id);
+                \Log::error("Exception error = ". $exception);
+                \Log::error("student id = " . $student->id);
 
             }
         }

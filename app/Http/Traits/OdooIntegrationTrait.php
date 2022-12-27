@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\DB;
 trait OdooIntegrationTrait
 {
     public function createStudentInOdoo($student){
-        info("student object body = " .$student);
+        info("student object body = " . json_encode($student));
         $service = new OdooCURLServices();
         $result = $service->sendStudentToOdoo($student);
-        info("odoo student response result = ", $result);
+        info("odoo student response = " . json_encode($result));
 
         if(isset($result["code"]) && $result["code"] == 401){
             return redirect()->back()
@@ -77,10 +77,10 @@ trait OdooIntegrationTrait
     }
 
     public function createPaymentInOdoo($payment, $payment_id){
-        info($payment);
+        info("payment object body = " . json_encode($payment));
         $service = new OdooCURLServices();
         $result = $service->sendPaymentToOdoo($payment);
-        info("odd payment response result = " . $result);
+        info("odd payment response result = " . json_encode($result));
         if(isset($result["code"]) && $result["code"] == 401){
             return redirect()->back()
                 ->with('alert-danger', $result["message"]);
@@ -110,10 +110,10 @@ trait OdooIntegrationTrait
     }
 
     public function createInvoiceInOdoo($invoice, $contract_id){
-        info("contract object body = " . $invoice);
+        info("contract object body = " . json_encode($invoice));
         $service = new OdooCURLServices();
         $result = $service->sendInvoiceToOdoo($invoice);
-        info("odoo invoice response result = " . $result);
+        info("odoo invoice response result = " . json_encode($result));
         if(isset($result["code"]) && $result["code"] == 401){
             return redirect()->back()
                 ->with('alert-danger', $result["message"]);
