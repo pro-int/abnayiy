@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\DB;
 trait OdooIntegrationTrait
 {
     public function createStudentInOdoo($student){
-        info("student object body = " .$student);
+        info("student object body = " . json_encode($student));
         $service = new OdooCURLServices();
         $result = $service->sendStudentToOdoo($student);
-        info("odoo student response result = ", $result);
+        info("odoo student response = ", json_encode($result));
 
         if(isset($result["code"]) && $result["code"] == 401){
             return redirect()->back()
