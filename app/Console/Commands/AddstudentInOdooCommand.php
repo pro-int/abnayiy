@@ -39,7 +39,8 @@ class AddstudentInOdooCommand extends Command
                 $this->createStudentInOdoo($student->getOdooKeys());
             }catch (\Exception $exception){
                 info($exception);
-                info($student->id);
+                info("student id = " . $student->id);
+
             }
         }
         return Command::SUCCESS;

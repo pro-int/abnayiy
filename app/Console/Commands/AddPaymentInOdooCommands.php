@@ -37,7 +37,8 @@ class AddPaymentInOdooCommands extends Command
                 $this->createPaymentInOdoo($paymentAttempt->getOdooKeys(), $paymentAttempt->id);
             }catch (\Exception $exception){
                 info($exception);
-                info($paymentAttempt->id);
+                info("payment id = " . $paymentAttempt->id);
+
             }
         }
         return Command::SUCCESS;
