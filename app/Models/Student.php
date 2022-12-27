@@ -59,9 +59,9 @@ class Student extends Model
     {
         $guardian = guardian::select('national_id')->where('guardian_id', $this->guardian_id)->first();
 
-        $applicationInfo = Application::select("plans.odoo_id")
-            ->leftjoin("plans", "plans.id", "applications.plan_id")
-            ->where("student_name", $this->student_name)->first();
+        $applicationInfo = Contract::select("plans.odoo_id")
+            ->leftjoin("plans", "plans.id", "contracts.plan_id")
+            ->where("student_id", $this->id)->first();
 
         $code = $applicationInfo? $applicationInfo->odoo_id : null;
 
