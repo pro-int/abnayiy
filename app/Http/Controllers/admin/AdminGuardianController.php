@@ -101,8 +101,6 @@ class AdminGuardianController extends Controller
     {
         $guardian = guardian::findOrFail($request->get('id'));
         $guardian->setOdooKeys($guardian);
-        if(!app()->isProduction()) {
-            return $this->createParentInOdoo($guardian->getOdooKeys());
-        }
+        return $this->createParentInOdoo($guardian->getOdooKeys());
     }
 }

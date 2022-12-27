@@ -374,8 +374,6 @@ class AdminStudentController extends Controller
     public function storeStudentInOdoo(Request $request)
     {
         $student = Student::findOrFail($request->get('id'));
-        if(!app()->isProduction()) {
-            return $this->createStudentInOdoo($student->getOdooKeys());
-        }
+        return $this->createStudentInOdoo($student->getOdooKeys());
     }
 }
