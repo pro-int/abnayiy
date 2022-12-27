@@ -65,6 +65,14 @@ class Student extends Model
 
         $code = $applicationInfo? $applicationInfo->odoo_id : null;
 
+        if(!$code){
+            $applicationInfo = Contract::select("plans.odoo_id")
+                ->leftjoin("plans", "plans.id", "contracts.plan_id")
+                ->where("student_id", $this->id)->first();
+
+            $code = $applicationInfo? $applicationInfo->odoo_id : null;
+        }
+
         $this->odooIntegrationKeys["student_id"] = $this->id;
         $this->odooIntegrationKeys["name"] =  $this->student_name;
         $this->odooIntegrationKeys["student_national_id"] = $this->national_id;
