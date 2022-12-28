@@ -36,7 +36,7 @@ class AddInvoiceInOdooCommands extends Command
         foreach ($contracts as $contract){
             try {
                 $this->setOdooKeys($contract);
-                $this->createInvoiceInOdoo($this->odooIntegrationKeys, $contract->id);
+                $this->createInvoiceInOdoo($this->odooIntegrationKeys, $this->odooIntegrationTransportationKey, $contract->id);
             }catch (\Exception $exception){
                 info($exception);
                 info("contract id = " . $contract->id);

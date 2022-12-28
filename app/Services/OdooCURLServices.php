@@ -120,11 +120,27 @@ class OdooCURLServices
 
     }
 
-    public function sendInvoiceToOdoo($invoice): array{
+    public function sendInvoiceToOdoo($invoice, $transInvoice=null, $contract_odoo_sync_study_status=null, $contract_odoo_sync_transportation_status=null): array{
         if(session()->has('odoo_session_id')){
-            $url = $invoice["name"] == 'رسوم دراسية'? $this->CREATE_STUDY_INVOICE_API : $this->CREATE_TRANSPORTATION_INVOICE_API;
-            $result = $this->sendCURLRequestToOdoo($invoice, $url, "POST");
-            if($result["code"] == 401){
+            $urlStudy = $invoice["name"] == 'رسوم دراسية'? $this->CREATE_STUDY_INVOICE_API : null;
+            $urlTransportation = ($transInvoice && $transInvoice["name"] == 'رسوم نقل')? $this->CREATE_TRANSPORTATION_INVOICE_API : null;
+            $resultStudy = null;
+            $resultTransportation = null;
+
+            if($urlStudy && $contract_odoo_sync_study_status == 0){
+                $resultStudy = $this->sendCURLRequestToOdoo($invoice, $urlStudy, "POST");
+            }
+            info($resultStudy);
+            if($urlTransportation && $contract_odoo_sync_transportation_status==0){
+                $invoice["product_id"] = $transInvoice["product_id"];
+                $invoice["name"] = $transInvoice["name"];
+                $invoice["account_code"] = $transInvoice["account_code"];
+                $invoice["price_unit"] = $transInvoice["price_unit"];
+                $invoice["is_fees_transport"] = $transInvoice["is_fees_transport"];
+                $resultTransportation = $this->sendCURLRequestToOdoo($invoice, $urlTransportation, "POST");
+            }
+            info($resultTransportation);
+            if(($resultStudy && $resultStudy["code"] == 401) || ($resultTransportation && $resultTransportation["code"] == 401)){
                 $authResult= $this->checkOdooAuth();
                 if($authResult["code"] == 200){
                     return $this->sendInvoiceToOdoo($invoice);
@@ -132,7 +148,10 @@ class OdooCURLServices
                     return $authResult;
                 }
             }
-            return $result;
+            return [
+                "resultStudy" => $resultStudy,
+                "resultTransportation" => $resultTransportation
+            ];
         }else{
             $result = $this->checkOdooAuth();
             if($result["code"] == 401){
