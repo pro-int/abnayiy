@@ -165,7 +165,7 @@ trait OdooIntegrationTrait
         }
 
         return redirect()->back()
-            ->with(['alert-danger' => $msgStudy, 'alert-warning' => $msgTransportation != ''? $msgTransportation:null]);
+            ->with(['alert-danger' => $msgStudy != '' ? $msgStudy:null, 'alert-warning' => $msgTransportation != ''? $msgTransportation:null]);
     }
 
 }
