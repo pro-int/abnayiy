@@ -46,9 +46,12 @@ class Contract extends Model
         'old_contract_id',
         'class_id',
         'status',
-        'odoo_record_id',
-        'odoo_sync_status',
-        'odoo_message',
+        'odoo_record_study_id',
+        'odoo_sync_study_status',
+        'odoo_message_study',
+        'odoo_record_transportation_id',
+        'odoo_sync_transportation_status',
+        'odoo_message_transportation'
     ];
 
     protected $casts = [

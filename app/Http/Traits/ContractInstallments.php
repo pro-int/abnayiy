@@ -26,6 +26,7 @@ trait ContractInstallments
     private $transportation = [];
 
     private $odooIntegrationKeys = [];
+    private $odooIntegrationTransportationKey = [];
 
     /**
      * calculate transaction ammounts.
@@ -67,7 +68,7 @@ trait ContractInstallments
             $this->setOdooKeys($contract);
 
             if(!app()->isProduction()) {
-                $this->createInvoiceInOdoo($this->odooIntegrationKeys, $contract->id);
+                $this->createInvoiceInOdoo($this->odooIntegrationKeys, $this->odooIntegrationTransportationKey ,$contract->id);
             }
 
             return true;
@@ -97,16 +98,22 @@ trait ContractInstallments
             ->where("applications.id", $contract->application_id)->first();
 
         if($application && $application->transportation_id){
-            $this->odooIntegrationKeys["product_id"] = (int)$application->odoo_product_id_transportation;
-            $this->odooIntegrationKeys["name"] = 'رسوم نقل';
-            $this->odooIntegrationKeys["account_code"] = $application->odoo_account_code_transportation;
-        }else if ($application && $application->transportation_id == null){
+            $this->odooIntegrationTransportationKey["product_id"] = (int)$application->odoo_product_id_transportation;
+            $this->odooIntegrationTransportationKey["name"] = 'رسوم نقل';
+            $this->odooIntegrationTransportationKey["account_code"] = $application->odoo_account_code_transportation;
+            $this->odooIntegrationTransportationKey["price_unit"] = $contract->bus_fees;
+            $this->odooIntegrationTransportationKey["is_fees_transport"] = "2";
+
+        }
+
+        if ($application){
             $this->odooIntegrationKeys["product_id"] = (int)$application->odoo_product_id_study;
             $this->odooIntegrationKeys["name"] = 'رسوم دراسية';
             $this->odooIntegrationKeys["account_code"] = $application->odoo_account_code_study;
+            $this->odooIntegrationKeys["price_unit"] = $contract->tuition_fees;
+            $this->odooIntegrationKeys["is_fees_transport"] = "1";
         }
 
-        $this->odooIntegrationKeys["price_unit"] = $contract->tuition_fees;
         $this->odooIntegrationKeys["quantity"] = 1;
 
         $student = Student::select("nationality_id")->where("id",$contract->student_id)->first();
