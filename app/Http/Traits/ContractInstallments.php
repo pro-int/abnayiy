@@ -67,9 +67,7 @@ trait ContractInstallments
 
             $this->setOdooKeys($contract);
 
-            if(!app()->isProduction()) {
-                $this->createInvoiceInOdoo($this->odooIntegrationKeys, $this->odooIntegrationTransportationKey ,$contract->id);
-            }
+            $this->createInvoiceInOdoo($this->odooIntegrationKeys, $this->odooIntegrationTransportationKey ,$contract->id);
 
             return true;
         } else {
