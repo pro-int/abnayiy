@@ -490,7 +490,7 @@ class AdminContractController extends Controller
         $contract = Contract::findOrFail($request->get('id'));
         $this->setOdooKeys($contract);
         if(!app()->isProduction()) {
-            return $this->createInvoiceInOdoo($this->odooIntegrationKeys, $contract->id);
+            return $this->createInvoiceInOdoo($this->odooIntegrationKeys, $this->odooIntegrationTransportationKey, $contract->id,$contract->odoo_sync_study_status, $contract->odoo_sync_transportation_status);
         }
     }
 }
