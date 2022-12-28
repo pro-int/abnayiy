@@ -131,19 +131,28 @@ trait OdooIntegrationTrait
         $httpTransportationCode = $result["resultTransportation"]["code"]?? null;
         $responseTransportation = $result["resultTransportation"]["response"]?? null;
 
-        $msgStudy = (isset($responseStudy->result))?$responseStudy->result->message: '';
-        $msgTransportation = (isset($responseTransportation->result))?$responseTransportation->result->message: '';
+        $msgStudy = (isset($responseStudy->result) && $contract_odoo_sync_study_status ==0 )?$responseStudy->result->message: '';
+        $msgTransportation = (isset($responseTransportation->result) && $contract_odoo_sync_transportation_status == 0)?$responseTransportation->result->message: '';
 
-        DB::transaction(function () use ($responseStudy, $responseTransportation, $msgStudy, $msgTransportation, $contract_id, $httpStudyCode, $httpTransportationCode){
-            DB::table('contracts')->where("id",$contract_id)->update([
-                "odoo_record_study_id" => ($httpStudyCode == 200  && $responseStudy)?$responseStudy->result->ID:null,
-                "odoo_sync_study_status" => ($httpStudyCode == 200 && $responseStudy && $responseStudy->result->success) ? 1 : 0,
-                "odoo_message_study" => $msgStudy,
-                "odoo_record_transportation_id" => ($httpTransportationCode == 200  && $responseTransportation)?$responseTransportation->result->ID:null,
-                "odoo_sync_transportation_status" => ($httpTransportationCode == 200 && $responseTransportation && $responseTransportation->result->success) ? 1 : 0,
-                "odoo_message_transportation" => $msgTransportation
-            ]);
-        });
+        if($contract_odoo_sync_study_status == 0 || $httpStudyCode == 200){
+            DB::transaction(function () use ($responseStudy, $msgStudy, $contract_id, $httpStudyCode){
+                DB::table('contracts')->where("id",$contract_id)->update([
+                    "odoo_record_study_id" => ($httpStudyCode == 200  && $responseStudy)?$responseStudy->result->ID:null,
+                    "odoo_sync_study_status" => ($httpStudyCode == 200 && $responseStudy && $responseStudy->result->success) ? 1 : 0,
+                    "odoo_message_study" => $msgStudy,
+                ]);
+            });
+        }
+
+        if($contract_odoo_sync_transportation_status == 0 || $httpTransportationCode == 200){
+            DB::transaction(function () use ($responseTransportation, $msgTransportation, $contract_id, $httpTransportationCode, $contract_odoo_sync_transportation_status){
+                DB::table('contracts')->where("id",$contract_id)->update([
+                    "odoo_record_transportation_id" => ($contract_odoo_sync_transportation_status ==0 && $httpTransportationCode == 200  && $responseTransportation)?$responseTransportation->result->ID:null,
+                    "odoo_sync_transportation_status" => ($contract_odoo_sync_transportation_status == 0 && $httpTransportationCode == 200 && $responseTransportation && $responseTransportation->result->success) ? 1 : 0,
+                    "odoo_message_transportation" => $msgTransportation
+                ]);
+            });
+        }
 
         if($httpStudyCode == 200 && isset($responseStudy->result) && isset($responseStudy->result->success) && $responseStudy->result->success){
             return redirect()->back()

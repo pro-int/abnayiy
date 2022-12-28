@@ -94,7 +94,9 @@ trait ContractInstallments
             ->leftjoin('grades', 'grades.id', 'levels.grade_id')
             ->leftjoin('genders', 'genders.id', 'grades.gender_id')
             ->leftjoin("plans", "plans.id", "applications.plan_id")
-            ->leftjoin("transportations", "transportations.id", "applications.transportation_id")
+            ->leftjoin("students", "students.student_name", "applications.student_name")
+            ->leftjoin("student_transportations", "student_transportations.student_id", "students.id")
+            ->leftjoin("transportations", "transportations.id", "student_transportations.transportation_id")
             ->where("applications.id", $contract->application_id)->first();
 
         if($application && $application->transportation_id){
@@ -103,7 +105,6 @@ trait ContractInstallments
             $this->odooIntegrationTransportationKey["account_code"] = $application->odoo_account_code_transportation;
             $this->odooIntegrationTransportationKey["price_unit"] = $contract->bus_fees;
             $this->odooIntegrationTransportationKey["is_fees_transport"] = "2";
-
         }
 
         if ($application){
