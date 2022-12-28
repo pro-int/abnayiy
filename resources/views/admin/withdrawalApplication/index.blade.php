@@ -74,7 +74,7 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
 
                 @can('applications-edit')
                     @if($application->application_status == 0)
-                            <a class="btn btn-icon round btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="right" onclick='openConfirmModel({{$application->trans_id}})' title="قبول الطلب">
+                            <a class="btn btn-icon round btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="right" onclick='openConfirmModel({{$application->trans_id}},{{$application->id}})' title="قبول الطلب">
                                 <em data-feather="edit-2"></em>
                             </a>
                     @endif
@@ -110,14 +110,15 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
 <script src="{{ asset(mix('js/scripts/forms/pickers/form-pickers.js')) }}"></script>
 
     <script>
-        function openConfirmModel(e) {
+        function openConfirmModel(e,app_id) {
+            console.log(e);
             if(e){
                 let fees = prompt("ادخل قيمة رسوم النقل... علما بان الضفط علي زر ok سوف يتم قبول الطلب فورا");
                 if (fees != null) {
                     $.ajax(
                         {
                             type: "GET",
-                            url: "{{route("withdrawals.edit", $application->id)}}",
+                            url: "withdrawals/" + app_id + "/edit?",
                             data: {
                                 "fees": fees
                             },
@@ -147,7 +148,7 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
                     $.ajax(
                         {
                             type: "GET",
-                            url: "{{route("withdrawals.edit", $application->id)}}",
+                            url: "withdrawals/" + app_id + "/edit?",
                             data: {
                                 "fees": null
                             },
