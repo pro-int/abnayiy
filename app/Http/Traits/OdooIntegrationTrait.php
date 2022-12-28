@@ -77,10 +77,10 @@ trait OdooIntegrationTrait
     }
 
     public function createPaymentInOdoo($payment, $payment_id){
-        info($payment);
+        info("payment object body = " . json_encode($payment));
         $service = new OdooCURLServices();
         $result = $service->sendPaymentToOdoo($payment);
-        info("odd payment response result = " . $result);
+        info("odd payment response result = " . json_encode($result));
         if(isset($result["code"]) && $result["code"] == 401){
             return redirect()->back()
                 ->with('alert-danger', $result["message"]);
