@@ -31,7 +31,7 @@ class AddPaymentInOdooCommands extends Command
      */
     public function handle()
     {
-        $paymentAttempts = PaymentAttempt::where("created_at",">=",Carbon::parse("01-08-2022 00:00:00"))->where("odoo_sync_status", 0)->cursor();
+        $paymentAttempts = PaymentAttempt::where("created_at",">=",Carbon::parse("01-08-2022 00:00:00"))->where("odoo_sync_status", 0)->where("approved",1)->cursor();
         foreach ($paymentAttempts as $paymentAttempt){
             try{
                 $this->createPaymentInOdoo($paymentAttempt->getOdooKeys(), $paymentAttempt->id);
