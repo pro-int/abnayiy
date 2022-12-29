@@ -104,11 +104,13 @@ trait ContractInstallments
             $this->odooIntegrationTransportationKey["price_unit"] = $contract->bus_fees;
             $this->odooIntegrationTransportationKey["is_fees_transport"] = "2";
             $this->odooIntegrationTransportationKey["tax_ids"] = [1];
+            $this->odooIntegrationKeys["global_order_discount"] = 0;
         }else{
             $this->odooIntegrationTransportationKey = [];
         }
 
         if ($application){
+            $this->odooIntegrationKeys["global_order_discount"] =  $contract->period_discounts + $contract->coupon_discounts;
             $this->odooIntegrationKeys["product_id"] = (int)$application->odoo_product_id_study;
             $this->odooIntegrationKeys["name"] = 'رسوم دراسية';
             $this->odooIntegrationKeys["account_code"] = $application->odoo_account_code_study;
