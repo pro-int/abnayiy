@@ -77,8 +77,6 @@ trait ContractInstallments
     }
 
     public function setOdooKeys($contract){
-        $this->odooIntegrationJournalKey = [];
-        $this->odooIntegrationTransportationKey = [];
         $this->odooIntegrationKeys["student_id"] = $contract->student_id;
         $this->odooIntegrationKeys["invoice_code_abnai"] = $contract->id;
         $this->odooIntegrationKeys["date"] = Carbon::parse($contract->created_at)->toDateString();
@@ -105,6 +103,9 @@ trait ContractInstallments
             $this->odooIntegrationTransportationKey["account_code"] = $application->odoo_account_code_transportation;
             $this->odooIntegrationTransportationKey["price_unit"] = $contract->bus_fees;
             $this->odooIntegrationTransportationKey["is_fees_transport"] = "2";
+            $this->odooIntegrationTransportationKey["tax_ids"] = [1];
+        }else{
+            $this->odooIntegrationTransportationKey = [];
         }
 
         if ($application){
@@ -113,17 +114,15 @@ trait ContractInstallments
             $this->odooIntegrationKeys["account_code"] = $application->odoo_account_code_study;
             $this->odooIntegrationKeys["price_unit"] = $contract->tuition_fees;
             $this->odooIntegrationKeys["is_fees_transport"] = "1";
+            $student = Student::select("nationality_id")->where("id",$contract->student_id)->first();
+            if($student->nationality_id != 1){
+                $this->odooIntegrationKeys["tax_ids"] = [1];
+            }else{
+                $this->odooIntegrationKeys["tax_ids"] = [4];
+            }
         }
 
         $this->odooIntegrationKeys["quantity"] = 1;
-
-        $student = Student::select("nationality_id")->where("id",$contract->student_id)->first();
-
-        if($student->nationality_id != 1 || $contract->bus_fees > 0){
-            $this->odooIntegrationKeys["tax_ids"] = [1];
-        }else{
-            $this->odooIntegrationKeys["tax_ids"] = [4];
-        }
 
         if($contract->debt !=0) {
             $this->odooIntegrationJournalKey["date"] = Carbon::parse($contract->created_at)->toDateString();
@@ -145,6 +144,8 @@ trait ContractInstallments
                     "credit" => $contract->debet > 0 ? $contract->debt : 0,
                 ]
             ];
+        }else{
+            $this->odooIntegrationJournalKey = [];
         }
     }
 
