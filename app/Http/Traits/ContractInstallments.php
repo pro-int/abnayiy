@@ -27,6 +27,7 @@ trait ContractInstallments
 
     private $odooIntegrationKeys = [];
     private $odooIntegrationTransportationKey = [];
+    private $odooIntegrationJournalKey = [];
 
     /**
      * calculate transaction ammounts.
@@ -67,7 +68,7 @@ trait ContractInstallments
 
             $this->setOdooKeys($contract);
 
-            $this->createInvoiceInOdoo($this->odooIntegrationKeys, $this->odooIntegrationTransportationKey ,$contract->id);
+            $this->createInvoiceInOdoo($this->odooIntegrationKeys, $contract->id, $this->odooIntegrationTransportationKey, $this->odooIntegrationJournalKey);
 
             return true;
         } else {
@@ -76,7 +77,6 @@ trait ContractInstallments
     }
 
     public function setOdooKeys($contract){
-
         $this->odooIntegrationKeys["student_id"] = $contract->student_id;
         $this->odooIntegrationKeys["invoice_code_abnai"] = $contract->id;
         $this->odooIntegrationKeys["date"] = Carbon::parse($contract->created_at)->toDateString();
@@ -121,6 +121,28 @@ trait ContractInstallments
             $this->odooIntegrationKeys["tax_ids"] = [1];
         }else{
             $this->odooIntegrationKeys["tax_ids"] = [4];
+        }
+
+        if($contract->debt !=0) {
+            $this->odooIntegrationJournalKey["date"] = Carbon::parse($contract->created_at)->toDateString();
+            $this->odooIntegrationJournalKey["ref"] = "مديونيات الطالب";
+            $this->odooIntegrationJournalKey["journal_id"] = 3;
+            $this->odooIntegrationJournalKey["journals"] = [
+                [
+                    "account_id" => config("odoo_configuration")['db'] == "Live" ? 7686:7684,
+                    "student_id" => $contract->student_id,
+                    "name" => "new",
+                    "debit" => $contract->debet > 0 ? $contract->debt : 0,
+                    "credit" => $contract->debet > 0 ? 0 : $contract->debt,
+                ],
+                [
+                    "account_id" => config("odoo_configuration")['db'] == "Live" ? 7687:7685,
+                    "student_id" => "0000",
+                    "name" => "new",
+                    "debit" => $contract->debet > 0 ? 0 : $contract->debt,
+                    "credit" => $contract->debet > 0 ? $contract->debt : 0,
+                ]
+            ];
         }
     }
 

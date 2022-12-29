@@ -10,6 +10,7 @@ class OdooCURLServices
     private string $CREATE_STUDENT_API = '/api/create/student';
     private string $CREATE_STUDY_INVOICE_API = '/api/create/invoice/study';
     private string $CREATE_TRANSPORTATION_INVOICE_API = '/api/create/invoice/transportation';
+    private string $CREATE_JOURNAL_INVOICE_API = '/api/create/journal';
     private string $CREATE_PARENT_API = '/api/create/parent';
     private string $CREATE_PAYMENT_API = '/api/create/payment';
 
@@ -120,12 +121,15 @@ class OdooCURLServices
 
     }
 
-    public function sendInvoiceToOdoo($invoice, $transInvoice=null, $contract_odoo_sync_study_status=null, $contract_odoo_sync_transportation_status=null): array{
+    public function sendInvoiceToOdoo($invoice, $transInvoice=null, $journalInvoice=null, $contract_odoo_sync_study_status=null, $contract_odoo_sync_transportation_status=null, $contract_odoo_sync_journal_status=null): array{
         if(session()->has('odoo_session_id')){
-            $urlStudy = $invoice["name"] == 'رسوم دراسية'? $this->CREATE_STUDY_INVOICE_API : null;
+            $urlStudy = (isset($invoice["name"]) && $invoice["name"] == 'رسوم دراسية')? $this->CREATE_STUDY_INVOICE_API : null;
             $urlTransportation = ($transInvoice && $transInvoice["name"] == 'رسوم نقل')? $this->CREATE_TRANSPORTATION_INVOICE_API : null;
+            $urlJournal = $journalInvoice? $this->CREATE_JOURNAL_INVOICE_API : null;
+
             $resultStudy = null;
             $resultTransportation = null;
+            $resultJournal = null;
 
             if($urlStudy && $contract_odoo_sync_study_status == 0){
                 $resultStudy = $this->sendCURLRequestToOdoo($invoice, $urlStudy, "POST");
@@ -140,7 +144,13 @@ class OdooCURLServices
                 $resultTransportation = $this->sendCURLRequestToOdoo($invoice, $urlTransportation, "POST");
             }
             info($resultTransportation);
-            if(($resultStudy && $resultStudy["code"] == 401) || ($resultTransportation && $resultTransportation["code"] == 401)){
+
+            if($urlJournal && $contract_odoo_sync_journal_status == 0){
+                $resultJournal = $this->sendCURLRequestToOdoo($journalInvoice, $urlJournal, "POST");
+            }
+            info($resultJournal);
+
+            if(($resultStudy && $resultStudy["code"] == 401) || ($resultTransportation && $resultTransportation["code"] == 401) || ($resultJournal && $resultJournal["code"] == 401)){
                 $authResult= $this->checkOdooAuth();
                 if($authResult["code"] == 200){
                     return $this->sendInvoiceToOdoo($invoice);
@@ -150,7 +160,8 @@ class OdooCURLServices
             }
             return [
                 "resultStudy" => $resultStudy,
-                "resultTransportation" => $resultTransportation
+                "resultTransportation" => $resultTransportation,
+                "resultJournal" => $resultJournal
             ];
         }else{
             $result = $this->checkOdooAuth();
