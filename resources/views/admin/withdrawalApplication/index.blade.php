@@ -74,7 +74,7 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
 
                 @can('applications-edit')
                     @if($application->application_status == 0)
-                            <a class="btn btn-icon round btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="right" onclick='openConfirmModel({{$application->trans_id}},{{$application->id}})' title="قبول الطلب">
+                            <a class="btn btn-icon round btn-sm btn-outline-primary" data-bs-toggle="tooltip" data-bs-placement="right" onclick='openConfirmModel({{$application->id}}, {{$application->trans_id}})' title="قبول الطلب">
                                 <em data-feather="edit-2"></em>
                             </a>
                     @endif
@@ -110,8 +110,7 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
 <script src="{{ asset(mix('js/scripts/forms/pickers/form-pickers.js')) }}"></script>
 
     <script>
-        function openConfirmModel(e,app_id) {
-            console.log(e);
+        function openConfirmModel(app_id, e=null) {
             if(e){
                 let fees = prompt("ادخل قيمة رسوم النقل... علما بان الضفط علي زر ok سوف يتم قبول الطلب فورا");
                 if (fees != null) {
@@ -124,9 +123,11 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
                             },
                             success: function(response)
                             {
+                                console.log(response)
                                 if(response.code == 200){
                                     $(".message").css("display","block");
                                     $('.message').removeClass("alert-danger");
+                                    $('.message').removeClass("alert-success");
                                     $('.message').addClass("alert-success");
                                     $('.messageBody').text(response.message);
                                     window.setTimeout(function(){
@@ -135,6 +136,7 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
                                 }else{
                                     $(".message").css("display","block");
                                     $('.message').removeClass("alert-success");
+                                    $('.message').removeClass("alert-danger");
                                     $('.message').addClass("alert-danger");
                                     $('.messageBody').text(response.message);
                                 }
@@ -157,6 +159,7 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
                                 if(response.code == 200){
                                     $(".message").css("display","block");
                                     $('.message').removeClass("alert-danger");
+                                    $('.message').removeClass("alert-success");
                                     $('.message').addClass("alert-success");
                                     $('.messageBody').text(response.message);
                                     window.setTimeout(function(){
@@ -165,6 +168,7 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
                                 }else{
                                     $(".message").css("display","block");
                                     $('.message').removeClass("alert-success");
+                                    $('.message').removeClass("alert-danger");
                                     $('.message').addClass("alert-danger");
                                     $('.messageBody').text(response.message);
                                 }
