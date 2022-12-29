@@ -98,9 +98,7 @@ class AdminWithdrawalApplicationController extends Controller
             }else{
                 $amount_fees = ($contract->tuition_fees * ($period->fees / 100)) + ($contract->vat_amount * ($period->fees / 100));
             }
-        }
-
-        if($amount_fees == 0){
+        }else{
             return redirect()->back()
                 ->with('alert-danger', 'خطأ اثناء اضافة طلب الانسحاب بسبب عدم وجود فتره انسحاب صحيحة');
         }
