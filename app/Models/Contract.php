@@ -271,8 +271,7 @@ class Contract extends Model
         $this->bus_fees = round($buss_fees, 2);
 
         $withdrawal_fees = 0;
-
-        if($withdrawal != null){
+        if($withdrawal != null || $withdrawal === 0.0){
             $this->status = 3;
             $withdrawal_fees = $this->transactions()->where('transaction_type', 'withdrawal') ? $withdrawal : 0;
         }
