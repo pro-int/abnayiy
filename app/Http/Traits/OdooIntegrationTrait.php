@@ -109,10 +109,16 @@ trait OdooIntegrationTrait
 
     }
 
-    public function createInvoiceInOdoo($invoice, $transInvoice=null, $contract_id, $contract_odoo_sync_study_status=null, $contract_odoo_sync_transportation_status=null){
+    public function createInvoiceInOdoo($invoice,
+                                        $contract_id,
+                                        $transInvoice=null,
+                                        $journalInvoice=null,
+                                        $contract_odoo_sync_study_status=null,
+                                        $contract_odoo_sync_transportation_status=null,
+                                        $contract_odoo_sync_journal_status=null){
         info("contract object body = " . json_encode($invoice));
         $service = new OdooCURLServices();
-        $result = $service->sendInvoiceToOdoo($invoice, $transInvoice, $contract_odoo_sync_study_status, $contract_odoo_sync_transportation_status);
+        $result = $service->sendInvoiceToOdoo($invoice, $transInvoice, $journalInvoice, $contract_odoo_sync_study_status, $contract_odoo_sync_transportation_status, $contract_odoo_sync_journal_status);
         info("odoo invoice response result = " . json_encode($result));
 
         if(isset($result["resultStudy"]["code"]) && $result["resultStudy"]["code"] == 401){
@@ -125,14 +131,23 @@ trait OdooIntegrationTrait
                 ->with('alert-danger', $result["resultTransportation"]["message"]);
         }
 
+        if(isset($result["resultJournal"]["code"]) && $result["resultJournal"]["code"] == 401){
+            return redirect()->back()
+                ->with('alert-danger', $result["resultJournal"]["message"]);
+        }
+
         $httpStudyCode = $result["resultStudy"]["code"] ?? null;
         $responseStudy = $result["resultStudy"]["response"]?? null;
 
         $httpTransportationCode = $result["resultTransportation"]["code"]?? null;
         $responseTransportation = $result["resultTransportation"]["response"]?? null;
 
+        $httpJournalCode = $result["resultJournal"]["code"]?? null;
+        $responseJournal = $result["resultJournal"]["response"]?? null;
+
         $msgStudy = (isset($responseStudy->result) && $contract_odoo_sync_study_status ==0 )?$responseStudy->result->message: '';
         $msgTransportation = (isset($responseTransportation->result) && $contract_odoo_sync_transportation_status == 0)?$responseTransportation->result->message: '';
+        $msgJournal = (isset($responseJournal->result) && $contract_odoo_sync_journal_status == 0)?$responseJournal->result->message: '';
 
         if($contract_odoo_sync_study_status == 0 || $httpStudyCode == 200){
             DB::transaction(function () use ($responseStudy, $msgStudy, $contract_id, $httpStudyCode){
@@ -154,6 +169,17 @@ trait OdooIntegrationTrait
             });
         }
 
+
+        if($contract_odoo_sync_journal_status == 0 || $httpJournalCode == 200){
+            DB::transaction(function () use ($responseJournal, $msgJournal, $contract_id, $httpJournalCode, $contract_odoo_sync_journal_status){
+                DB::table('contracts')->where("id",$contract_id)->update([
+                    "odoo_record_journal_id" => ($contract_odoo_sync_journal_status ==0 && $httpJournalCode == 200  && $responseJournal)?$responseJournal->result->ID:null,
+                    "odoo_sync_journal_status" => ($contract_odoo_sync_journal_status == 0 && $httpJournalCode == 200 && $responseJournal && $responseJournal->result->success) ? 1 : 0,
+                    "odoo_message_journal" => $msgJournal
+                ]);
+            });
+        }
+
         if($httpStudyCode == 200 && isset($responseStudy->result) && isset($responseStudy->result->success) && $responseStudy->result->success){
             return redirect()->back()
                 ->with('alert-info', 'تم اضافه تعاقد الرسوم الدراسيه في odoo بنجاح');
@@ -164,8 +190,13 @@ trait OdooIntegrationTrait
                 ->with('alert-secondary', 'تم اضافه تعاقد الرسوم النقل في odoo بنجاح');
         }
 
+        if($httpJournalCode == 200 && isset($responseJournal->result) && isset($responseJournal->result->success) && $responseJournal->result->success){
+            return redirect()->back()
+                ->with('alert-light', 'تم اضافه المديونيات في odoo بنجاح');
+        }
+
         return redirect()->back()
-            ->with(['alert-danger' => $msgStudy != '' ? $msgStudy:null, 'alert-warning' => $msgTransportation != ''? $msgTransportation:null]);
+            ->with(['alert-danger' => $msgStudy != '' ? $msgStudy:null, 'alert-warning' => $msgTransportation != ''? $msgTransportation:null,  'alert-dark' => $msgJournal != ''? $msgJournal:null]);
     }
 
 }
