@@ -142,6 +142,7 @@ class OdooCURLServices
                 $invoice["price_unit"] = $transInvoice["price_unit"];
                 $invoice["is_fees_transport"] = $transInvoice["is_fees_transport"];
                 $invoice["tax_ids"] = $transInvoice["tax_ids"];
+                $invoice["global_order_discount"] = $transInvoice["global_order_discount"];
                 $resultTransportation = $this->sendCURLRequestToOdoo($invoice, $urlTransportation, "POST");
             }
             info($resultTransportation);
