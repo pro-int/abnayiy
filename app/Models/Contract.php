@@ -51,7 +51,10 @@ class Contract extends Model
         'odoo_message_study',
         'odoo_record_transportation_id',
         'odoo_sync_transportation_status',
-        'odoo_message_transportation'
+        'odoo_message_transportation',
+        'odoo_record_journal_id',
+        'odoo_sync_journal_status',
+        'odoo_message_journal'
     ];
 
     protected $casts = [
@@ -282,16 +285,6 @@ class Contract extends Model
         $this->debt = $debt;
 
         return $this->save();
-    }
-
-    public function setOdooKeys(guardian $guardian)
-    {
-        $this->odooIntegrationKeys["name"] =  $guardian->user()->first()->getFullName();
-        $this->odooIntegrationKeys["guardian_id"] = $guardian->guardian_id;
-        $this->odooIntegrationKeys["guardian_national_id"] = $guardian->national_id;
-        $this->odooIntegrationKeys["student_id"] = null;
-        $this->odooIntegrationKeys["student_national_id"] = null;
-        $this->odooIntegrationKeys["is_company"] = "True";
     }
 
 }
