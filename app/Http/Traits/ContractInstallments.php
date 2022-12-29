@@ -104,7 +104,7 @@ trait ContractInstallments
             $this->odooIntegrationTransportationKey["price_unit"] = $contract->bus_fees;
             $this->odooIntegrationTransportationKey["is_fees_transport"] = "2";
             $this->odooIntegrationTransportationKey["tax_ids"] = [1];
-            $this->odooIntegrationKeys["global_order_discount"] = 0;
+            $this->odooIntegrationTransportationKey["global_order_discount"] = 0;
         }else{
             $this->odooIntegrationTransportationKey = [];
         }
