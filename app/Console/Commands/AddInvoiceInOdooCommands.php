@@ -37,12 +37,9 @@ class AddInvoiceInOdooCommands extends Command
             try {
                 $this->setOdooKeys($contract);
                 $this->createInvoiceInOdoo($this->odooIntegrationKeys, $contract->id, $this->odooIntegrationTransportationKey, $this->odooIntegrationJournalKey);
-                $this->odooIntegrationTransportationKey = [];
-                $this->odooIntegrationJournalKey = [];
             }catch (\Exception $exception){
                 \Log::error($exception);
                 \Log::error("contract id = " . $contract->id);
-
             }
         }
         return Command::SUCCESS;

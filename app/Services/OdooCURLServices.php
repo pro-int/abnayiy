@@ -135,6 +135,7 @@ class OdooCURLServices
                 $resultStudy = $this->sendCURLRequestToOdoo($invoice, $urlStudy, "POST");
             }
             info($resultStudy);
+
             if($urlTransportation && $contract_odoo_sync_transportation_status==0){
                 $invoice["product_id"] = $transInvoice["product_id"];
                 $invoice["name"] = $transInvoice["name"];
@@ -155,7 +156,7 @@ class OdooCURLServices
             if(($resultStudy && $resultStudy["code"] == 401) || ($resultTransportation && $resultTransportation["code"] == 401) || ($resultJournal && $resultJournal["code"] == 401)){
                 $authResult= $this->checkOdooAuth();
                 if($authResult["code"] == 200){
-                    return $this->sendInvoiceToOdoo($invoice);
+                    return $this->sendInvoiceToOdoo($invoice, $transInvoice, $journalInvoice, $contract_odoo_sync_journal_status,$contract_odoo_sync_transportation_status,$contract_odoo_sync_journal_status);
                 }else{
                     return $authResult;
                 }
@@ -170,7 +171,7 @@ class OdooCURLServices
             if($result["code"] == 401){
                 return $result;
             }
-            return $this->sendInvoiceToOdoo($invoice);
+            return $this->sendInvoiceToOdoo($invoice, $transInvoice, $journalInvoice, $contract_odoo_sync_journal_status,$contract_odoo_sync_transportation_status,$contract_odoo_sync_journal_status);
         }
     }
 
