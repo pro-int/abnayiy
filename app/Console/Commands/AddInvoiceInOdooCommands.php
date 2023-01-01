@@ -40,7 +40,6 @@ class AddInvoiceInOdooCommands extends Command
             }catch (\Exception $exception){
                 \Log::error($exception);
                 \Log::error("contract id = " . $contract->id);
-
             }
         }
         return Command::SUCCESS;
