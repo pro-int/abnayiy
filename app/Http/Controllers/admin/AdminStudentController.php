@@ -69,6 +69,7 @@ class AdminStudentController extends Controller
                 'plans.plan_name',
                 'schools.school_name',
                 'levels.level_name',
+                'levels.tuition_fees as level_tuition_fees',
                 'grades.grade_name',
                 'genders.gender_name',
                 'contracts.id as contract_id',

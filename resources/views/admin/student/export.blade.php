@@ -44,7 +44,9 @@
                 <th scope="row" style="background-color: yellow;">حالة التعاقد</th>
                 <th scope="row" style="background-color: yellow;">الخطة</th>
                 @can('accuonts-list')
-                <th scope="row" style="background-color: yellow;">الرسوم الدراسية</th>
+                <th scope="row" style="background-color: yellow;">الرسوم السنوية</th>
+                <th scope="row" style="background-color: yellow;">المستحق من الرسوم الدراسية</th>
+                <th scope="row" style="background-color: yellow;">الفصول الدراسية</th>
                 <th scope="row" style="background-color: yellow;">النقل</th>
                 <th scope="row" style="background-color: yellow;">الضرائب</th>
                 <th scope="row" style="background-color: yellow;">خصم الفترة</th>
@@ -89,7 +91,13 @@
                 @can('accuonts-list')
                 <td>{{ $student->plan_name }}</td>
                 @if($student->contract)
+                <td>{{ $student->level_tuition_fees }}</td>
                 <td>{{ $student->contract->tuition_fees }}</td>
+                <td>
+                    @foreach( $student->contract->appliedSemesters() as $semester)
+                        {{$semester->semester_name}} ,
+                    @endforeach
+                </td>
                 <td>{{ $student->contract->bus_fees }}</td>
                 <td>{{ $student->contract->vat_amount }}</td>
                 <td>{{ $student->contract->period_discounts }}</td>
