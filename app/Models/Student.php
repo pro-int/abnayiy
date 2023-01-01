@@ -45,6 +45,8 @@ class Student extends Model
         return $this->hasMany(Contract::class);
     }
 
+
+
     public function contract()
     {
         return $this->hasOne(Contract::class);

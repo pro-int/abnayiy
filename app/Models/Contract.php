@@ -254,6 +254,10 @@ class Contract extends Model
             $guardianPoints->save();
         }
     }
+    public function appliedSemesters()
+    {
+        return semester::whereIn('id', $this->applied_semesters)->get();
+    }
     public function update_total_payments($withdrawal = null)
     {
         $transaction = $this->transactions();
