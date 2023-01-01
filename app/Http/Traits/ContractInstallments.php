@@ -5,6 +5,7 @@ namespace App\Http\Traits;
 use App\Helpers\FeesCalculatorClass;
 use App\Helpers\TuitionFeesClass;
 use App\Models\Application;
+use App\Models\Contract;
 use App\Models\Discount;
 use App\Models\guardian;
 use App\Models\Plan;
@@ -82,20 +83,22 @@ trait ContractInstallments
         $this->odooIntegrationKeys["date"] = Carbon::parse($contract->created_at)->toDateString();
         $this->odooIntegrationKeys["global_order_discount"] =  $contract->period_discounts + $contract->coupon_discounts;
 
-        $application = Application::select('genders.odoo_product_id_study',
+        $application = Contract::select('genders.odoo_product_id_study',
             'genders.odoo_account_code_study',
             'genders.odoo_product_id_transportation',
             'genders.odoo_account_code_transportation',
             'transportations.id as transportation_id',
+            'transactions.period_discount','transactions.coupon_discount',
             'genders.id as gender_id')
-            ->leftjoin('levels', 'levels.id', 'applications.level_id')
+            ->leftjoin('levels', 'levels.id', 'contracts.level_id')
             ->leftjoin('grades', 'grades.id', 'levels.grade_id')
             ->leftjoin('genders', 'genders.id', 'grades.gender_id')
-            ->leftjoin("plans", "plans.id", "applications.plan_id")
-            ->leftjoin("students", "students.student_name", "applications.student_name")
+            ->leftjoin("plans", "plans.id", "contracts.plan_id")
+            ->leftjoin("students", "students.id", "contracts.student_id")
             ->leftjoin("student_transportations", "student_transportations.student_id", "students.id")
             ->leftjoin("transportations", "transportations.id", "student_transportations.transportation_id")
-            ->where("applications.id", $contract->application_id)->first();
+            ->leftjoin("transactions", "transactions.id", "student_transportations.transaction_id")
+            ->where("contracts.id", $contract->id)->first();
 
         if($application && $application->transportation_id){
             $this->odooIntegrationTransportationKey["product_id"] = (int)$application->odoo_product_id_transportation;
@@ -104,11 +107,13 @@ trait ContractInstallments
             $this->odooIntegrationTransportationKey["price_unit"] = $contract->bus_fees;
             $this->odooIntegrationTransportationKey["is_fees_transport"] = "2";
             $this->odooIntegrationTransportationKey["tax_ids"] = [1];
+            $this->odooIntegrationTransportationKey["global_order_discount"] = $application->period_discounts + $application->coupon_discounts;
         }else{
             $this->odooIntegrationTransportationKey = [];
         }
 
         if ($application){
+            $this->odooIntegrationKeys["global_order_discount"] =  $contract->period_discounts + $contract->coupon_discounts;
             $this->odooIntegrationKeys["product_id"] = (int)$application->odoo_product_id_study;
             $this->odooIntegrationKeys["name"] = 'رسوم دراسية';
             $this->odooIntegrationKeys["account_code"] = $application->odoo_account_code_study;
