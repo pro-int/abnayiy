@@ -29,13 +29,14 @@ class Transaction extends Model
         'payment_due',
         'debt_year_id',
         'is_contract_payment',
-        'admin_id'
+        'admin_id',
+        'payment_status'
     ];
 
     public static function boot()
     {
         parent::boot();
-      
+
         static::deleting(function ($item) {
             $item->PaymentAttempt()->delete();
         });
@@ -162,7 +163,7 @@ class Transaction extends Model
                 # set contract to done
                 $contract->status = 1;
             } else {
-                # set contract to under processing 
+                # set contract to under processing
                 $contract->status = 0;
             }
         }
