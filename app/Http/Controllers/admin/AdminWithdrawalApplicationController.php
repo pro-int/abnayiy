@@ -49,11 +49,9 @@ class AdminWithdrawalApplicationController extends Controller
             ->leftJoin('academic_years', 'academic_years.id', 'contracts.academic_year_id')
             ->leftjoin('student_transportations', function ($join){
                 $join->on('student_transportations.student_id', '=', 'students.id')
-                    ->on('student_transportations.contract_id', '=', 'contracts.id');
+                    ->where('student_transportations.contract_id', '=', 'contracts.id');
             })
             ->paginate(10);
-
-       // dd($withdrawalApplication);
 
         return view('admin.withdrawalApplication.index', compact('withdrawalApplication'));
     }

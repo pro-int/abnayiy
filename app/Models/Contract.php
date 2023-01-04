@@ -258,7 +258,7 @@ class Contract extends Model
     {
         return semester::whereIn('id', $this->applied_semesters)->get();
     }
-    public function update_total_payments($withdrawal = null)
+    public function update_total_payments()
     {
         $transaction = $this->transactions();
 
@@ -270,20 +270,19 @@ class Contract extends Model
         $buss_fees = $transaction->where('transaction_type', 'bus')->sum('amount_before_discount');
         $tuition_fees = $this->transactions()->where('transaction_type', 'tuition')->sum('amount_before_discount');
         $debt = $this->transactions()->where('transaction_type', 'debt')->sum('amount_before_discount');
+        $withdrawal_fees = $this->transactions()->where('transaction_type', 'withdrawal')->sum('amount_before_discount');
 
-        $this->tuition_fees = $tuition_fees;
+        $this->tuition_fees = $tuition_fees + $withdrawal_fees;
         $this->period_discounts = round($period_discounts, 2);
         $this->coupon_discounts = round($coupon_discounts, 2);
         $this->vat_amount = round($vat_amount, 2);
         $this->bus_fees = round($buss_fees, 2);
 
-        $withdrawal_fees = 0;
-        if($withdrawal != null || $withdrawal === 0.0){
+        if($withdrawal_fees != 0){
             $this->status = 3;
-            $withdrawal_fees = $this->transactions()->where('transaction_type', 'withdrawal') ? $withdrawal : 0;
         }
 
-        $this->total_fees = round(($tuition_fees - $period_discounts - $coupon_discounts) + $buss_fees + $vat_amount + $debt + $withdrawal_fees, 2);
+        $this->total_fees = round(($tuition_fees + $withdrawal_fees - $period_discounts - $coupon_discounts) + $buss_fees + $vat_amount + $debt, 2);
 
         $this->total_paid = round($total_paid, 2);
         $this->debt = $debt;
