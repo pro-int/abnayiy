@@ -32,6 +32,8 @@ class PaymentAttempt extends Model
         'odoo_record_id',
         'odoo_sync_status',
         'odoo_message',
+        'odoo_sync_delete_status',
+        'odoo_delete_message'
     ];
 
     private $odooIntegrationKeys = [];

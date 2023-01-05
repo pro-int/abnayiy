@@ -54,7 +54,12 @@ class Contract extends Model
         'odoo_message_transportation',
         'odoo_record_journal_id',
         'odoo_sync_journal_status',
-        'odoo_message_journal'
+        'odoo_message_journal',
+        'odoo_sync_update_invoice_status',
+        'odoo_message_update_invoice',
+        'odoo_record_inverse_journal_id',
+        'odoo_sync_inverse_journal_status',
+        'odoo_message_inverse_journal'
     ];
 
     protected $casts = [

@@ -33,7 +33,9 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
             <th scope="col">حالة الدفع</th>
             <th scope="col">المرجع</th>
             <th scope="col">مزامنة odoo</th>
+            <th scope="col">مزامنة حذف الدفعه odoo</th>
             <th scope="col">اخطاء مزامنة odoo</th>
+            <th scope="col">اخطاء مزامنة حذف الدفعه odoo</th>
             <th scope="col">بواسطة</th>
             <th scope="col">اخر تحديث</th>
         </tr>
@@ -87,7 +89,11 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
             @else {{ $PaymentAttempt->reference }} @endif
         </td>
         <td>@if($PaymentAttempt->odoo_sync_status) <abbr title="{{ $PaymentAttempt->odoo_sync_status }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>
+        <td>@if($PaymentAttempt->odoo_sync_delete_status) <abbr title="{{ $PaymentAttempt->odoo_sync_delete_status }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>
+
         <td>{{ !$PaymentAttempt->odoo_sync_status? $PaymentAttempt->odoo_message : 'لا يوجد'}}</td>
+        <td>{{ !$PaymentAttempt->odoo_sync_delete_status? $PaymentAttempt->odoo_delete_message : 'لا يوجد'}}</td>
+
         <td>{{ $PaymentAttempt->admin_name }}</td>
         <td><abbr title="تاريخ التسجيل : {{ $PaymentAttempt->created_at->format('Y-m-d h:m:s') }}">{{ $PaymentAttempt->updated_at->diffforhumans() }}</abbr></td>
         </tr>
