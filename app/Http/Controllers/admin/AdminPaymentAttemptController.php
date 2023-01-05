@@ -377,9 +377,9 @@ class AdminPaymentAttemptController extends Controller
     public function storePaymentInOdoo(Request $request)
     {
         $payment = PaymentAttempt::findOrFail($request->get('id'));
-        if(!app()->isProduction()) {
-            return $this->createPaymentInOdoo($payment->getOdooKeys(), $payment->id);
-        }
+
+        return $this->createPaymentInOdoo($payment->getOdooKeys(), $payment->id);
+
     }
 
 }
