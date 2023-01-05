@@ -60,6 +60,7 @@ class AdminCouponClassificationController extends Controller
             'limit',
             'color_class',
             'academic_year_id',
+            'allowed_types',
             'active'
         ), ['admin_id' => Auth::id()]));
 
@@ -106,6 +107,7 @@ class AdminCouponClassificationController extends Controller
         $updated = $classification->update(array_merge($request->only(
             'classification_name',
             'allowed_schools',
+            'allowed_types',
             'limit',
             'color_class',
             'active'
