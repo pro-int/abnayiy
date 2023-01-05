@@ -61,6 +61,8 @@ class AdminPaymentAttemptController extends Controller
             'payment_attempts.coupon_discount',
             'payment_attempts.odoo_sync_status',
             'payment_attempts.odoo_message',
+            'payment_attempts.odoo_sync_delete_status',
+            'payment_attempts.odoo_delete_message',
             'periods.period_name',
             'payment_attempts.period_discount',
             'payment_attempts.transaction_id',
