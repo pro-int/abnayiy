@@ -54,7 +54,8 @@ class WithdrawalFeesServices
 
             if($contract->total_paid == 0){
                 $contract->transactions()->delete();
-                $this->addNewWithdrawalTransaction($contract, $newTransaction, $amount_fees);
+                $this->StoreNewTransaction($newTransaction);
+                $contract->update_total_payments();
             }else{
                 $refundResidual = 0;
                 if($contract->total_fees != $contract->total_paid){
@@ -142,4 +143,5 @@ class WithdrawalFeesServices
         }
 
     }
+
 }
