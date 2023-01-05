@@ -16,6 +16,7 @@ use App\Models\WithdrawalPeriod;
 use App\Services\WithdrawalFeesServices;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 
 class AdminWithdrawalApplicationController extends Controller
@@ -39,19 +40,39 @@ class AdminWithdrawalApplicationController extends Controller
      */
     public function index()
     {
-        $withdrawalApplication = WithdrawalApplication::select("student_transportations.id as trans_id","withdrawal_applications.*", "students.student_name", "students.national_id", "levels.level_name", "academic_years.year_name")
-            ->leftjoin("students", "students.id", "withdrawal_applications.student_id")
-            ->leftjoin('contracts', function ($join){
-                $join->on('contracts.student_id', '=', 'withdrawal_applications.student_id')
-                    ->on('contracts.academic_year_id', '=', 'withdrawal_applications.academic_year_id');
-            })
-            ->leftJoin('levels', 'levels.id', 'contracts.level_id')
-            ->leftJoin('academic_years', 'academic_years.id', 'contracts.academic_year_id')
-            ->leftjoin('student_transportations', function ($join){
-                $join->on('student_transportations.student_id', '=', 'students.id')
-                    ->where('student_transportations.contract_id', '=', 'contracts.id');
-            })
-            ->paginate(10);
+        $withdrawalApplication = DB::select("SELECT
+                              any_value(`student_transportations`.`id`) AS `trans_id`,
+                              `withdrawal_applications`.*,
+                              any_value(`students`.`student_name`) AS `student_name`,
+                              any_value(`students`.`national_id`) AS `national_id`,
+                              any_value(`levels`.`level_name`) AS `level_name`,
+                              any_value(`academic_years`.`year_name`) AS `year_name`
+                            FROM
+                              `withdrawal_applications`
+                              LEFT JOIN `students` ON `students`.`id` = `withdrawal_applications`.`student_id`
+                              LEFT JOIN `contracts` ON `contracts`.`student_id` = `withdrawal_applications`.`student_id`
+                              AND `contracts`.`academic_year_id` = `withdrawal_applications`.`academic_year_id`
+                              LEFT JOIN `levels` ON `levels`.`id` = `contracts`.`level_id`
+                              LEFT JOIN `academic_years` ON `academic_years`.`id` = `contracts`.`academic_year_id`
+                              LEFT JOIN `student_transportations` ON `student_transportations`.`student_id` = `students`.`id`
+                              AND `student_transportations`.`contract_id` = `contracts`.`id`
+                            GROUP BY
+                              `withdrawal_applications`.`id`;");
+
+//        $withdrawalApplication = WithdrawalApplication::select(DB::raw('max(student_transportations.id) as trans_id'), "withdrawal_applications.*", "students.student_name", "students.national_id", "levels.level_name", "academic_years.year_name")
+//            ->leftjoin("students", "students.id", "withdrawal_applications.student_id")
+//            ->leftjoin('contracts', function ($join){
+//                $join->on('contracts.student_id', '=', 'withdrawal_applications.student_id')
+//                    ->on('contracts.academic_year_id', '=', 'withdrawal_applications.academic_year_id');
+//            })
+//            ->leftJoin('levels', 'levels.id', 'contracts.level_id')
+//            ->leftJoin('academic_years', 'academic_years.id', 'contracts.academic_year_id')
+//            ->leftjoin('student_transportations', function ($join){
+//                $join->on('student_transportations.student_id', '=', 'students.id')
+//                    ->on('student_transportations.contract_id', '=', 'contracts.id');
+//            })
+//            ->groupBy("withdrawal_applications.id")
+//            ->paginate(10);
 
         return view('admin.withdrawalApplication.index', compact('withdrawalApplication'));
     }
