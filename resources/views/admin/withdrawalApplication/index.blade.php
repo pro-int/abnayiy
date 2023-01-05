@@ -88,9 +88,6 @@ $breadcrumbs = [[['link' => route('withdrawals.index'), 'name' => "الطلبا�
         </tbody>
     </x-slot>
 
-    <x-slot name="pagination">
-        {{ $withdrawalApplication->appends(request()->except('page'))->links() }}
-    </x-slot>
 </x-ui.table>
 <x-ui.SideDeletePopUp />
 
