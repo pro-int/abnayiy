@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Http\Traits\ContractTrait;
+use App\Http\Traits\OdooIntegrationTrait;
 use App\Models\Contract;
 use App\Models\guardian;
 use App\Models\PaymentAttempt;
@@ -11,7 +12,7 @@ use Carbon\Carbon;
 
 class WithdrawalFeesServices
 {
-    use ContractTrait;
+    use ContractTrait, OdooIntegrationTrait;
 
     public function __construct()
     {
@@ -56,6 +57,7 @@ class WithdrawalFeesServices
                 $contract->transactions()->delete();
                 $this->StoreNewTransaction($newTransaction);
                 $contract->update_total_payments();
+                $this->updateInvoiceInOdoo(["invoice_code_abnai" => $contract->id, "price_unit" => $contract->total_fees]);
             }else{
                 $refundResidual = 0;
                 if($contract->total_fees != $contract->total_paid){
@@ -104,19 +106,23 @@ class WithdrawalFeesServices
                     $result = $this->StoreNewTransaction($residualTransaction);
                     $contract->update_total_payments();
 
-                    return PaymentAttempt::create([
-                            'transaction_id' => $result->id,
-                            'payment_method_id' => 1,
-                            'requested_ammount' => $refundResidualFees,
-                            'received_ammount' => $refundResidualFees,
-                            'coupon' => null,
-                            'coupon_discount' => 0,
-                            'period_id' => null,
-                            'period_discount' => 0,
-                            'bank_id' => null,
-                            'payment_network_id' => null,
-                            'approved' => 1
-                        ]);
+                    PaymentAttempt::create([
+                        'transaction_id' => $result->id,
+                        'payment_method_id' => 1,
+                        'requested_ammount' => $refundResidualFees,
+                        'received_ammount' => $refundResidualFees,
+                        'coupon' => null,
+                        'coupon_discount' => 0,
+                        'period_id' => null,
+                        'period_discount' => 0,
+                        'bank_id' => null,
+                        'payment_network_id' => null,
+                        'approved' => 1
+                    ]);
+
+                    $this->createInverseTransactionInOdoo($contract,$refund);
+                    $this->updateInvoiceInOdoo(["invoice_code_abnai" => $contract->id, "price_unit" => $contract->total_fees]);
+                    return;
                 }else{
                     $positiveRefund = abs($refund);
                 }
@@ -138,6 +144,8 @@ class WithdrawalFeesServices
 
                 $this->StoreNewTransaction($newTransaction);
                 $contract->update_total_payments();
+
+                $this->updateInvoiceInOdoo(["invoice_code_abnai" => $contract->id, "price_unit" => $contract->total_fees]);
             }
 
         }

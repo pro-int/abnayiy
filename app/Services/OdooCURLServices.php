@@ -10,9 +10,12 @@ class OdooCURLServices
     private string $CREATE_STUDENT_API = '/api/create/student';
     private string $CREATE_STUDY_INVOICE_API = '/api/create/invoice/study';
     private string $CREATE_TRANSPORTATION_INVOICE_API = '/api/create/invoice/transportation';
+    private string $UPDATE_INVOICE_API = '/api/update/invoice';
     private string $CREATE_JOURNAL_INVOICE_API = '/api/create/journal';
     private string $CREATE_PARENT_API = '/api/create/parent';
     private string $CREATE_PAYMENT_API = '/api/create/payment';
+    private string $DELETE_PAYMENT_API = '/api/delete/payment';
+
 
     public function getAccessServerOdoo(): bool{
         $db = config("odoo_configuration")['db'];
@@ -214,6 +217,70 @@ class OdooCURLServices
                 return $result;
             }
             return $this->sendParentToOdoo($parent);
+        }
+    }
+
+    public function updateInvoiceToOdoo($invoice): array{
+        if(session()->has('odoo_session_id')){
+            $result = $this->sendCURLRequestToOdoo($invoice, $this->UPDATE_INVOICE_API, "POST");
+            if($result["code"] == 401){
+                $authResult= $this->checkOdooAuth();
+                if($authResult["code"] == 200){
+                    return $this->updateInvoiceToOdoo($invoice);
+                }else{
+                    return $authResult;
+                }
+            }
+            return $result;
+        }else{
+            $result = $this->checkOdooAuth();
+            if($result["code"] == 401){
+                return $result;
+            }
+            return $this->updateInvoiceToOdoo($invoice);
+        }
+    }
+
+    public function createInverseTransactionToOdoo($invoice){
+        if(session()->has('odoo_session_id')){
+            $result = $this->sendCURLRequestToOdoo($invoice, $this->CREATE_JOURNAL_INVOICE_API, "POST");
+
+            if($result["code"] == 401){
+                $authResult= $this->checkOdooAuth();
+                if($authResult["code"] == 200){
+                    return $this->createInverseTransactionToOdoo($invoice);
+                }else{
+                    return $authResult;
+                }
+            }
+            return $result;
+        }else{
+            $result = $this->checkOdooAuth();
+            if($result["code"] == 401){
+                return $result;
+            }
+            return $this->createInverseTransactionToOdoo($invoice);
+        }
+    }
+
+    public function deletePaymentToOdoo($payment){
+        if(session()->has('odoo_session_id')){
+            $result = $this->sendCURLRequestToOdoo($payment, $this->DELETE_PAYMENT_API, "POST");
+            if($result["code"] == 401){
+                $authResult= $this->checkOdooAuth();
+                if($authResult["code"] == 200){
+                    return $this->deletePaymentToOdoo($payment);
+                }else{
+                    return $authResult;
+                }
+            }
+            return $result;
+        }else{
+            $result = $this->checkOdooAuth();
+            if($result["code"] == 401){
+                return $result;
+            }
+            return $this->deletePaymentToOdoo($payment);
         }
     }
 

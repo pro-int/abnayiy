@@ -3,6 +3,7 @@
 namespace App\Http\Traits;
 
 use App\Services\OdooCURLServices;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 trait OdooIntegrationTrait
@@ -198,5 +199,134 @@ trait OdooIntegrationTrait
         return redirect()->back()
             ->with(['alert-danger' => $msgStudy != '' ? $msgStudy:null, 'alert-warning' => $msgTransportation != ''? $msgTransportation:null,  'alert-dark' => $msgJournal != ''? $msgJournal:null]);
     }
+
+    public function updateInvoiceInOdoo($invoice){
+        info("Update Invoice Body = " . json_encode($invoice));
+        $service = new OdooCURLServices();
+        $result = $service->updateInvoiceToOdoo($invoice);
+        info("odoo update invoice response = " . json_encode($result));
+
+        if(isset($result["code"]) && $result["code"] == 401){
+            return redirect()->back()
+                ->with('alert-danger', $result["message"]);
+        }
+
+        $httpcode = $result["code"];
+        $response = $result["response"];
+
+        $msg = (isset($response->result)) ? $response->result->message : '';
+        $invoice_id = $invoice["invoice_code_abnai"];
+
+        DB::transaction(function () use ($response, $msg, $invoice_id, $httpcode) {
+            DB::table('contracts')->where("id", $invoice_id)->update([
+                "odoo_sync_update_invoice_status" => ($httpcode == 200 && isset($response->result) && $response->result->success) ? 1 : 0,
+                "odoo_message_update_invoice" => $msg
+            ]);
+        });
+
+
+        if ($httpcode == 200 && isset($response->result) && isset($response->result->success) && $response->result->success) {
+            return redirect()->back()
+                ->with('alert-info', 'تم تعديل العقد بنجاح في odoo');
+        }
+
+        return redirect()->back()
+            ->with('alert-danger', $msg);
+    }
+
+    public function createInverseTransactionInOdoo($invoice, $newValue){
+        $inverseArray = array(
+            "date" => Carbon::parse($invoice->created_at)->toDateString(),
+            "ref" => "مديونيات الطالب",
+            "journal_id" => 3,
+            "journals" =>[
+                [
+                    "account_id" => config("odoo_configuration")['db'] == "Live" ? 7686:7684,
+                    "student_id" => $invoice->student_id,
+                    "name" => "new",
+                    "debit" => 0,
+                    "credit" => $newValue,
+                ],
+                [
+                    "account_id" => config("odoo_configuration")['db'] == "Live" ? 7687:7685,
+                    "student_id" => "0000",
+                    "name" => "new",
+                    "debit" => $newValue,
+                    "credit" => 0,
+                ]
+            ]
+        );
+        info("inverse  Body = " . json_encode($inverseArray));
+        $service = new OdooCURLServices();
+        $result = $service->createInverseTransactionToOdoo($inverseArray);
+        info("odoo inverse response = " . json_encode($result));
+
+        if(isset($result["code"]) && $result["code"] == 401){
+            return redirect()->back()
+                ->with('alert-danger', $result["message"]);
+        }
+
+        $httpcode = $result["code"];
+        $response = $result["response"];
+
+        $msg = (isset($response->result)) ? $response->result->message : '';
+        $invoice_id = $invoice->id;
+
+        DB::transaction(function () use ($response, $msg, $invoice_id, $httpcode) {
+            DB::table('contracts')->where("id", $invoice_id)->update([
+                "odoo_record_inverse_journal_id" => ($httpcode == 200 && isset($response->result)) ? $response->result->ID : null,
+                "odoo_sync_inverse_journal_status" => ($httpcode == 200 && isset($response->result) && $response->result->success) ? 1 : 0,
+                "odoo_message_inverse_journal" => $msg
+            ]);
+        });
+
+
+        if ($httpcode == 200 && isset($response->result) && isset($response->result->success) && $response->result->success) {
+            return redirect()->back()
+                ->with('alert-info', 'تم اضافه الدفعه العكسيه بنجاح في odoo');
+        }
+
+        return redirect()->back()
+            ->with('alert-danger', $msg);
+    }
+
+    public function deletePaymentInOdoo($payment){
+        info("delete payment body = " . json_encode($payment));
+        $service = new OdooCURLServices();
+        $result = $service->deletePaymentToOdoo($payment);
+        info("odd delete payment result = " . json_encode($result));
+
+        if(isset($result["code"]) && $result["code"] == 401){
+            return redirect()->back()
+                ->with('alert-danger', $result["message"]);
+        }
+
+        $httpcode = $result["code"];
+        $response = $result["response"];
+
+        $msg = (isset($response->result))?$response->result->message:'';
+        $payment_id = $payment['payment_code_abnai'];
+
+        DB::transaction(function () use ($response,$msg,$payment_id,$httpcode){
+            DB::table('payment_attempts')->where("id",$payment_id)->update([
+                "odoo_sync_delete_status" => ($httpcode == 200 && isset($response->result) && $response->result->success) ? 1 : 0,
+                "odoo_delete_message" => $msg
+            ]);
+        });
+
+        if($httpcode == 200 && isset($response->result) && isset($response->result->success) && $response->result->success){
+            return [
+                "status" => true,
+                "message" => 'تم مسح الدفعه في odoo بنجاح'
+            ];
+        }
+
+        return [
+            "status" => false,
+            "message" => $msg
+        ];
+
+    }
+
 
 }
