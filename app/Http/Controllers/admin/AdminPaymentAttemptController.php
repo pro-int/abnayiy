@@ -61,6 +61,8 @@ class AdminPaymentAttemptController extends Controller
             'payment_attempts.coupon_discount',
             'payment_attempts.odoo_sync_status',
             'payment_attempts.odoo_message',
+            'payment_attempts.odoo_sync_delete_status',
+            'payment_attempts.odoo_delete_message',
             'periods.period_name',
             'payment_attempts.period_discount',
             'payment_attempts.transaction_id',
@@ -233,14 +235,21 @@ class AdminPaymentAttemptController extends Controller
             return redirect()->back()->with('alert-danger', $msg);
         }
 
+        $result = $this->deletePaymentInOdoo(["payment_code_abnai" => $attempt->id]);
+
+        if(!$result['status']){
+            return redirect()->back()
+                ->with('alert-danger', $result['message']);
+        }
+
         if ($attempt->delete()) {
             $transaction->update_transaction($attempt);
 
             return redirect()->route('students.contracts.transactions.index', [$student, $contract, $transaction])
-                ->with('alert-success', 'تم حضف الدقغة  ينجاح');
+                ->with('alert-success', 'تم حذف الدقغة ينجاح');
         }
         return redirect()->back()
-            ->with('alert-danger', 'فشل حضف الدقغة  ');
+            ->with('alert-danger', 'فشل حذف الدقغة  ');
     }
 
     public function confirmPaymentAttempt($PaymentAttempt, $transaction, $request)

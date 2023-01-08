@@ -38,9 +38,13 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
             <th scope="col">مزامنة رسوم الدراسيه odoo</th>
             <th scope="col">مزامنة رسوم النقل odoo</th>
             <th scope="col">مزامنة المديونات odoo</th>
+            <th scope="col">مزامنة تعديل العقد في odoo</th>
+            <th scope="col">مزامنة الدفعه العكسيه في odoo</th>
             <th scope="col">اخطاء مزامنة رسوم الدراسيه odoo</th>
             <th scope="col">اخطاء مزامنة رسوم النقل odoo</th>
             <th scope="col">اخطاء مزامنة المديونيات odoo</th>
+            <th scope="col">اخطاء مزامنة تعديل العقد في odoo</th>
+            <th scope="col">اخطاء مزامنة الدفعه العكسيه في odoo</th>
             <th scope="col">بواسطة</th>
             <th scope="col">اخر تحديث</th>
         </tr>
@@ -100,9 +104,13 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
         <td>@if($contract->odoo_sync_study_status) <abbr title="{{ $contract->odoo_sync_study_status }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>
         <td>@if($contract->odoo_sync_transportation_status) <abbr title="{{ $contract->odoo_sync_transportation_status }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>
         <td>@if($contract->odoo_sync_journal_status) <abbr title="{{ $contract->odoo_sync_journal_status }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>
+        <td>@if($contract->odoo_sync_update_invoice_status) <abbr title="{{ $contract->odoo_sync_update_invoice_status }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>
+        <td>@if($contract->odoo_sync_inverse_journal_status) <abbr title="{{ $contract->odoo_sync_inverse_journal_status }}"><em data-feather='check-circle' class="text-success"></em></abbr>@else <em class="text-danger" data-feather='x-circle'></em> @endif</td>
         <td>{{ !$contract->odoo_sync_study_status?$contract->odoo_message_study : 'لا يوجد'}}</td>
         <td>{{ !$contract->odoo_sync_transportation_status?$contract->odoo_message_transportation : 'لا يوجد'}}</td>
         <td>{{ !$contract->odoo_sync_journal_status?$contract->odoo_message_journal : 'لا يوجد'}}</td>
+        <td>{{ !$contract->odoo_sync_update_invoice_status?$contract->odoo_message_update_invoice : 'لا يوجد'}}</td>
+        <td>{{ !$contract->odoo_sync_inverse_journal_status?$contract->odoo_message_inverse_journal : 'لا يوجد'}}</td>
 
         <td>{{ $contract->admin_name }}</td>
         <td><abbr title="تاريخ التسجيل : {{ $contract->created_at->format('Y-m-d h:m:s') }}">{{ $contract->updated_at->diffforhumans() }}</abbr></td>
