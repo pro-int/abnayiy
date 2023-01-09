@@ -391,4 +391,20 @@ class AdminPaymentAttemptController extends Controller
 
     }
 
+    public function storeInversePaymentInOdoo(Request $request)
+    {
+        $payment = PaymentAttempt::findOrFail($request->get('id'));
+        $transaction = Transaction::findOrFail($payment->transaction_id);
+        $contract = Contract::findOrFail($transaction->contract_id);
+        //dd($payment,$transaction,$contract);
+        if($transaction->transaction_type == "withdrawal" && $payment->requested_ammount >= 0
+            && $contract->odoo_sync_update_invoice_status == 0){
+            return $this->updateInvoiceInOdoo(["invoice_code_abnai" => $contract->id, "price_unit" => $contract->total_fees]);
+        }elseif ($transaction->transaction_type == "withdrawal" && $payment->requested_ammount < 0
+                && $contract->odoo_sync_update_invoice_status == 0 && $contract->odoo_sync_inverse_journal_status == 0){
+            $this->createInverseTransactionInOdoo($contract, abs($payment->requested_ammount));
+            return $this->updateInvoiceInOdoo(["invoice_code_abnai" => $contract->id, "price_unit" => $contract->total_fees]);
+        }
+    }
+
 }

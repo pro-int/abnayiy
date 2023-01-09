@@ -241,25 +241,28 @@ class OdooCURLServices
         }
     }
 
-    public function createInverseTransactionToOdoo($invoice){
+    public function createInverseTransactionToOdoo($invoice, $contractSyncStatus){
         if(session()->has('odoo_session_id')){
-            $result = $this->sendCURLRequestToOdoo($invoice, $this->CREATE_JOURNAL_INVOICE_API, "POST");
+            if($contractSyncStatus == 0){
+                $result = $this->sendCURLRequestToOdoo($invoice, $this->CREATE_JOURNAL_INVOICE_API, "POST");
 
-            if($result["code"] == 401){
-                $authResult= $this->checkOdooAuth();
-                if($authResult["code"] == 200){
-                    return $this->createInverseTransactionToOdoo($invoice);
-                }else{
-                    return $authResult;
+                if($result["code"] == 401){
+                    $authResult= $this->checkOdooAuth();
+                    if($authResult["code"] == 200){
+                        return $this->createInverseTransactionToOdoo($invoice, $contractSyncStatus);
+                    }else{
+                        return $authResult;
+                    }
                 }
+                return $result;
             }
-            return $result;
+
         }else{
             $result = $this->checkOdooAuth();
             if($result["code"] == 401){
                 return $result;
             }
-            return $this->createInverseTransactionToOdoo($invoice);
+            return $this->createInverseTransactionToOdoo($invoice, $contractSyncStatus);
         }
     }
 
