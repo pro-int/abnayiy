@@ -24,7 +24,7 @@
                 <p class="u-text">{{ sprintf('رقم #%s للعام %s',$attempt->id,$attempt->year_name)}}</p>
               </td>
               <td style="width: 33.33%;" class="u-align-center u-table-cell">
-                <img style="padding-bottom: 10px;" src="{{ public_path('/assets/reportLogo.png') }}">
+                <img style="padding-bottom: 10px;" src="{{ public_path('/assets/alnoballaLogo.jpeg') }}">
                 <h5 class="u-text u-text-1">الرقم الضريبي <br> : {{ env('VAT_NUMBER','301207898100003') }}
                 </h5>
               </td>
