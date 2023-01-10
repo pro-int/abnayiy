@@ -20,23 +20,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Traits\StudentContract;
 use App\Models\Gender;
-use App\Models\Grade;
 use App\Models\ReservedAppointment;
 use App\Models\User;
 use Gtech\AbnayiyNotification\ApplySingleNotification;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Helpers\LogHelper;
 
 class AdminApplicationController extends Controller
 {
     use Studentcontract, ManageAppointments, CreatePdfFile;
-
-    function __construct()
+    protected LogHelper $logHelper;
+    function __construct(LogHelper $logHelper)
     {
+        $this->logHelper = $logHelper;
         $this->middleware('permission:applications-list|applications-create|applications-edit|applications-delete', ['only' => ['index', 'store']]);
         $this->middleware('permission:applications-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:applications-edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:applications-delete', ['only' => ['destroy']]);
+
     }
 
     /**
@@ -217,7 +219,8 @@ class AdminApplicationController extends Controller
                     $application->sales_id = Auth::id();
 
                     if ($application->save()) {
-
+                        $logMessage = 'تم تسجيل الطلب بنجاح من خلال لوحة التحكم بواسطة '.Auth::user()->getFullName();
+                        $this->logHelper->logApplication($logMessage, $application->id, Auth::id());
                         $new_application = Application::select('applications.id', 'applications.student_name', 'applications.national_id', 'reserved_appointments.appointment_time', 'reserved_appointments.selected_date', 'appointment_sections.section_name', 'appointment_offices.office_name', 'appointment_offices.employee_name', 'appointment_offices.phone')
                             ->leftjoin('reserved_appointments', 'reserved_appointments.id', 'applications.appointment_id')
                             ->leftjoin('appointment_sections', 'appointment_sections.id', 'reserved_appointments.section_id')
@@ -352,6 +355,9 @@ class AdminApplicationController extends Controller
         $result = $this->UpdateAppointments($request, $appointment);
 
         if ($result['success']) {
+            $logMessage = 'تم تعديل الطلب  من خلال لوحة التحكم بواسطة '.Auth::user()->getFullName();
+            $this->logHelper->logApplication($logMessage, $application->id, Auth::id());
+
             $nNotification = new ApplySingleNotification($appointment, 12, $application->guardian_id);
             $nNotification->fireNotification();
         } else {
@@ -463,10 +469,16 @@ class AdminApplicationController extends Controller
                     // $application = Application::where('id', $request->application_id)->update(['status_id' => 2]);
                     $result = $this->NewStudent($application);
                     if ($result) {
+                        $logMessage = 'تم اضافة نتيجة المقابلة بنجاح بواسطة '.Auth::user()->getFullName().' وتم قبول الطلب وملخص الاجتماع: '.$request->summary;
+                        $this->logHelper->logApplication($logMessage, $application->id, Auth::id());
+
                         $application->status_id = 2;
                     }
                 } elseif ($request->approved == 0) {
-                    //  change application stautus to rejected - no more actions can be performed
+                    //  change application status to rejected - no more actions can be performed
+                    $logMessage = 'تم اضافة نتيجة المقابلة بنجاح بواسطة '.Auth::user()->getFullName().' وتم رفض الطلب وملخص الاجتماع: '.$request->summary;
+                    $this->logHelper->logApplication($logMessage, $application->id, Auth::id());
+
                     $application->status_id = 6;
                     $nNotification->event_id = 11;
                 }
@@ -497,7 +509,30 @@ class AdminApplicationController extends Controller
             }
         }
     }
+    public function applicationLogs(Request $request, $application)
+    {
+        // get Logs from Service
+        $logs = $this->logHelper->search([
+            'searchKey' => 'model_id',
+            'searchValue' => (int)$application,
+        ]);
+        dd($logs);
+        if($logs && $logs["error"]){
+            return redirect()->back()->with('alert-danger', 'فشل سحب سجل الطلبات');;
+        }
 
+        // fill logs with users
+        $userIds = array_unique(array_column($logs, 'created_by'));
+        $users = DB::table('users')->whereIn('id', $userIds)->get(['id', 'first_name', 'last_name'])->mapWithKeys(fn ($item) => [$item->id => $item]);
+
+        // insert users into logs
+        $logs = array_map(function ($log) use ($users) {
+            $log['user'] = $users[$log['created_by']] ?? '';
+
+            return $log;
+        }, $logs);
+        return view('admin.application.index', get_defined_vars());
+    }
     public function updateapplicationstatus(Request $request)
     {
         if ($request->has('application_id') && null !== $request->application_id) {
@@ -506,18 +541,29 @@ class AdminApplicationController extends Controller
                 # update applcation statues to add_to_noor
                 $application->status_id = 3;
                 $message = 'تم تحويل حالة الطلب الي تم الاضافة الي نور';
+                $logMessage = 'تم تحويل حالة الطلب الي تم الاضافة الي نور بواسطة '.Auth::user()->getFullName();
+                $this->logHelper->logApplication($logMessage, $application->id, Auth::id());
+
             } else if ($request->changeTo == 'pending' && $application->status_id == 3) {
                 # update applcation statues to add_to_peinding
                 $application->status_id = 4;
                 $message = 'تم اضافة الطلب الي الطلاب المقبولين وضمن قائمة الانتظار';
+                $logMessage = 'تم اضافة الطلب الي الطلاب المقبولين وضمن قائمة الانتظار بواسطة '.Auth::user()->getFullName();
+                $this->logHelper->logApplication($logMessage, $application->id, Auth::id());
+
             } else if ($request->changeTo == 'confirm' && in_array($application->status_id, [3, 4])) {
                 # update applcation statues to add_to_confirmed
                 $application->status_id = 5;
                 $message = 'تم اضافة الطلب الي الطلاب المقبولين وضمن قائمة الانتظار';
+                $logMessage = 'تم اضافة الطلب الي الطلاب المقبولين وضمن قائمة الانتظار بواسطة '.Auth::user()->getFullName();
+                $this->logHelper->logApplication($logMessage, $application->id, Auth::id());
             } else if ($request->changeTo == 'reopen'  && $application->status_id == 6) {
                 # update applcation statues to add_to_confirmed
                 $application->status_id = 1;
                 $message = 'تم اعادة فتح الطلب';
+                $logMessage = 'تم اعادة فتح الطلب بواسطة '.Auth::user()->getFullName();
+                $this->logHelper->logApplication($logMessage, $application->id, Auth::id());
+
             } else {
                 return response()->json([
                     'done' => false,

@@ -93,6 +93,7 @@ $breadcrumbs = [[['link' => route('applications.index'), 'name' => "الطلبا
         <td>
 
         @can('applications-list')
+        <x-inputs.btn.generic icon="book-open" data-bs-original-title="سجل الطلب" colorClass="primary" route="{{ route('applications.applicationLogs',$application->id) }}" />
         <x-inputs.btn.view route="{{ route('applications.show',$application->id) }}" />
         @endcan
 

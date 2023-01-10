@@ -21,13 +21,16 @@ use App\Models\User;
 use Gtech\AbnayiyNotification\ApplySingleNotification;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
+use App\Helpers\LogHelper;
 
 class GuardianApplicationController extends Controller
 {
     use Studentcontract, ManageAppointments, CreatePdfFile;
 
-    function __construct()
+    protected LogHelper $logHelper;
+    function __construct(LogHelper $logHelper)
     {
+        $this->logHelper = $logHelper;
         $this->middleware('permission:guardian-applications-list|guardian-applications-create|guardian-applications-edit|guardian-applications-delete', ['only' => ['index', 'store']]);
         $this->middleware('permission:guardian-applications-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:guardian-applications-edit', ['only' => ['edit', 'update']]);
@@ -205,7 +208,8 @@ class GuardianApplicationController extends Controller
                     $application->guardian_id=Auth::id();
 
                     if ($application->save()) {
-
+                        $logMessage = 'تم تسجيل الطلب بنجاح من خلال بوابة ولي الامر بواسطة '.Auth::user()->getFullName();
+                        $this->logHelper->logApplication($logMessage, $application->id, Auth::id());
                         $new_application = Application::select('applications.id', 'applications.student_name', 'applications.national_id', 'reserved_appointments.appointment_time', 'reserved_appointments.selected_date', 'appointment_sections.section_name', 'appointment_offices.office_name', 'appointment_offices.employee_name', 'appointment_offices.phone')
                             ->leftjoin('reserved_appointments', 'reserved_appointments.id', 'applications.appointment_id')
                             ->leftjoin('appointment_sections', 'appointment_sections.id', 'reserved_appointments.section_id')
@@ -341,6 +345,8 @@ class GuardianApplicationController extends Controller
         $result = $this->UpdateAppointments($request, $appointment);
 
         if ($result['success']) {
+            $logMessage = 'تم تعديل الطلب بنجاح من خلال بوابة ولي الامر بواسطة '.Auth::user()->getFullName();
+            $this->logHelper->logApplication($logMessage, $application->id, Auth::id());
             $nNotification = new ApplySingleNotification($appointment, 12, $application->guardian_id);
             $nNotification->fireNotification();
         } else {

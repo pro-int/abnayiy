@@ -75,7 +75,6 @@ use App\Http\Controllers\guardian\GuardianChildrenController;
 |
 */
 
-
 Route::get('reset-password', [AdminResetPassword::class, 'resetPasswordSendSmsCode'])->name('reset_password');
 Route::post('reset-password', [AdminResetPassword::class, 'resetPasswordBySmsCode'])->name('change_password');
 Route::get('confirm-code', [AdminResetPassword::class, 'confirmCodeChangePasswordPage'])->name('get.confirm_code');
@@ -159,6 +158,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::match(['post', 'put'], 'applications/meetingInfo', [AdminApplicationController::class, 'meeting_info'])->name('applications.meeting');
     Route::match(['post', 'put'], 'applications/meetingresult', [AdminApplicationController::class, 'meeting_result'])->name('applications.meeting_result');
     Route::post('applications/updateapplicationstatus', [AdminApplicationController::class, 'updateapplicationstatus'])->name('applications.updateapplicationstatus');
+    Route::get('{applications}/logs', [AdminApplicationController::class, 'applicationLogs'])->name('applications.applicationLogs');
     Route::match(['post', 'get'], 'applications/{id}/confirm_application', [AdminApplicationController::class, 'confirm_application'])->name('applications.confirm_application');
     Route::get('transactions/unconfirmedpayment', [AdminPaymentAttemptController::class, 'UnConfirmedPayment'])->name('attempts.unconfirmed');
 

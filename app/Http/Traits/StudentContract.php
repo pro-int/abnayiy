@@ -78,6 +78,10 @@ trait StudentContract
             'terms_id' => current_contract_term()->id,
             'admin_id' => Auth::id()
         ]);
+        $logMessage = 'تم اضافة التعاقد بنجاح بواسطة '.Auth::user()->getFullName().' وتم انشاء الطالب كود : '.$student->id.' كود التعاقد : '.$contract->id;
+        $this->logHelper->logApplication($logMessage, $application->id, Auth::id());
+        $logMessage = 'تم اضافة التعاقد بنجاح بواسطة '.Auth::user()->getFullName().' وتم انشاء الطالب كود : '.$student->id;
+        $this->logHelper->logContract($logMessage, $contract->id, Auth::id());
 
         return  $this->CheckStudentTransportation($application, $student, $contract);
     }

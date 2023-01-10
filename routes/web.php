@@ -17,6 +17,7 @@ use App\Http\Controllers\guardian\GuardianAuthController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/health', \App\Http\Controllers\HealthCheck::class);
 
 Route::get('/', function () {
     return redirect()->route('home');
