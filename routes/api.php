@@ -30,10 +30,9 @@ use App\Http\Controllers\WalletController;
 */
 
 // old_data api
-//will be deleted 
+//will be deleted
 // /gdasfdnkksjfksjadbaskdjbfdksjbfksadjbfs/" & id & "/hash?
 // Route::get('gdasfdnkksjfksjadbaskdjbfdksjbfksadjbfs/{id}/hash/{password}', [LevelController::class, 'changepassword']);
-
 
 // public login
 Route::post('user/auth/login', [AuthController::class, 'login']);
@@ -57,7 +56,7 @@ Route::middleware(['auth:sanctum'])->prefix('user')->group(function () {
     Route::post('auth/update', [AuthController::class, 'update']);
     Route::post('auth/changepassword', [AuthController::class, 'changepassword']);
 
-    // wallet 
+    // wallet
     Route::post('wallet', [WalletController::class, 'getUserWallet']);
     Route::post('wallet/{wallet}/transactions', [WalletController::class, 'geWalletTransactions']);
 
