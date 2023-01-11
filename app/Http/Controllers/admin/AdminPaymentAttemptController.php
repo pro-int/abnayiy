@@ -398,11 +398,11 @@ class AdminPaymentAttemptController extends Controller
         $contract = Contract::findOrFail($transaction->contract_id);
         if($transaction->transaction_type == "withdrawal" && $payment->requested_ammount >= 0
             && $contract->odoo_sync_update_invoice_status == 0){
-            return $this->updateInvoiceInOdoo(["invoice_code_abnai" => $contract->id, "price_unit" => $contract->total_fees]);
+            return $this->updateInvoiceInOdoo(["invoice_code_abnai" => $contract->id, "price_unit" => $contract->tuition_fees, "tax_ids" => $contract->getTaxIDOdoo()]);
         }elseif ($transaction->transaction_type == "withdrawal" && $payment->requested_ammount < 0
                 && ($contract->odoo_sync_update_invoice_status == 0 || $contract->odoo_sync_inverse_journal_status == 0)){
             $this->createInverseTransactionInOdoo($contract, abs($payment->requested_ammount));
-            return $this->updateInvoiceInOdoo(["invoice_code_abnai" => $contract->id, "price_unit" => $contract->total_fees]);
+            return $this->updateInvoiceInOdoo(["invoice_code_abnai" => $contract->id, "price_unit" => $contract->tuition_fees, "tax_ids" => $contract->getTaxIDOdoo()]);
         }
     }
 

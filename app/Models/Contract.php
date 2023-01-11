@@ -295,4 +295,26 @@ class Contract extends Model
         return $this->save();
     }
 
+    public function getTaxIDOdoo(){
+        $application = Contract::select('transportations.id as transportation_id')
+            ->leftjoin("students", "students.id", "contracts.student_id")
+            ->leftjoin("student_transportations", "student_transportations.student_id", "students.id")
+            ->leftjoin("transportations", "transportations.id", "student_transportations.transportation_id")
+            ->where("contracts.id", $this->id)->first();
+
+        if($application && $application->transportation_id){
+            return 1;
+        }
+
+        if($application){
+            $student = Student::select("nationality_id")->where("id",$this->student_id)->first();
+            if($student->nationality_id != 1){
+                return 1;
+            }else{
+                return 4;
+            }
+        }
+
+        return 0;
+    }
 }
