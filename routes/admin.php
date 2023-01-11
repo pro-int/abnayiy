@@ -158,7 +158,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::match(['post', 'put'], 'applications/meetingInfo', [AdminApplicationController::class, 'meeting_info'])->name('applications.meeting');
     Route::match(['post', 'put'], 'applications/meetingresult', [AdminApplicationController::class, 'meeting_result'])->name('applications.meeting_result');
     Route::post('applications/updateapplicationstatus', [AdminApplicationController::class, 'updateapplicationstatus'])->name('applications.updateapplicationstatus');
-    Route::get('{applications}/logs', [AdminApplicationController::class, 'applicationLogs'])->name('applications.applicationLogs');
+    Route::get('applications/{applications}/logs', [AdminApplicationController::class, 'logs'])->name('applications.logs');
     Route::match(['post', 'get'], 'applications/{id}/confirm_application', [AdminApplicationController::class, 'confirm_application'])->name('applications.confirm_application');
     Route::get('transactions/unconfirmedpayment', [AdminPaymentAttemptController::class, 'UnConfirmedPayment'])->name('attempts.unconfirmed');
 
@@ -173,6 +173,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('contracts.resendToOdoo', [AdminContractController::class, 'storeInvoiceInOdoo'])->name('contracts.resendToOdoo');
     Route::resource('students/noor', AdminNoorQueueController::class)->only('create','store');
     Route::resource('students.contracts', AdminContractController::class);
+    Route::get('/students/{student_id}/contracts/{contract}/logs', [AdminContractController::class, 'logs'])->name('students.contracts.logs');
     Route::resource('students.contracts.files', AdminContractFileController::class)->only('index', 'create', 'store', 'destroy');
     Route::resource('students/contracts/transfers', AdminTransferRequestController::class);
     Route::resource('students.contracts.transactions', AdminTransactionController::class);

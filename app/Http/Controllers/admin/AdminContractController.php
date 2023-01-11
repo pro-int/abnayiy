@@ -5,6 +5,7 @@ namespace App\Http\Controllers\admin;
 use App\Exceptions\SystemConfigurationError;
 use App\Exports\ContractsExport;
 use App\Exports\StudentsExport;
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Contract\StudentExamResultRequest;
 use App\Http\Traits\ContractInstallments;
@@ -27,7 +28,11 @@ class AdminContractController extends Controller
 {
     use CreatePdfFile, OdooIntegrationTrait, ContractInstallments;
 
-
+    protected LogHelper $logHelper;
+    function __construct(LogHelper $logHelper)
+    {
+        $this->logHelper = $logHelper;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -54,7 +59,32 @@ class AdminContractController extends Controller
 
         return view('admin.student.contract.index', compact('contracts', 'student'));
     }
+    public function logs(Request $request, $student_id,$contract)
+    {
+        // get Logs from Service
+        $logs = $this->logHelper->search([
+            'searchKey' => 'model_id',
+            'searchVal' => (int)$contract,
+            'searchKey2' => 'model_type',
+            'searchVal2' => config('log_service.log_types')[$this->logHelper::CONTRACT_LOG]
+        ]);
+        if($logs && array_key_exists("error",$logs)){
+            return redirect()->back()->with('alert-danger', 'فشل سحب سجل الطلبات');;
+        }
 
+        // fill logs with users
+        $userIds = array_unique(array_column($logs, 'created_by'));
+        $users = DB::table('users')->whereIn('id', $userIds)->get(['id', 'first_name', 'last_name'])->mapWithKeys(fn ($item) => [$item->id => $item]);
+
+        // insert users into logs
+        $logs = array_map(function ($log) use ($users) {
+            $log['user'] = $users[$log['created_by']] ?? '';
+
+            return $log;
+        }, $logs);
+
+        return view('admin.student.contract.logs', get_defined_vars());
+    }
     /**
      * Display the specified resource.
      *

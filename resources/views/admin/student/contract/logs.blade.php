@@ -1,17 +1,17 @@
 @extends('layouts.contentLayoutMaster')
 
 @php
-$breadcrumbs = [[['link' => route('applications.logs',$application), 'name' => "سجل الطلب"],['name'=> 'سجل طلب الألتحاق']],['title'=> 'ادارة سجل الطلب']];
+$breadcrumbs = [[['link' => route('students.contracts.logs',[$student_id,$contract]), 'name' => "سجل التعاقد"],['name'=> 'سجل التعاقد']],['title'=> 'ادارة سجل التعاقد']];
 @endphp
 
-@section('title', 'سجل طلب الألتحاق')
+@section('title', 'سجل التعاقد')
 
 @section('content')
 
 
 <!-- Striped rows start -->
 <x-ui.table>
-    <x-slot name="title">سجل الطلب </x-slot>
+    <x-slot name="title">سجل التعاقد </x-slot>
 
     <x-slot name="thead">
         <tr>

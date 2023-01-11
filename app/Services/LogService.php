@@ -18,7 +18,7 @@ class LogService
         }
     }
 
-    public function search(array $data): array
+    public function search(array $data): ?array
     {
         try {
             Log::info($data);

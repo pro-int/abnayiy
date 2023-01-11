@@ -54,7 +54,8 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
         @foreach ($contracts as $contract)
         <td>
             @can('accuonts-list')
-            <x-inputs.btn.view :route="route('students.contracts.show', [$student->id,$contract->id])" />
+                <x-inputs.btn.generic icon="book-open" data-bs-original-title="سجل التعاقد" colorClass="primary" route="{{ route('students.contracts.logs',[$student->id,$contract->id]) }}" />
+                <x-inputs.btn.view :route="route('students.contracts.show', [$student->id,$contract->id])" />
             @endcan
 
             @can('accuonts-delete')

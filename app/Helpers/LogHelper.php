@@ -22,7 +22,7 @@ class LogHelper
     {
         $this->logService = $logService;
     }
-    public function search(array $data): array
+    public function search(array $data): ?array
     {
         return $this->logService->search($data);
     }

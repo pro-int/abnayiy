@@ -509,12 +509,14 @@ class AdminApplicationController extends Controller
             }
         }
     }
-    public function applicationLogs(Request $request, $application)
+    public function logs(Request $request, $application)
     {
         // get Logs from Service
         $logs = $this->logHelper->search([
             'searchKey' => 'model_id',
-            'searchValue' => (int)$application,
+            'searchVal' => (int)$application,
+            'searchKey2' => 'model_type',
+            'searchVal2' => config('log_service.log_types')[$this->logHelper::APPLICATION_LOG]
         ]);
         if($logs && array_key_exists("error",$logs)){
             return redirect()->back()->with('alert-danger', 'فشل سحب سجل الطلبات');;
