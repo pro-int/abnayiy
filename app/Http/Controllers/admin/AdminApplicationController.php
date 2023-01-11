@@ -516,8 +516,7 @@ class AdminApplicationController extends Controller
             'searchKey' => 'model_id',
             'searchValue' => (int)$application,
         ]);
-        dd($logs);
-        if($logs && $logs["error"]){
+        if($logs && array_key_exists("error",$logs)){
             return redirect()->back()->with('alert-danger', 'فشل سحب سجل الطلبات');;
         }
 
@@ -531,7 +530,8 @@ class AdminApplicationController extends Controller
 
             return $log;
         }, $logs);
-        return view('admin.application.index', get_defined_vars());
+
+        return view('admin.application.logs', get_defined_vars());
     }
     public function updateapplicationstatus(Request $request)
     {
