@@ -258,6 +258,9 @@ trait OdooIntegrationTrait
         );
         info("inverse  Body = " . json_encode($inverseArray));
         $service = new OdooCURLServices();
+        if($invoice->odoo_sync_inverse_journal_status == 1){
+            return;
+        }
         $result = $service->createInverseTransactionToOdoo($inverseArray, $invoice->odoo_sync_inverse_journal_status);
         info("odoo inverse response = " . json_encode($result));
 
