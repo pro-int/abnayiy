@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 
 use App\Models\Transaction;
@@ -11,9 +12,11 @@ use Illuminate\Support\Facades\DB;
 
 class AdminTransactionController extends Controller
 {
+    protected LogHelper $logHelper;
 
-    function __construct()
+    function __construct(LogHelper $logHelper)
     {
+        $this->logHelper = $logHelper;
         $this->middleware('permission:accuonts-list|accuonts-create|accuonts-edit|accuonts-delete', ['only' => ['index', 'store']]);
         $this->middleware('permission:accuonts-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:accuonts-edit', ['only' => ['edit', 'update']]);

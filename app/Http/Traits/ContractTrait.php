@@ -34,7 +34,7 @@ trait ContractTrait
     {
         $student = $student instanceof Student ? $student : Student::findOrFail($student);
 
-        return Contract::create([
+        $contract= Contract::create([
             'student_id' => $student->id,
             'application_id' => $contractArray['application_id'] ?? null,
             'academic_year_id' => $contractArray['academic_year_id'],
@@ -51,6 +51,11 @@ trait ContractTrait
             'old_contract_id' => $contractArray['old_contract_id'],
             'admin_id' => $contractArray['user_id']
         ]);
+        if($contract) {
+            $logMessage = 'تم اضافة التعاقد بنجاح بواسطة ' . Auth::user()->getFullName().' هذا التعاقد لطالب موجود بكود: '.$student->id;
+            $this->logHelper->logContract($logMessage, $contract->id, Auth::id());
+        }
+        return $contract;
     }
 
     /**

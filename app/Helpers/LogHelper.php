@@ -34,6 +34,18 @@ class LogHelper
     {
         $this->log($message, $this::CONTRACT_LOG, $loggable, $user_id);
     }
+    public function logPayment(string|array $message, int $loggable, int $user_id): void
+    {
+        $this->log($message, $this::PAYMENT_LOG, $loggable, $user_id);
+    }
+    public function logTransaction(string|array $message, int $loggable, int $user_id): void
+    {
+        $this->log($message, $this::TRANSACTION_LOG, $loggable, $user_id);
+    }
+    public function logWithdraw(string|array $message, int $loggable, int $user_id): void
+    {
+        $this->log($message, $this::WITHDRAW_LOG, $loggable, $user_id);
+    }
     private function log(string $message, int $type, int $loggable, int $user_id)
     {
         $data = [

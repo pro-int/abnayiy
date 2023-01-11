@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Models\StudentTransportation;
 use App\Http\Requests\StoreStudentTransportationRequest;
@@ -17,6 +18,11 @@ use Illuminate\Support\Facades\DB;
 
 class AdminStudentTransportationController extends Controller
 {
+    protected LogHelper $logHelper;
+    function __construct(LogHelper $logHelper)
+    {
+        $this->logHelper = $logHelper;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -86,11 +92,15 @@ class AdminStudentTransportationController extends Controller
             $student_transportation->transaction_id = $transaction->id;
             $student_transportation->add_by = Auth::id();
             $student_transportation->save();
-
+            $logMessage = 'تم اضافة خطة النقل كود'.$student_transportation->id.'  بنجاح بواسطة '.Auth::user()->getFullName().' وتم اضافة دفعه نقل  كود : '.$transaction->id;
+            $this->logHelper->logContract($logMessage, $contract->id, Auth::id());
+            $logMessage = 'تم اضافة دفعة نقل كود'.$transaction->id.'  بنجاح بواسطة '.Auth::user()->getFullName().' لخطة النقل  كود : '.$student_transportation->id;
+            $this->logHelper->logTransaction($logMessage, $transaction->id, Auth::id());
             return  $contract->update_total_payments();
         }, 2);
 
         if ($result) {
+
             return redirect()->route('students.contracts.transportations.index', [$student, $contract->id])
                 ->with('alert-success', 'تم اضافة خطة النقل بنجاح');
         }
@@ -130,7 +140,7 @@ class AdminStudentTransportationController extends Controller
     public function update(UpdateStudentTransportationRequest $request, $student, $contract, StudentTransportation $transportation)
     {
 
-        $result = DB::transaction(function () use ($request, $transportation) {
+        $result = DB::transaction(function () use ($request, $transportation,$contract) {
 
             $fees = $this->getTransportationFees($request, $request->transportation_id);
 
@@ -151,11 +161,14 @@ class AdminStudentTransportationController extends Controller
             $transaction->vat_amount = $vat;
             $transaction->amount_after_discount = $fees;
             $transaction->save();
+            $logMessage = 'تم تعديل خطة النقل كود'.$transportation->id.'  بنجاح بواسطة '.Auth::user()->getFullName();
+            $this->logHelper->logContract($logMessage, $contract, Auth::id());
 
             return $transaction->update_transaction();
         }, 2);
 
         if ($result) {
+
             return redirect()->route('students.contracts.transportations.index', [$student, $contract])
                 ->with('alert-success', 'تم تعديل خطة النقل بنجاح');
         }
@@ -180,6 +193,9 @@ class AdminStudentTransportationController extends Controller
                 $transaction->amount_after_discount = 0;
                 $transaction->save();
                 $transaction->update_transaction();
+                $logMessage = 'تم الغاء خطة النقل كود'.$transportation->id.'  بنجاح بواسطة '.Auth::user()->getFullName().' وتم حذف الدفعة الخاصة بها  كود : '.$transaction->id;
+                $this->logHelper->logContract($logMessage, $contract->id, Auth::id());
+
             } else {
                 $transaction->delete();
             }

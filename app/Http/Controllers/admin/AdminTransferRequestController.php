@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\admin;
 
 use App\Exports\TransferRequestExport;
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Models\TransferRequest;
 use App\Http\Requests\Contract\TransferRequest\StoreAdminTransferRequestRequest;
@@ -21,8 +22,10 @@ use Maatwebsite\Excel\Facades\Excel;
 class AdminTransferRequestController extends Controller
 {
     use ContractTrait, ContractTransportation;
-    function __construct()
+    protected LogHelper $logHelper;
+    function __construct(LogHelper $logHelper)
     {
+        $this->logHelper = $logHelper;
         $this->middleware('permission:transfers-list|transfers-create|transfers-edit|transfers-delete', ['only' => ['index', 'store']]);
         $this->middleware('permission:transfers-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:transfers-edit', ['only' => ['edit', 'update']]);

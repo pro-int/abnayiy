@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Contract\Files\StoreContractFileRequest;
 use App\Models\Contract;
 use App\Models\ContractFile;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -17,7 +19,11 @@ class AdminContractFileController extends Controller
      * Display a listing of the files resource.
      * @return \Illuminate\Http\Response
      */
-
+    protected LogHelper $logHelper;
+    function __construct(LogHelper $logHelper)
+    {
+        $this->logHelper = $logHelper;
+    }
      public function index($student, $contract)
      {
         $contract = Contract::select('contracts.id', 'students.student_name','students.id as student_id', 'academic_years.year_name')
@@ -66,6 +72,8 @@ class AdminContractFileController extends Controller
      ]);
 
      if ($contractfile) {
+         $logMessage = 'تم اضافة ملف للتعاقد  بنجاح بواسطة '.Auth::user()->getFullName();
+         $this->logHelper->logContract($logMessage, $contract, Auth::id());
             return redirect()->route('students.contracts.files.index',[$student, $contract])
                 ->with('alert-success', 'تم اضافة الملف بنجاح');
         }
@@ -82,6 +90,8 @@ class AdminContractFileController extends Controller
     public function destroy($student, $contract , ContractFile $file)
     {
         if (Storage::disk('s3')->delete($file->file_path) && $file->delete()) {
+            $logMessage = 'تم حذف ملف من التعاقد  بنجاح بواسطة '.Auth::user()->getFullName();
+            $this->logHelper->logContract($logMessage, $contract, Auth::id());
             return redirect()->back()
                 ->with('alert-success', 'تم حضف الملف ينجاح');
         }

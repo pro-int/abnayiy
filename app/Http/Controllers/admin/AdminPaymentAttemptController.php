@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\admin;
 
+use App\Helpers\LogHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Traits\OdooIntegrationTrait;
 use App\Models\PaymentAttempt;
@@ -26,8 +27,10 @@ class AdminPaymentAttemptController extends Controller
 {
     use TransactionTrait, CreatePdfFile, OdooIntegrationTrait;
 
-    function __construct()
+    protected LogHelper $logHelper;
+    function __construct(LogHelper $logHelper)
     {
+        $this->logHelper = $logHelper;
         $this->middleware('permission:accuonts-list|accuonts-create|accuonts-edit|accuonts-delete', ['only' => ['index', 'store', 'UnConfirmedPayment']]);
         $this->middleware('permission:accuonts-create', ['only' => ['create', 'store']]);
         $this->middleware('permission:accuonts-edit', ['only' => ['edit', 'update']]);
@@ -122,7 +125,10 @@ class AdminPaymentAttemptController extends Controller
 
         $PaymentAttempt = $this->CreatePaymentAttempt($transaction, $request, [], $student->guardian_id);
         if ($PaymentAttempt) {
-
+            $logMessage = 'تم اضافة محاولة دفع رقم: ' .$PaymentAttempt->id.' بنجاح بواسطة '. Auth::user()->getFullName().' هذه المحاولة لدفعة رقم: '.$transaction->id.' لتعاقد كود: '.$contract;
+            $this->logHelper->logPayment($logMessage, $PaymentAttempt->id, Auth::id());
+            $this->logHelper->logTransaction($logMessage, $transaction->id, Auth::id());
+            $this->logHelper->logContract($logMessage, $contract, Auth::id());
             if ($request->filled('is_confirmed')) {
 
                 $amount = $request->requested_ammount ?? $transaction->residual_amount;
@@ -130,6 +136,11 @@ class AdminPaymentAttemptController extends Controller
 
                 if (!$this->confirmPaymentAttempt($PaymentAttempt, $transaction, $request)) {
                     return redirect()->back()->with('alert-danger', 'خطأ اثناء محاولة تأكيد الدفعة');
+                }else{
+                    $logMessage = 'تم تأكيد محاولة دفع رقم: ' .$PaymentAttempt->id.' بنجاح بواسطة '. Auth::user()->getFullName().' هذه المحاولة لدفعة رقم: '.$transaction->id.' لتعاقد كود: '.$contract;
+                    $this->logHelper->logPayment($logMessage, $PaymentAttempt->id, Auth::id());
+                    $this->logHelper->logTransaction($logMessage, $transaction->id, Auth::id());
+                    $this->logHelper->logContract($logMessage, $contract, Auth::id());
                 }
             }
 
@@ -241,7 +252,10 @@ class AdminPaymentAttemptController extends Controller
             return redirect()->back()
                 ->with('alert-danger', $result['message']);
         }
-
+        $logMessage = 'تم حذف دفعة رقم: ' .$attempt->id.' بنجاح بواسطة '. Auth::user()->getFullName().' هذه المحاولة لدفعة رقم: '.$transaction->id.' لتعاقد كود: '.$contract;
+        $this->logHelper->logPayment($logMessage, $attempt->id, Auth::id());
+        $this->logHelper->logTransaction($logMessage, $transaction->id, Auth::id());
+        $this->logHelper->logContract($logMessage, $contract->id, Auth::id());
         if ($attempt->delete()) {
             $transaction->update_transaction($attempt);
 
@@ -270,6 +284,10 @@ class AdminPaymentAttemptController extends Controller
             $PaymentAttempt->received_ammount = $received_ammount;
 
             if ($PaymentAttempt->save()) {
+                $logMessage = 'تم تأكيد محاولة دفع رقم: ' .$PaymentAttempt->id.' بنجاح بواسطة '. Auth::user()->getFullName().' هذه المحاولة لدفعة رقم: '.$transaction->id.' لتعاقد كود: '.$transaction->contract_id;
+                $this->logHelper->logPayment($logMessage, $PaymentAttempt->id, Auth::id());
+                $this->logHelper->logTransaction($logMessage, $transaction->id, Auth::id());
+                $this->logHelper->logContract($logMessage, $transaction->contract_id, Auth::id());
                 if ($request->has('notifyuser') && $request->notifyuser) {
                     $nNotification = new ApplySingleNotification($PaymentAttempt, 3, $transaction->guardian_id);
                     $nNotification->fireNotification();
@@ -302,6 +320,10 @@ class AdminPaymentAttemptController extends Controller
             $this->CheckNewPaymentStatus($transaction->academic_year_id, $transaction->contract_id);
 
             if ($this->confirmPaymentAttempt($paymentAttempt, $transaction, $request)) {
+                $logMessage = 'تم تأكيد محاولة دفع رقم: ' .$paymentAttempt->id.' بنجاح بواسطة '. Auth::user()->getFullName().' هذه المحاولة لدفعة رقم: '.$transaction->id.' لتعاقد كود: '.$transaction->contract_id;
+                $this->logHelper->logPayment($logMessage, $paymentAttempt->id, Auth::id());
+                $this->logHelper->logTransaction($logMessage, $transaction->id, Auth::id());
+                $this->logHelper->logContract($logMessage, $transaction->contract_id, Auth::id());
                 return redirect()->back()
                     ->with('alert-success', 'تم تأكيد الدفعة بنجاح');
             }
@@ -324,13 +346,17 @@ class AdminPaymentAttemptController extends Controller
     public function refuseTransaction(Request $request)
     {
         $paymentAttempt = PaymentAttempt::findOrFail($request->paymentAttempt_id);
-
+        $transaction = $this->Get_transactions($paymentAttempt->transaction_id);
 
         $paymentAttempt->approved = 2;
         $paymentAttempt->reason = $request->reason;
         $paymentAttempt->admin_id = Auth::id();
 
         if ($paymentAttempt->save()) {
+            $logMessage = 'تم رفض محاولة دفع رقم: ' .$paymentAttempt->id.' بنجاح بواسطة '. Auth::user()->getFullName().' هذه المحاولة لدفعة رقم: '.$transaction->id.' لتعاقد كود: '.$transaction->contract_id;
+            $this->logHelper->logPayment($logMessage, $paymentAttempt->id, Auth::id());
+            $this->logHelper->logTransaction($logMessage, $transaction->id, Auth::id());
+            $this->logHelper->logContract($logMessage, $transaction->contract_id, Auth::id());
             if ($request->input('notifyuser') == 1 && $request->filled('reason')) {
 
                 $nNotification = new ApplySingleNotification($paymentAttempt, 4);
