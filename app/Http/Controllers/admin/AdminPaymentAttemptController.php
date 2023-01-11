@@ -194,7 +194,7 @@ class AdminPaymentAttemptController extends Controller
             ->whereIn('student_id', $students)->get();
 
         $content = view('admin.student.contract.transaction.attempt.receipt', compact('attempt', 'contracts'))->render();
-        $mpdf = $this->getPdf($content, 'P')->setWaterMark(public_path('/assets/reportLogo45d.png'));
+        $mpdf = $this->getPdf($content, 'P')->setWaterMark(public_path('/assets/alnoballaLogo2.jpeg'),0.1);
 
         return  response($mpdf->Output(sprintf('ايصال_سداد_%s_%s.pdf', $attempt->contract_id, str_replace(' ', '_', $attempt->student_name)), "I"), 200, ['Content-Type', 'application/pdf']);
     }
