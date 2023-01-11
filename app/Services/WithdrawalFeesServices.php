@@ -57,7 +57,7 @@ class WithdrawalFeesServices
                 $contract->transactions()->delete();
                 $this->StoreNewTransaction($newTransaction);
                 $contract->update_total_payments();
-                $this->updateInvoiceInOdoo(["invoice_code_abnai" => $contract->id, "price_unit" => $contract->total_fees]);
+                $this->updateInvoiceInOdoo(["invoice_code_abnai" => $contract->id, "price_unit" => $contract->tuition_fees, "tax_ids" => $contract->getTaxIDOdoo()]);
             }else{
                 $refundResidual = 0;
                 if($contract->total_fees != $contract->total_paid){
@@ -121,7 +121,7 @@ class WithdrawalFeesServices
                     ]);
 
                     $this->createInverseTransactionInOdoo($contract,$refund);
-                    $this->updateInvoiceInOdoo(["invoice_code_abnai" => $contract->id, "price_unit" => $contract->total_fees]);
+                    $this->updateInvoiceInOdoo(["invoice_code_abnai" => $contract->id, "price_unit" => $contract->tuition_fees, "tax_ids" => $contract->getTaxIDOdoo()]);
                     return;
                 }else{
                     $positiveRefund = abs($refund);
@@ -145,7 +145,7 @@ class WithdrawalFeesServices
                 $this->StoreNewTransaction($newTransaction);
                 $contract->update_total_payments();
 
-                $this->updateInvoiceInOdoo(["invoice_code_abnai" => $contract->id, "price_unit" => $contract->total_fees]);
+                $this->updateInvoiceInOdoo(["invoice_code_abnai" => $contract->id, "price_unit" => $contract->tuition_fees, "tax_ids" => $contract->getTaxIDOdoo()]);
             }
 
         }
