@@ -72,7 +72,7 @@ $breadcrumbs = [[['link' => route('students.index'), 'name' => 'الطلاب'],[
                 @endcan
             @endif
 
-            @if($PaymentAttempt->odoo_sync_status == 0 && $PaymentAttempt->approved && $year->id == $contractAcademicYear->academic_year_id && $transaction->transaction_type == "withdrawal")
+            @if($PaymentAttempt->odoo_sync_update_invoice_status == 0 && $PaymentAttempt->odoo_sync_inverse_journal_status == 0 && $PaymentAttempt->approved && $year->id == $contractAcademicYear->academic_year_id && $transaction->transaction_type == "withdrawal")
                 @can('accuonts-list')
                     <x-inputs.btn.generic colorClass="primary btn-icon round" icon="repeat" :route="route('attempts.resendInversePaymentToOdoo', ['id' => $PaymentAttempt->id])" title="مزامنه الدفعه العكسيه odoo" />
                 @endcan

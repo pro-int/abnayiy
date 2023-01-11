@@ -64,6 +64,8 @@ class AdminPaymentAttemptController extends Controller
             'payment_attempts.odoo_sync_delete_status',
             'payment_attempts.odoo_delete_message',
             'periods.period_name',
+            'contracts.odoo_sync_inverse_journal_status',
+            'contracts.odoo_sync_update_invoice_status',
             'payment_attempts.period_discount',
             'payment_attempts.transaction_id',
             'payment_methods.method_name',
@@ -78,6 +80,9 @@ class AdminPaymentAttemptController extends Controller
             ->leftjoin('payment_networks', 'payment_networks.id', 'payment_attempts.payment_network_id')
             ->leftjoin('periods', 'periods.id', 'payment_attempts.period_id')
             ->leftjoin('users as admins', 'admins.id', 'payment_attempts.admin_id')
+            ->leftjoin('contracts', function ($join) use ($contract){
+                $join->where('contracts.id', $contract);
+            })
             ->where('transaction_id', $transaction->id)
             ->orderBy('payment_attempts.id')
             ->get();
